@@ -1,0 +1,198 @@
+# Bedarf (Demand) schemas
+BedarfResponse:
+  type: object
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier
+      example: "123e4567-e89b-12d3-a456-426614174000"
+    betriebId:
+      type: string
+      format: uuid
+      description: Company ID
+      example: "123e4567-e89b-12d3-a456-426614174001"
+    betriebName:
+      type: string
+      description: Company name
+      example: "Bau AG Grabs"
+    holzbauAnzahl:
+      type: integer
+      format: int32
+      description: Number of carpenters needed
+      example: 2
+    zimmermannAnzahl:
+      type: integer
+      format: int32
+      description: Number of joiners needed
+      example: 1
+    datumVon:
+      type: string
+      format: date
+      description: Start date
+      example: "2024-02-01"
+    datumBis:
+      type: string
+      format: date
+      description: End date
+      example: "2024-02-15"
+    adresse:
+      type: string
+      description: Work location address
+      example: "Dorfstrasse 1234, 9472 Grabs"
+    mitWerkzeug:
+      type: boolean
+      description: Tools required
+      example: true
+    mitFahrzeug:
+      type: boolean
+      description: Vehicle required
+      example: false
+    status:
+      type: string
+      enum: [AKTIV, INACTIV, ABGESCHLOSSEN]
+      description: Current status
+      example: "AKTIV"
+    createdAt:
+      type: string
+      format: date-time
+      description: Creation timestamp
+      example: "2024-01-15T10:30:00Z"
+    updatedAt:
+      type: string
+      format: date-time
+      description: Last update timestamp
+      example: "2024-01-15T10:30:00Z"
+
+CreateBedarfRequest:
+  type: object
+  required:
+    - holzbauAnzahl
+    - zimmermannAnzahl
+    - datumVon
+    - datumBis
+    - adresse
+  properties:
+    holzbauAnzahl:
+      type: integer
+      format: int32
+      minimum: 0
+      description: Number of carpenters needed
+      example: 2
+    zimmermannAnzahl:
+      type: integer
+      format: int32
+      minimum: 0
+      description: Number of joiners needed
+      example: 1
+    datumVon:
+      type: string
+      format: date
+      description: Start date
+      example: "2024-02-01"
+    datumBis:
+      type: string
+      format: date
+      description: End date
+      example: "2024-02-15"
+    adresse:
+      type: string
+      minLength: 1
+      maxLength: 1000
+      description: Work location address
+      example: "Dorfstrasse 1234, 9472 Grabs"
+    mitWerkzeug:
+      type: boolean
+      description: Tools required
+      example: true
+    mitFahrzeug:
+      type: boolean
+      description: Vehicle required
+      example: false
+
+UpdateBedarfRequest:
+  type: object
+  properties:
+    holzbauAnzahl:
+      type: integer
+      format: int32
+      minimum: 0
+      description: Number of carpenters needed
+      example: 2
+    zimmermannAnzahl:
+      type: integer
+      format: int32
+      minimum: 0
+      description: Number of joiners needed
+      example: 1
+    datumVon:
+      type: string
+      format: date
+      description: Start date
+      example: "2024-02-01"
+    datumBis:
+      type: string
+      format: date
+      description: End date
+      example: "2024-02-15"
+    adresse:
+      type: string
+      minLength: 1
+      maxLength: 1000
+      description: Work location address
+      example: "Dorfstrasse 1234, 9472 Grabs"
+    mitWerkzeug:
+      type: boolean
+      description: Tools required
+      example: true
+    mitFahrzeug:
+      type: boolean
+      description: Vehicle required
+      example: false
+
+UpdateBedarfStatusRequest:
+  type: object
+  required:
+    - status
+  properties:
+    status:
+      type: string
+      enum: [AKTIV, INACTIV, ABGESCHLOSSEN]
+      description: New status
+      example: "ABGESCHLOSSEN"
+
+BedarfListResponse:
+  type: object
+  properties:
+    content:
+      type: array
+      items:
+        $ref: '#/BedarfResponse'
+    totalElements:
+      type: integer
+      format: int32
+      description: Total number of elements
+      example: 100
+    totalPages:
+      type: integer
+      format: int32
+      description: Total number of pages
+      example: 5
+    currentPage:
+      type: integer
+      format: int32
+      description: Current page number (0-based)
+      example: 0
+    pageSize:
+      type: integer
+      format: int32
+      description: Page size
+      example: 20
+    hasNext:
+      type: boolean
+      description: Has next page
+      example: true
+    hasPrevious:
+      type: boolean
+      description: Has previous page
+      example: false 

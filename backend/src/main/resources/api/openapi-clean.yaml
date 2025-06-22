@@ -1,0 +1,371 @@
+openapi: 3.0.3
+info:
+  title: Bau Platform API
+  description: API for connecting construction companies with temporary workers
+  version: 1.0.0
+  contact:
+    name: Bau Platform Team
+    email: support@bau-platform.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://api.bau-platform.com/api/v1
+    description: Production server
+  - url: https://staging-api.bau-platform.com/api/v1
+    description: Staging server
+  - url: http://localhost:8080/api/v1
+    description: Local development server
+
+security:
+  - BearerAuth: []
+
+paths:
+  /bedarfe:
+    get:
+      summary: List all Bedarfe
+      operationId: listBedarfe
+      tags: [Bedarf]
+      parameters:
+        - name: page
+          in: query
+          description: Page number (0-based)
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: Page size
+          required: false
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: List of Bedarfe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BedarfListResponse'
+    post:
+      summary: Create a new Bedarf
+      operationId: createBedarf
+      tags: [Bedarf]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBedarfRequest'
+      responses:
+        '201':
+          description: Bedarf created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BedarfResponse'
+        '400':
+          description: Invalid input
+
+  /betriebe:
+    get:
+      summary: List all Betriebe
+      operationId: listBetriebe
+      tags: [Betrieb]
+      parameters:
+        - name: page
+          in: query
+          description: Page number (0-based)
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: Page size
+          required: false
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: List of Betriebe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BetriebListResponse'
+    post:
+      summary: Create a new Betrieb
+      operationId: createBetrieb
+      tags: [Betrieb]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBetriebRequest'
+      responses:
+        '201':
+          description: Betrieb created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BetriebResponse'
+        '400':
+          description: Invalid input
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token from AWS Cognito
+
+  schemas:
+    BedarfResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        betriebId:
+          type: string
+          format: uuid
+          description: Company ID
+          example: "123e4567-e89b-12d3-a456-426614174001"
+        betriebName:
+          type: string
+          description: Company name
+          example: "Bau AG Grabs"
+        holzbauAnzahl:
+          type: integer
+          format: int32
+          description: Number of carpenters needed
+          example: 2
+        zimmermannAnzahl:
+          type: integer
+          format: int32
+          description: Number of joiners needed
+          example: 1
+        datumVon:
+          type: string
+          format: date
+          description: Start date
+          example: "2024-02-01"
+        datumBis:
+          type: string
+          format: date
+          description: End date
+          example: "2024-02-15"
+        adresse:
+          type: string
+          description: Work location address
+          example: "Dorfstrasse 1234, 9472 Grabs"
+        mitWerkzeug:
+          type: boolean
+          description: Tools required
+          example: true
+        mitFahrzeug:
+          type: boolean
+          description: Vehicle required
+          example: false
+        status:
+          type: string
+          enum: [AKTIV, INACTIV, ABGESCHLOSSEN]
+          description: Current status
+          example: "AKTIV"
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation timestamp
+          example: "2024-01-15T10:30:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+          example: "2024-01-15T10:30:00Z"
+
+    BedarfListResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/BedarfResponse'
+        totalElements:
+          type: integer
+          description: Total number of elements
+          example: 100
+        totalPages:
+          type: integer
+          description: Total number of pages
+          example: 5
+        currentPage:
+          type: integer
+          description: Current page number
+          example: 0
+        pageSize:
+          type: integer
+          description: Page size
+          example: 20
+        hasNext:
+          type: boolean
+          description: Whether there is a next page
+          example: true
+        hasPrevious:
+          type: boolean
+          description: Whether there is a previous page
+          example: false
+
+    CreateBedarfRequest:
+      type: object
+      required:
+        - holzbauAnzahl
+        - zimmermannAnzahl
+        - datumVon
+        - datumBis
+        - adresse
+      properties:
+        holzbauAnzahl:
+          type: integer
+          format: int32
+          minimum: 0
+          description: Number of carpenters needed
+          example: 2
+        zimmermannAnzahl:
+          type: integer
+          format: int32
+          minimum: 0
+          description: Number of joiners needed
+          example: 1
+        datumVon:
+          type: string
+          format: date
+          description: Start date
+          example: "2024-02-01"
+        datumBis:
+          type: string
+          format: date
+          description: End date
+          example: "2024-02-15"
+        adresse:
+          type: string
+          minLength: 1
+          maxLength: 1000
+          description: Work location address
+          example: "Dorfstrasse 1234, 9472 Grabs"
+        mitWerkzeug:
+          type: boolean
+          description: Tools required
+          example: true
+        mitFahrzeug:
+          type: boolean
+          description: Vehicle required
+          example: false
+
+    BetriebResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        name:
+          type: string
+          description: Company name
+          example: "Bau AG Grabs"
+        adresse:
+          type: string
+          description: Company address
+          example: "Dorfstrasse 1234, 9472 Grabs"
+        email:
+          type: string
+          format: email
+          description: Company email
+          example: "info@bau-ag-grabs.ch"
+        telefon:
+          type: string
+          description: Company phone
+          example: "+41 81 123 45 67"
+        status:
+          type: string
+          enum: [AKTIV, INACTIV]
+          description: Current status
+          example: "AKTIV"
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation timestamp
+          example: "2024-01-15T10:30:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+          example: "2024-01-15T10:30:00Z"
+
+    BetriebListResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/BetriebResponse'
+        totalElements:
+          type: integer
+          description: Total number of elements
+          example: 100
+        totalPages:
+          type: integer
+          description: Total number of pages
+          example: 5
+        currentPage:
+          type: integer
+          description: Current page number
+          example: 0
+        pageSize:
+          type: integer
+          description: Page size
+          example: 20
+        hasNext:
+          type: boolean
+          description: Whether there is a next page
+          example: true
+        hasPrevious:
+          type: boolean
+          description: Whether there is a previous page
+          example: false
+
+    CreateBetriebRequest:
+      type: object
+      required:
+        - name
+        - adresse
+        - email
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: Company name
+          example: "Bau AG Grabs"
+        adresse:
+          type: string
+          minLength: 1
+          maxLength: 1000
+          description: Company address
+          example: "Dorfstrasse 1234, 9472 Grabs"
+        email:
+          type: string
+          format: email
+          description: Company email
+          example: "info@bau-ag-grabs.ch"
+        telefon:
+          type: string
+          description: Company phone
+          example: "+41 81 123 45 67" 

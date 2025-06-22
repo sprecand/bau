@@ -1,0 +1,86 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Bau Project Workspace Rules
+
+## Project Overview
+Bau is a construction worker matching platform connecting companies with temporary workers. Built with Spring Boot 3 + Java 21 backend and Angular 20 frontend using Hexagonal Architecture.
+
+## Documentation Links
+- **Technical Documentation**: `doc/tech/README.md`
+- **Business Requirements**: `doc/fach/fachlich.md`
+- **API Specification**: `api/`
+- **Coding Standards**: `doc/tech/08-cross-cutting-concepts/coding-standards.md`
+- **Architecture Decisions**: `doc/tech/09-architecture-decisions/`
+- **Implementation Checklist**: `doc/tech/08-cross-cutting-concepts/implementation-checklist.md`
+
+## Project Structure
+```
+bau/
+├── doc/                      # Documentation
+│   ├── tech/                 # Technical documentation (Arc42 structure)
+│   └── fach/                 # Business requirements
+├── api/                      # OpenAPI specification
+├── backend/                  # Spring Boot application (to be created)
+├── frontend/                 # Angular application (to be created)
+├── .github/                  # GitHub Actions workflows
+│   └── workflows/
+│       ├── ci.yml            # Continuous Integration
+│       ├── cd-staging.yml    # Staging deployment
+│       └── cd-production.yml # Production deployment
+└── .cursor/rules/            # Cursor rules for development
+```
+
+## CI/CD Pipeline
+
+### Continuous Integration (CI)
+- **Trigger**: Push to `main`/`develop` branches, pull requests
+- **Jobs**:
+  - Backend tests (with PostgreSQL service)
+  - Frontend tests (linting + unit tests)
+  - Security scan (Trivy vulnerability scanner)
+  - Build artifacts (JAR + frontend dist)
+
+### Continuous Deployment (CD)
+- **Staging**: Automatic deployment on push to `develop`
+- **Production**: Manual approval workflow with version selection
+- **Environments**: AWS ECS with ECR container registry
+- **Notifications**: Slack integration for deployment status
+
+## Key Architecture Decisions
+- **Hexagonal Architecture**: See `doc/tech/09-architecture-decisions/adr-001-hexagonal-architecture.md`
+- **AWS Cognito Authentication**: See `doc/tech/09-architecture-decisions/adr-002-aws-cognito-authentication.md`
+- **Entity & DTO Separation**: See `doc/tech/09-architecture-decisions/adr-003-entity-dto-separation.md`
+- **Naming Conventions**: See `doc/tech/09-architecture-decisions/adr-004-naming-conventions.md`
+
+## Technology Stack
+- **Backend**: Spring Boot 3.x + Java 21 + PostgreSQL + AWS Cognito
+- **Frontend**: Angular 20+ + TypeScript + Angular Material + Tailwind CSS + AWS Amplify
+- **Infrastructure**: AWS (ECS, RDS, Cognito, CloudFront)
+- **CI/CD**: GitHub Actions + Docker + AWS ECR
+
+## Business Domain
+- **Bedarf**: Construction demand with validation logic
+- **Betrieb**: Company profile management
+- **User**: User account information
+- See `doc/fach/fachlich.md` for detailed business requirements
+
+## Development Guidelines
+- **Code Quality**: Use SLF4J logging, minimal Javadoc, Optionals instead of null
+- **Architecture**: Follow Hexagonal Architecture with proper package structure
+- **Testing**: Unit tests for business logic, integration tests for APIs
+- **Security**: AWS Cognito integration, JWT validation, Swiss data protection compliance
+- **Coding Standards**: See `doc/tech/08-cross-cutting-concepts/coding-standards.md`
+- **Documentation**: Keep documentation in sync with code changes
+
+## Implementation Priority
+1. **Phase 1**: Project setup, database schema, basic CRUD
+2. **Phase 2**: Core features (Bedarf, Betrieb management)
+3. **Phase 3**: Testing, optimization, deployment
+
+## Related Rules
+- Use `java-spring-development.mdc` for backend development
+- Use `angular-development.mdc` for frontend development
+- Use `documentation.mdc` for documentation management

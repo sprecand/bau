@@ -1,0 +1,83 @@
+# Common schemas used across multiple endpoints
+ErrorResponse:
+  type: object
+  properties:
+    timestamp:
+      type: string
+      format: date-time
+      description: Error timestamp
+      example: "2024-01-15T10:30:00Z"
+    status:
+      type: integer
+      description: HTTP status code
+      example: 400
+    error:
+      type: string
+      description: Error type
+      example: "Bad Request"
+    message:
+      type: string
+      description: Error message
+      example: "Validation failed"
+    path:
+      type: string
+      description: Request path
+      example: "/api/v1/bedarf"
+    details:
+      type: array
+      items:
+        type: object
+        properties:
+          field:
+            type: string
+            description: Field name
+            example: "datumVon"
+          message:
+            type: string
+            description: Field-specific error message
+            example: "Start date must be in the future"
+
+# Common pagination parameters
+PaginationParameters:
+  type: object
+  properties:
+    page:
+      type: integer
+      minimum: 1
+      default: 1
+      description: Page number (1-based)
+    size:
+      type: integer
+      minimum: 1
+      maximum: 100
+      default: 20
+      description: Page size
+
+# Common pagination response
+PaginationResponse:
+  type: object
+  properties:
+    totalElements:
+      type: integer
+      description: Total number of elements
+      example: 100
+    totalPages:
+      type: integer
+      description: Total number of pages
+      example: 5
+    currentPage:
+      type: integer
+      description: Current page number
+      example: 1
+    pageSize:
+      type: integer
+      description: Page size
+      example: 20
+    hasNext:
+      type: boolean
+      description: Has next page
+      example: true
+    hasPrevious:
+      type: boolean
+      description: Has previous page
+      example: false 

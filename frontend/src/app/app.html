@@ -1,0 +1,21 @@
+<div class="app-container">
+  @if (authService.isAuthenticated()) {
+    <!-- Authenticated Layout -->
+    <app-header></app-header>
+    
+    <main class="bg-background">
+      <router-outlet></router-outlet>
+    </main>
+  } @else {
+    <!-- Unauthenticated Layout (Login page) -->
+    <router-outlet></router-outlet>
+  }
+</div>
+
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->
+<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * * -->
+<!-- * * * * * * * * * * and can be replaced.  * * * * * * * * * * * -->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- * * * * * * * * * * End of Placeholder  * * * * * * * * * * * * -->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->

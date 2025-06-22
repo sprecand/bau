@@ -1,0 +1,33 @@
+/auth/profile:
+  get:
+    operationId: getUserProfile
+    summary: Get user profile
+    description: Get the current user's profile information
+    tags:
+      - Authentication
+    responses:
+      '200':
+        description: User profile retrieved successfully
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/auth.yaml#/UserProfileResponse'
+      '401':
+        description: Unauthorized - Invalid or missing token
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/common.yaml#/ErrorResponse'
+
+/auth/logout:
+  post:
+    operationId: logoutUser
+    summary: Logout user
+    description: Logout the current user (handled by AWS Cognito)
+    tags:
+      - Authentication
+    responses:
+      '200':
+        description: Logout successful
+      '401':
+        description: Unauthorized 

@@ -1,0 +1,164 @@
+name: Documentation Check
+
+on:
+  push:
+    paths:
+      - 'doc/**'
+      - 'api/**'
+      - 'README.md'
+      - '.github/workflows/docs-check.yml'
+  pull_request:
+    paths:
+      - 'doc/**'
+      - 'api/**'
+      - 'README.md'
+      - '.github/workflows/docs-check.yml'
+
+jobs:
+  markdown-lint:
+    name: Markdown Lint
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install markdownlint
+        run: npm install -g markdownlint-cli
+
+      - name: Run markdownlint
+        run: |
+          markdownlint "**/*.md" --ignore node_modules --ignore .git
+
+  link-check:
+    name: Link Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install markdown-link-check
+        run: npm install -g markdown-link-check
+
+      - name: Check internal links
+        run: |
+          find doc/ api/ -name "*.md" -exec markdown-link-check {} \; || true
+
+  spell-check:
+    name: Spell Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install cspell
+        run: npm install -g cspell
+
+      - name: Run spell check
+        run: |
+          cspell "doc/**/*.md" "api/**/*.md" "README.md" --config .cspell.json
+
+  mermaid-check:
+    name: Mermaid Diagram Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install mermaid-cli
+        run: npm install -g @mermaid-js/mermaid-cli
+
+      - name: Check Mermaid diagrams
+        run: |
+          find doc/ -name "*.md" -exec grep -l "```mermaid" {} \; | while read file; do
+            echo "Checking Mermaid diagrams in $file"
+            grep -A 100 "```mermaid" "$file" | grep -B 100 "```" | grep -v "^```" | mmdc --input /dev/stdin --output /dev/null || echo "Mermaid syntax error in $file"
+          done
+
+  documentation-coverage:
+    name: Documentation Coverage
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check documentation structure
+        run: |
+          echo "Checking documentation structure..."
+          
+          # Check if required directories exist
+          [ -d "doc/tech" ] || echo "❌ Missing doc/tech directory"
+          [ -d "doc/fach" ] || echo "❌ Missing doc/fach directory"
+          [ -d "api" ] || echo "❌ Missing api directory"
+          
+          # Check if required files exist
+          [ -f "doc/tech/README.md" ] || echo "❌ Missing doc/tech/README.md"
+          [ -f "doc/fach/fachlich.md" ] || echo "❌ Missing doc/fach/fachlich.md"
+          [ -f "api/main.yaml" ] || echo "❌ Missing api/main.yaml"
+          
+          # Check if ADRs exist
+          [ -d "doc/tech/09-architecture-decisions" ] || echo "❌ Missing architecture decisions directory"
+          
+          echo "✅ Documentation structure check completed"
+
+      - name: Check for broken internal links
+        run: |
+          echo "Checking for broken internal links..."
+          
+          # Find all markdown files
+          find doc/ api/ -name "*.md" -print0 | while IFS= read -r -d '' file; do
+            echo "Checking $file"
+            
+            # Extract internal links (starting with doc/, api/, or relative paths)
+            grep -o '\[.*\]([^)]*\.md)' "$file" | sed 's/.*(\(.*\))/\1/' | while read link; do
+              if [[ "$link" == doc/* ]] || [[ "$link" == api/* ]] || [[ "$link" == ./* ]]; then
+                if [ ! -f "$link" ]; then
+                  echo "❌ Broken link in $file: $link"
+                fi
+              fi
+            done
+          done
+
+  notify:
+    name: Notify Documentation Issues
+    runs-on: ubuntu-latest
+    needs: [markdown-lint, link-check, spell-check, mermaid-check, documentation-coverage]
+    if: always() && (needs.markdown-lint.result == 'failure' || needs.link-check.result == 'failure' || needs.spell-check.result == 'failure' || needs.mermaid-check.result == 'failure' || needs.documentation-coverage.result == 'failure')
+    
+    steps:
+      - name: Notify Slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          channel: '#bau-documentation'
+          webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} 

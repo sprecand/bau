@@ -1,0 +1,27 @@
+# Aggregate all path files for modular OpenAPI spec
+/auth/profile:
+  $ref: './auth.yaml#/auth/profile'
+/auth/logout:
+  $ref: './auth.yaml#/auth/logout'
+/bedarfe:
+  $ref: './bedarfe.yaml#/bedarfe'
+/bedarfe/{id}:
+  $ref: './bedarfe-id.yaml#/bedarfe/{id}'
+/bedarfe/{id}/status:
+  $ref: './bedarfe-id-status.yaml#/bedarfe/{id}/status'
+/bedarfe/betrieb/{betriebId}:
+  $ref: './bedarfe-betrieb-betriebId.yaml#/bedarfe/betrieb/{betriebId}'
+/betriebe:
+  $ref: './betriebe.yaml#/betriebe'
+/betriebe/{id}:
+  $ref: './betriebe-id.yaml#/betriebe/{id}'
+/betriebe/{id}/status:
+  $ref: './betriebe-id-status.yaml#/betriebe/{id}/status'
+/users:
+  $ref: './users.yaml#/users'
+/users/{id}:
+  $ref: './users.yaml#/users/{id}'
+/users/{id}/profile:
+  $ref: './users.yaml#/users/{id}/profile'
+/users/{id}/password:
+  $ref: './users.yaml#/users/{id}/password'

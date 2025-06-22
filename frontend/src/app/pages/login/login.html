@@ -1,0 +1,79 @@
+<div class="min-h-screen bg-background flex items-center justify-center p-4">
+  <div class="w-full max-w-md">
+    <!-- Logo/Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-foreground mb-2">Bau Platform</h1>
+      <p class="text-muted-foreground">Anmelden um fortzufahren</p>
+    </div>
+
+    <!-- Login Form -->
+    <div class="bg-card rounded-lg border border-border p-6 shadow-lg">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4">
+        <!-- Email -->
+        <div>
+          <label class="block text-sm font-medium text-foreground mb-2">E-Mail</label>
+          <input 
+            type="email"
+            formControlName="email" 
+            placeholder="ihre.email@beispiel.ch"
+            class="w-full h-12 px-3 border border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+          @if (loginForm.get('email')?.hasError('required') && loginForm.get('email')?.touched) {
+            <p class="text-destructive text-sm mt-1">E-Mail ist erforderlich</p>
+          }
+          @if (loginForm.get('email')?.hasError('email') && loginForm.get('email')?.touched) {
+            <p class="text-destructive text-sm mt-1">Ungültige E-Mail-Adresse</p>
+          }
+        </div>
+
+        <!-- Password -->
+        <div>
+          <label class="block text-sm font-medium text-foreground mb-2">Passwort</label>
+          <div class="relative">
+            <input 
+              [type]="showPassword() ? 'text' : 'password'"
+              formControlName="password" 
+              placeholder="Ihr Passwort"
+              class="w-full h-12 px-3 pr-12 border border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+            <button 
+              type="button"
+              (click)="togglePasswordVisibility()"
+              class="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground transition-colors">
+              <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+          </div>
+          @if (loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched) {
+            <p class="text-destructive text-sm mt-1">Passwort ist erforderlich</p>
+          }
+        </div>
+
+        <!-- Development Info -->
+        @if (!isProduction) {
+          <div class="bg-muted/30 rounded-md p-3 text-sm">
+            <p class="font-medium text-card-foreground mb-1">Entwicklungsmodus</p>
+            <p class="text-muted-foreground">
+              Verwenden Sie eine beliebige E-Mail. Für Rollen: admin&#64;test.ch (Admin), andere E-Mails für Betrieb.
+            </p>
+          </div>
+        }
+
+        <!-- Submit Button -->
+        <button 
+          type="submit" 
+          [disabled]="loginForm.invalid || loading()"
+          class="w-full h-12 px-6 bg-primary text-primary-foreground rounded-md font-medium hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2">
+          @if (loading()) {
+            <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-foreground"></div>
+          } @else {
+            <mat-icon>login</mat-icon>
+          }
+          {{ loading() ? 'Anmelden...' : 'Anmelden' }}
+        </button>
+      </form>
+    </div>
+
+    <!-- Footer -->
+    <div class="text-center mt-6 text-sm text-muted-foreground">
+      <p>© 2024 Bau Platform. Alle Rechte vorbehalten.</p>
+    </div>
+  </div>
+</div> 

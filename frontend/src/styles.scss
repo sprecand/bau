@@ -1,0 +1,153 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Sass @use statements must come first */
+@use 'tailwindcss/base';
+@use 'tailwindcss/components';
+@use 'tailwindcss/utilities';
+@use 'styles/design-system.scss';
+
+/* Base styles */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+// Ensure proper box-sizing
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+// Focus styles
+:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+// Remove default button styles
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+// Smooth transitions
+* {
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Snackbar Styles */
+.success-snackbar {
+  --mdc-snackbar-container-color: hsl(var(--success)) !important;
+  --mdc-snackbar-supporting-text-color: hsl(var(--success-foreground)) !important;
+  --mat-snack-bar-button-color: hsl(var(--success-foreground)) !important;
+}
+
+.error-snackbar {
+  --mdc-snackbar-container-color: hsl(0 71% 45%) !important; /* More muted red, similar approach to success */
+  --mdc-snackbar-supporting-text-color: hsl(0 0% 98.5%) !important; /* Clean white text */
+  --mat-snack-bar-button-color: hsl(0 0% 98.5%) !important; /* Clean white button text */
+}
+
+/* Ensure snackbars are not transparent */
+.mat-mdc-snack-bar-container {
+  opacity: 1 !important;
+  background: var(--mdc-snackbar-container-color) !important;
+}
+
+/* Material Date Picker Improvements */
+.mat-datepicker-popup {
+  background: hsl(var(--card)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+.mat-calendar {
+  background: hsl(var(--card)) !important;
+  color: hsl(var(--card-foreground)) !important;
+}
+
+.mat-calendar-header {
+  background: hsl(var(--card)) !important;
+  color: hsl(var(--card-foreground)) !important;
+}
+
+.mat-calendar-arrow {
+  fill: hsl(var(--card-foreground)) !important;
+}
+
+.mat-calendar-next-button,
+.mat-calendar-previous-button {
+  color: hsl(var(--card-foreground)) !important;
+}
+
+.mat-calendar-table-header th {
+  color: hsl(var(--muted-foreground)) !important;
+  font-weight: 500 !important;
+}
+
+.mat-calendar-body-cell-content {
+  background: transparent !important;
+  color: hsl(var(--card-foreground)) !important;
+  border-radius: 6px !important;
+  transition: all 0.2s ease !important;
+}
+
+.mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover .mat-calendar-body-cell-content {
+  background: hsl(var(--accent)) !important;
+  color: hsl(var(--accent-foreground)) !important;
+}
+
+.mat-calendar-body-selected .mat-calendar-body-cell-content {
+  background: hsl(var(--primary)) !important;
+  color: hsl(var(--primary-foreground)) !important;
+}
+
+.mat-calendar-body-today:not(.mat-calendar-body-selected) .mat-calendar-body-cell-content {
+  border: 2px solid hsl(var(--primary)) !important;
+  background: transparent !important;
+  color: hsl(var(--primary)) !important;
+  font-weight: 600 !important;
+}
+
+.mat-calendar-body-disabled .mat-calendar-body-cell-content {
+  color: hsl(var(--muted-foreground)) !important;
+  opacity: 0.5 !important;
+}
+
+.mat-calendar-period-button {
+  color: hsl(var(--card-foreground)) !important;
+  font-weight: 600 !important;
+}
+
+.mat-calendar-period-button:hover {
+  background: hsl(var(--accent)) !important;
+  color: hsl(var(--accent-foreground)) !important;
+}
+
+/* Date picker input field improvements */
+.mat-datepicker-input {
+  background: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+.mat-datepicker-input:focus {
+  border-color: hsl(var(--primary)) !important;
+  box-shadow: 0 0 0 2px hsl(var(--ring)) !important;
+}
+
+/* Date picker toggle button */
+.mat-datepicker-toggle {
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+.mat-datepicker-toggle:hover {
+  color: hsl(var(--foreground)) !important;
+}

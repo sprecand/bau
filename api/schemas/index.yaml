@@ -1,0 +1,39 @@
+# Aggregate all schema files for modular OpenAPI spec
+UserProfileResponse:
+  $ref: './auth.yaml#/UserProfileResponse'
+BedarfResponse:
+  $ref: './bedarfe.yaml#/BedarfResponse'
+CreateBedarfRequest:
+  $ref: './bedarfe.yaml#/CreateBedarfRequest'
+UpdateBedarfRequest:
+  $ref: './bedarfe.yaml#/UpdateBedarfRequest'
+UpdateBedarfStatusRequest:
+  $ref: './bedarfe.yaml#/UpdateBedarfStatusRequest'
+BedarfListResponse:
+  $ref: './bedarfe.yaml#/BedarfListResponse'
+BetriebResponse:
+  $ref: './betriebe.yaml#/BetriebResponse'
+CreateBetriebRequest:
+  $ref: './betriebe.yaml#/CreateBetriebRequest'
+UpdateBetriebRequest:
+  $ref: './betriebe.yaml#/UpdateBetriebRequest'
+UpdateBetriebStatusRequest:
+  $ref: './betriebe.yaml#/UpdateBetriebStatusRequest'
+BetriebListResponse:
+  $ref: './betriebe.yaml#/BetriebListResponse'
+UserResponse:
+  $ref: './users.yaml#/UserResponse'
+UserListResponse:
+  $ref: './users.yaml#/UserListResponse'
+CreateUserRequest:
+  $ref: './users.yaml#/CreateUserRequest'
+UpdateUserRequest:
+  $ref: './users.yaml#/UpdateUserRequest'
+UpdateUserProfileRequest:
+  $ref: './users.yaml#/UpdateUserProfileRequest'
+ChangePasswordRequest:
+  $ref: './users.yaml#/ChangePasswordRequest'
+ErrorResponse:
+  $ref: './common.yaml#/ErrorResponse'
+Common:
+  $ref: './common.yaml#/Common'

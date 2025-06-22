@@ -1,0 +1,11 @@
+post:
+  operationId: logoutUser
+  summary: Logout user
+  description: Logout the current user (handled by AWS Cognito)
+  tags:
+    - Authentication
+  responses:
+    '200':
+      description: Logout successful
+    '401':
+      description: Unauthorized 

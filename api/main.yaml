@@ -1,0 +1,101 @@
+openapi: 3.0.3
+info:
+  title: Bau Platform API
+  description: API for connecting construction companies with temporary workers
+  version: 1.0.0
+  contact:
+    name: Bau Platform Team
+    email: support@bau-platform.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://api.bau-platform.com/api/v1
+    description: Production server
+  - url: https://staging-api.bau-platform.com/api/v1
+    description: Staging server
+  - url: http://localhost:8080/api/v1
+    description: Local development server
+
+# Global security - can be overridden at operation level
+security:
+  - BearerAuth: []
+
+# Import paths from separate files
+paths:
+  /auth/profile:
+    $ref: './paths/auth.yaml#/auth/profile'
+  /auth/logout:
+    $ref: './paths/auth.yaml#/auth/logout'
+  /bedarfe:
+    $ref: './paths/bedarfe.yaml#/bedarfe'
+  /bedarfe/{id}:
+    $ref: './paths/bedarfe-id.yaml#/bedarfe/{id}'
+  /bedarfe/{id}/status:
+    $ref: './paths/bedarfe-id-status.yaml#/bedarfe/{id}/status'
+  /bedarfe/betrieb/{betriebId}:
+    $ref: './paths/bedarfe-betrieb-betriebId.yaml#/bedarfe/betrieb/{betriebId}'
+  /betriebe:
+    $ref: './paths/betriebe.yaml#/betriebe'
+  /betriebe/{id}:
+    $ref: './paths/betriebe-id.yaml#/betriebe/{id}'
+  /betriebe/{id}/status:
+    $ref: './paths/betriebe-id-status.yaml#/betriebe/{id}/status'
+  /users:
+    $ref: './paths/users.yaml#/users'
+  /users/{id}:
+    $ref: './paths/users.yaml#/users/{id}'
+  /users/{id}/profile:
+    $ref: './paths/users.yaml#/users/{id}/profile'
+  /users/{id}/password:
+    $ref: './paths/users.yaml#/users/{id}/password'
+
+# Import components from separate files
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token from AWS Cognito
+  
+  schemas:
+    UserProfileResponse:
+      $ref: './schemas/auth.yaml#/UserProfileResponse'
+    BedarfResponse:
+      $ref: './schemas/bedarfe.yaml#/BedarfResponse'
+    CreateBedarfRequest:
+      $ref: './schemas/bedarfe.yaml#/CreateBedarfRequest'
+    UpdateBedarfRequest:
+      $ref: './schemas/bedarfe.yaml#/UpdateBedarfRequest'
+    UpdateBedarfStatusRequest:
+      $ref: './schemas/bedarfe.yaml#/UpdateBedarfStatusRequest'
+    BedarfListResponse:
+      $ref: './schemas/bedarfe.yaml#/BedarfListResponse'
+    BetriebResponse:
+      $ref: './schemas/betriebe.yaml#/BetriebResponse'
+    CreateBetriebRequest:
+      $ref: './schemas/betriebe.yaml#/CreateBetriebRequest'
+    UpdateBetriebRequest:
+      $ref: './schemas/betriebe.yaml#/UpdateBetriebRequest'
+    UpdateBetriebStatusRequest:
+      $ref: './schemas/betriebe.yaml#/UpdateBetriebStatusRequest'
+    BetriebListResponse:
+      $ref: './schemas/betriebe.yaml#/BetriebListResponse'
+    UserResponse:
+      $ref: './schemas/users.yaml#/UserResponse'
+    UserListResponse:
+      $ref: './schemas/users.yaml#/UserListResponse'
+    CreateUserRequest:
+      $ref: './schemas/users.yaml#/CreateUserRequest'
+    UpdateUserRequest:
+      $ref: './schemas/users.yaml#/UpdateUserRequest'
+    UpdateUserProfileRequest:
+      $ref: './schemas/users.yaml#/UpdateUserProfileRequest'
+    ChangePasswordRequest:
+      $ref: './schemas/users.yaml#/ChangePasswordRequest'
+    ErrorResponse:
+      $ref: './schemas/common.yaml#/ErrorResponse'
+    Common:
+      $ref: './schemas/common.yaml#/Common'

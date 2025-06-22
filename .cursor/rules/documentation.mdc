@@ -1,0 +1,189 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Documentation Management Rules
+
+## Documentation Principles
+
+### Always Keep Documentation in Sync
+- **Update docs first**: When making architectural changes, update documentation before implementing
+- **Document as you code**: Update relevant docs when adding new features or changing existing ones
+- **Cross-reference everything**: Ensure all documentation links are valid and up-to-date
+- **Version control**: All documentation changes should be committed with code changes
+
+### Documentation Structure (Arc42 Template)
+```
+doc/
+├── tech/                    # Technical documentation
+│   ├── 01-introduction/     # Requirements and goals
+│   ├── 05-building-blocks/  # Architecture components
+│   ├── 06-runtime/          # Runtime behavior
+│   ├── 07-deployment/       # Deployment and infrastructure
+│   ├── 08-cross-cutting-concepts/ # Standards and patterns
+│   └── 09-architecture-decisions/ # ADRs
+├── fach/                    # Business requirements
+└── api/                     # OpenAPI specification
+```
+
+## Documentation Standards
+
+### Code Changes Require Documentation Updates
+When making code changes, always check and update:
+
+#### Backend Changes
+- **New endpoints**: Update `api/paths/` and `api/schemas/`
+- **Domain changes**: Update `doc/tech/05-building-blocks/backend-architecture.md`
+- **New patterns**: Update `doc/tech/08-cross-cutting-concepts/coding-standards.md`
+- **Architecture changes**: Create new ADR in `doc/tech/09-architecture-decisions/`
+
+#### Frontend Changes
+- **New components**: Update `doc/tech/08-cross-cutting-concepts/coding-standards.md`
+- **UI patterns**: Update frontend patterns section
+- **Routing changes**: Update system overview diagrams
+
+#### Infrastructure Changes
+- **New services**: Update `doc/tech/07-deployment/deployment.md`
+- **CI/CD changes**: Update GitHub Actions documentation
+- **Environment changes**: Update environment variables documentation
+
+### Documentation Quality Checklist
+
+#### Before Committing Documentation
+- [ ] **Links work**: All internal links are valid
+- [ ] **Examples match**: Code examples match current implementation
+- [ ] **Diagrams updated**: Mermaid diagrams reflect current architecture
+- [ ] **Cross-references**: Related docs are properly linked
+- [ ] **Spelling/Grammar**: Professional writing quality
+- [ ] **Consistency**: Naming conventions match across all docs
+
+#### Content Standards
+- **Be concise**: Clear, to-the-point explanations
+- **Use examples**: Include practical code examples
+- **Show structure**: Use proper headings and formatting
+- **Keep current**: Remove outdated information
+- **Cross-reference**: Link to related documentation
+
+## Documentation Update Triggers
+
+### Automatic Updates Required
+- **New feature**: Update relevant architecture docs and patterns
+- **API changes**: Update OpenAPI spec and endpoint documentation
+- **Dependency updates**: Update technology stack documentation
+- **Environment changes**: Update deployment and setup guides
+- **Security changes**: Update security documentation
+
+### Manual Review Required
+- **Architecture decisions**: Create new ADR
+- **Major refactoring**: Update multiple documentation files
+- **Technology changes**: Update technology stack and setup guides
+- **Process changes**: Update development workflow documentation
+
+## Documentation Maintenance
+
+## Documentation Tools and Practices
+
+### Markdown Standards
+- Use proper heading hierarchy (H1 → H2 → H3)
+- Include table of contents for long documents
+- Use code blocks with language specification
+- Use Mermaid diagrams for visual documentation
+
+### Documentation Templates
+
+#### New Feature Documentation
+```markdown
+# Feature Name
+
+## Overview
+Brief description of the feature
+
+## Implementation
+- Technical details
+- Code examples
+- Configuration changes
+
+## Testing
+- Test scenarios
+- Test data requirements
+
+## Related Documentation
+- Links to related docs
+- Cross-references
+```
+
+#### Architecture Decision Record (ADR)
+```markdown
+# ADR-XXX: Decision Title
+
+## Status
+[Proposed | Accepted | Deprecated | Superseded]
+
+## Context
+What is the issue that we're seeing that is motivating this decision?
+
+## Decision
+What is the change that we're proposing and/or doing?
+
+## Consequences
+What becomes easier or more difficult to do because of this change?
+```
+
+## Documentation Review Process
+
+### Before Implementation
+1. **Document the plan**: Write down what you're going to build
+2. **Review with team**: Get feedback on the approach
+3. **Update architecture docs**: Reflect the planned changes
+4. **Create/update ADRs**: Document major decisions
+
+### During Implementation
+1. **Update as you go**: Keep docs in sync with code
+2. **Add examples**: Include real code examples
+3. **Update diagrams**: Keep visual docs current
+4. **Cross-reference**: Link related documentation
+
+### After Implementation
+1. **Final review**: Ensure all docs are accurate
+2. **Update examples**: Use actual implemented code
+3. **Test links**: Verify all internal links work
+4. **Update index**: Update main README and navigation
+
+## Common Documentation Issues
+
+### ❌ Don't Do This
+- Leave outdated examples in documentation
+- Forget to update diagrams when architecture changes
+- Create documentation without code examples
+- Use inconsistent naming across documents
+- Ignore broken links
+- Document features that don't exist yet
+
+### ✅ Do This Instead
+- Keep examples current and working
+- Update diagrams to match implementation
+- Include practical code examples
+- Use consistent terminology
+- Regularly check and fix links
+- Document what's actually implemented
+
+## Documentation Automation
+
+### GitHub Actions Integration
+- **Link checker**: Automatically verify internal links
+- **Spell check**: Catch spelling and grammar errors
+- **Format validation**: Ensure consistent markdown formatting
+- **Diagram validation**: Verify Mermaid diagrams are valid
+
+### Documentation Metrics
+- **Coverage**: Percentage of code documented
+- **Freshness**: How recent documentation updates are
+- **Link health**: Percentage of working internal links
+- **Review frequency**: How often docs are reviewed
+
+## Related Documentation
+- [Coding Standards](mdc:doc/tech/08-cross-cutting-concepts/coding-standards.md)
+- [Architecture Decisions](mdc:doc/tech/09-architecture-decisions)
+- [API Specification](mdc:api)
+- [Development Guide](mdc:doc/tech/08-cross-cutting-concepts/development.md)

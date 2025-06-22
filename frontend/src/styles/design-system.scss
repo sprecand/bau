@@ -1,0 +1,231 @@
+/* Bau Platform Design System - OKLCH Color Space */
+
+:root {
+  /* Typography */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 
+               'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 
+               sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 
+               'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 
+               "Liberation Mono", "Courier New", monospace;
+
+  /* Spacing */
+  --radius: 0.625rem; /* 10px base radius */
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+  --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
+  --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
+  --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
+
+  /* Core Colors - Light Mode */
+  --background: 0 0% 100%;                   /* Pure white */
+  --foreground: 0 0% 14.5%;                  /* Near black text */
+  
+  /* Cards & Surfaces */
+  --card: 0 0% 100%;                         /* White cards */
+  --card-foreground: 0 0% 14.5%;             /* Dark text on cards */
+  --popover: 0 0% 100%;                      /* White popovers */
+  --popover-foreground: 0 0% 14.5%;          /* Dark text in popovers */
+  
+  /* Brand Colors - Bau Platform Green */
+  --primary: 160 42% 28%;                    /* Muted forest green - professional & readable */
+  --primary-foreground: 0 0% 98.5%;          /* White text on primary */
+  
+  --secondary: 0 0% 97%;                     /* Light gray */
+  --secondary-foreground: 0 0% 20.5%;        /* Dark text on secondary */
+  
+  --accent: 160 42% 28%;                     /* Same as primary for consistency */
+  --accent-foreground: 0 0% 98.5%;           /* White text on accent */
+  
+  /* State Colors */
+  --destructive: 0 84% 60%;                  /* Red for delete/error */
+  --destructive-foreground: 0 0% 100%;       /* White text on red */
+  
+  --success: 142 71% 45%;                    /* Green for success states */
+  --success-foreground: 0 0% 98.5%;          /* White text on success */
+  
+  --warning: 48 96% 53%;                     /* Amber for warning states */
+  --warning-foreground: 0 0% 14.5%;          /* Dark text on warning */
+  
+  --muted: 0 0% 97%;                         /* Subtle background */
+  --muted-foreground: 0 0% 55.6%;            /* Muted text */
+  
+  /* UI Elements */
+  --border: 0 0% 92.2%;                      /* Subtle borders */
+  --input: 0 0% 92.2%;                       /* Input backgrounds */
+  --ring: 0 0% 70.8%;                        /* Focus rings */
+  
+  /* Sidebar Navigation */
+  --sidebar: 0 0% 98.5%;                     /* Sidebar background */
+  --sidebar-foreground: 0 0% 14.5%;          /* Sidebar text */
+  --sidebar-primary: 0 0% 20.5%;             /* Active nav items */
+  --sidebar-primary-foreground: 0 0% 98.5%;  /* Text on active items */
+  --sidebar-accent: 0 0% 97%;                /* Hover states */
+  --sidebar-accent-foreground: 0 0% 20.5%;   /* Text on hover */
+  --sidebar-border: 0 0% 92.2%;              /* Sidebar borders */
+  --sidebar-ring: 0 0% 70.8%;                /* Focus in sidebar */
+}
+
+/* Light Mode - Explicit Override (highest priority) */
+.light {
+  --background: 0 0% 100% !important;        /* Pure white */
+  --foreground: 0 0% 14.5% !important;       /* Near black text */
+  --card: 0 0% 100% !important;              /* White cards */
+  --card-foreground: 0 0% 14.5% !important;  /* Dark text on cards */
+  --popover: 0 0% 100% !important;           /* White popovers */
+  --popover-foreground: 0 0% 14.5% !important; /* Dark text in popovers */
+  --primary: 160 42% 28% !important;         /* Muted forest green */
+  --primary-foreground: 0 0% 98.5% !important; /* White text on primary */
+  --secondary: 0 0% 97% !important;          /* Light gray */
+  --secondary-foreground: 0 0% 20.5% !important; /* Dark text on secondary */
+  --accent: 160 42% 28% !important;          /* Same as primary for consistency */
+  --accent-foreground: 0 0% 98.5% !important; /* White text on accent */
+  --destructive: 0 84% 60% !important;       /* Red for delete/error */
+  --destructive-foreground: 0 0% 100% !important; /* White text on red */
+  --success: 142 71% 45% !important;         /* Green for success states */
+  --success-foreground: 0 0% 98.5% !important; /* White text on success */
+  --warning: 48 96% 53% !important;          /* Amber for warning states */
+  --warning-foreground: 0 0% 14.5% !important; /* Dark text on warning */
+  --muted: 0 0% 97% !important;              /* Subtle background */
+  --muted-foreground: 0 0% 55.6% !important; /* Muted text */
+  --border: 0 0% 92.2% !important;           /* Subtle borders */
+  --input: 0 0% 92.2% !important;            /* Input backgrounds */
+  --ring: 0 0% 70.8% !important;             /* Focus rings */
+  --sidebar: 0 0% 98.5% !important;          /* Sidebar background */
+  --sidebar-foreground: 0 0% 14.5% !important; /* Sidebar text */
+  --sidebar-primary: 0 0% 20.5% !important;  /* Active nav items */
+  --sidebar-primary-foreground: 0 0% 98.5% !important; /* Text on active items */
+  --sidebar-accent: 0 0% 97% !important;     /* Hover states */
+  --sidebar-accent-foreground: 0 0% 20.5% !important; /* Text on hover */
+  --sidebar-border: 0 0% 92.2% !important;  /* Sidebar borders */
+  --sidebar-ring: 0 0% 70.8% !important;    /* Focus in sidebar */
+}
+
+/* Dark Mode - Explicit Override (highest priority) */
+.dark {
+  --background: 0 0% 14.5% !important;       /* Dark background */
+  --foreground: 0 0% 98.5% !important;       /* Light text */
+  --card: 0 0% 20.5% !important;             /* Dark cards */
+  --card-foreground: 0 0% 98.5% !important;  /* Light text on cards */
+  --popover: 0 0% 26.9% !important;          /* Dark popovers */
+  --popover-foreground: 0 0% 98.5% !important; /* Light text in popovers */
+  
+  --primary: 160 42% 38% !important;         /* Slightly brighter muted green for dark mode */
+  --primary-foreground: 0 0% 98.5% !important; /* Light text on green */
+  
+  --secondary: 0 0% 25.3% !important;        /* Dark secondary */
+  --secondary-foreground: 0 0% 100% !important; /* White text */
+  
+  --accent: 160 42% 38% !important;          /* Same as primary for consistency */
+  --accent-foreground: 0 0% 98.5% !important; /* Light text on accent */
+  
+  --destructive: 0 84% 70% !important;       /* Lighter red for dark mode */
+  --destructive-foreground: 0 0% 98.5% !important; /* Light text on red */
+  
+  --success: 142 71% 55% !important;         /* Brighter green for dark mode */
+  --success-foreground: 0 0% 98.5% !important; /* Light text on success */
+  
+  --warning: 48 96% 63% !important;          /* Brighter amber for dark mode */
+  --warning-foreground: 0 0% 14.5% !important; /* Dark text on warning */
+  
+  --muted: 0 0% 26.9% !important;            /* Dark muted */
+  --muted-foreground: 0 0% 70.8% !important; /* Light muted text */
+  
+  --border: 0 0% 27.5% !important;           /* Dark borders */
+  --input: 0 0% 32.5% !important;            /* Dark input backgrounds */
+  --ring: 0 0% 55.6% !important;             /* Dark focus rings */
+  
+  /* Dark Sidebar */
+  --sidebar: 0 0% 20.5% !important;          /* Dark sidebar */
+  --sidebar-foreground: 0 0% 98.5% !important; /* Light sidebar text */
+  --sidebar-primary: 160 42% 38% !important; /* Green active items */
+  --sidebar-primary-foreground: 0 0% 98.5% !important; /* Light text on active */
+  --sidebar-accent: 0 0% 26.9% !important;  /* Dark hover states */
+  --sidebar-accent-foreground: 0 0% 98.5% !important; /* Light text on hover */
+  --sidebar-border: 0 0% 27.5% !important;  /* Dark sidebar borders */
+  --sidebar-ring: 0 0% 43.9% !important;    /* Dark focus in sidebar */
+}
+
+/* Dark Mode - CSS Media Query Fallback (lower priority) */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --background: 0 0% 14.5%;                  /* Dark background */
+    --foreground: 0 0% 98.5%;                  /* Light text */
+    --card: 0 0% 20.5%;                        /* Dark cards */
+    --card-foreground: 0 0% 98.5%;             /* Light text on cards */
+    --popover: 0 0% 26.9%;                     /* Dark popovers */
+    --popover-foreground: 0 0% 98.5%;          /* Light text in popovers */
+    
+    --primary: 160 42% 38%;                    /* Slightly brighter muted green for dark mode */
+    --primary-foreground: 0 0% 98.5%;          /* Light text on green */
+    
+    --secondary: 0 0% 25.3%;                   /* Dark secondary */
+    --secondary-foreground: 0 0% 100%;         /* White text */
+    
+    --accent: 160 42% 38%;                     /* Same as primary for consistency */
+    --accent-foreground: 0 0% 98.5%;           /* Light text on accent */
+    
+    --destructive: 0 84% 70%;                  /* Lighter red for dark mode */
+    --destructive-foreground: 0 0% 98.5%;      /* Light text on red */
+    
+    --success: 142 71% 55%;                    /* Brighter green for dark mode */
+    --success-foreground: 0 0% 98.5%;          /* Light text on success */
+    
+    --warning: 48 96% 63%;                     /* Brighter amber for dark mode */
+    --warning-foreground: 0 0% 14.5%;          /* Dark text on warning */
+    
+    --muted: 0 0% 26.9%;                       /* Dark muted */
+    --muted-foreground: 0 0% 70.8%;            /* Light muted text */
+    
+    --border: 0 0% 27.5%;                      /* Dark borders */
+    --input: 0 0% 32.5%;                       /* Dark input backgrounds */
+    --ring: 0 0% 55.6%;                        /* Dark focus rings */
+    
+    /* Dark Sidebar */
+    --sidebar: 0 0% 20.5%;                     /* Dark sidebar */
+    --sidebar-foreground: 0 0% 98.5%;          /* Light sidebar text */
+    --sidebar-primary: 160 42% 38%;            /* Green active items */
+    --sidebar-primary-foreground: 0 0% 98.5%;  /* Light text on active */
+    --sidebar-accent: 0 0% 26.9%;              /* Dark hover states */
+    --sidebar-accent-foreground: 0 0% 98.5%;   /* Light text on hover */
+    --sidebar-border: 0 0% 27.5%;              /* Dark sidebar borders */
+    --sidebar-ring: 0 0% 43.9%;                /* Dark focus in sidebar */
+  }
+}
+
+/* Base Styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: oklch(var(--background));
+  color: oklch(var(--foreground));
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* Smooth transitions */
+* {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Focus styles */
+.focus-visible,
+*:focus-visible {
+  outline: 2px solid oklch(var(--ring));
+  outline-offset: 2px;
+}
+
+/* Selection styling */
+::selection {
+  background: oklch(var(--primary) / 0.2);
+  color: oklch(var(--primary-foreground));
+} 

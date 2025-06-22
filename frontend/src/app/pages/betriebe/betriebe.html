@@ -1,0 +1,298 @@
+<div class="bg-background">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-bold text-foreground">Betriebe</h1>
+        <p class="text-base text-muted-foreground mt-2">Verwalten Sie Ihre Unternehmen und deren Profile</p>
+      </div>
+      @if (isAdmin()) {
+        <button 
+          (click)="openCreateForm()" 
+          class="w-full sm:w-auto h-12 px-6 bg-primary text-primary-foreground rounded-md font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2">
+          <mat-icon>add</mat-icon>
+          Neuen Betrieb erstellen
+        </button>
+      }
+    </div>
+
+    <div class="space-y-6">
+      <!-- Loading State -->
+      @if (loading() && !showForm()) {
+        <div class="flex justify-center items-center py-16">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        </div>
+      }
+
+      <!-- Form Modal -->
+      @if (showForm()) {
+        <div class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div class="bg-card rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+              <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-semibold text-card-foreground">
+                  {{ isEditing() ? 'Betrieb bearbeiten' : 'Neuen Betrieb erstellen' }}
+                </h2>
+                <button 
+                  (click)="closeForm()" 
+                  class="p-2 hover:bg-accent rounded-md transition-colors">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+
+              <form [formGroup]="betriebForm" (ngSubmit)="onSubmit()" class="space-y-6">
+                <!-- Firmenname -->
+                <div>
+                  <label class="block text-sm font-medium text-card-foreground mb-2">
+                    Firmenname *
+                  </label>
+                  <input 
+                    type="text" 
+                    formControlName="name"
+                    placeholder="z.B. Bau AG Grabs"
+                    class="w-full h-12 px-3 border border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                  @if (betriebForm.get('name')?.hasError('required') && betriebForm.get('name')?.touched) {
+                    <p class="text-destructive text-sm mt-1">Firmenname ist erforderlich</p>
+                  }
+                  @if (betriebForm.get('name')?.hasError('minlength') && betriebForm.get('name')?.touched) {
+                    <p class="text-destructive text-sm mt-1">Firmenname muss mindestens 2 Zeichen lang sein</p>
+                  }
+                </div>
+
+                <!-- Adresse -->
+                <div>
+                  <label class="block text-sm font-medium text-card-foreground mb-2">
+                    Adresse *
+                  </label>
+                  <textarea 
+                    formControlName="adresse"
+                    rows="3"
+                    placeholder="Vollständige Adresse mit PLZ und Ort"
+                    class="w-full px-3 py-3 border border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"></textarea>
+                  @if (betriebForm.get('adresse')?.hasError('required') && betriebForm.get('adresse')?.touched) {
+                    <p class="text-destructive text-sm mt-1">Adresse ist erforderlich</p>
+                  }
+                </div>
+
+                <!-- Email -->
+                <div>
+                  <label class="block text-sm font-medium text-card-foreground mb-2">
+                    E-Mail *
+                  </label>
+                  <input 
+                    type="email" 
+                    formControlName="email"
+                    placeholder="info@unternehmen.ch"
+                    class="w-full h-12 px-3 border border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                  @if (betriebForm.get('email')?.hasError('required') && betriebForm.get('email')?.touched) {
+                    <p class="text-destructive text-sm mt-1">E-Mail ist erforderlich</p>
+                  }
+                  @if (betriebForm.get('email')?.hasError('email') && betriebForm.get('email')?.touched) {
+                    <p class="text-destructive text-sm mt-1">Bitte geben Sie eine gültige E-Mail-Adresse ein</p>
+                  }
+                </div>
+
+                <!-- Telefon -->
+                <div>
+                  <label class="block text-sm font-medium text-card-foreground mb-2">
+                    Telefon
+                  </label>
+                  <input 
+                    type="tel" 
+                    formControlName="telefon"
+                    placeholder="+41 81 123 45 67"
+                    class="w-full h-12 px-3 border border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                  @if (betriebForm.get('telefon')?.hasError('pattern') && betriebForm.get('telefon')?.touched) {
+                    <p class="text-destructive text-sm mt-1">Bitte geben Sie eine gültige Telefonnummer ein</p>
+                  }
+                </div>
+
+                <!-- Form Actions -->
+                <div class="flex flex-col-reverse sm:flex-row gap-3 pt-4">
+                  <button 
+                    type="button" 
+                    (click)="closeForm()"
+                    class="w-full sm:w-auto h-12 px-6 border border-border rounded-md font-medium text-foreground hover:bg-accent transition-colors">
+                    Abbrechen
+                  </button>
+                  <button 
+                    type="submit" 
+                    [disabled]="betriebForm.invalid || loading()"
+                    class="w-full sm:w-auto h-12 px-6 bg-primary text-primary-foreground rounded-md font-medium hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2">
+                    @if (loading()) {
+                      <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-foreground"></div>
+                    } @else {
+                      <mat-icon>{{ isEditing() ? 'save' : 'add' }}</mat-icon>
+                    }
+                    {{ isEditing() ? 'Aktualisieren' : 'Erstellen' }}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Betriebe List -->
+      @if (!loading() && !showForm()) {
+        <!-- Mobile Cards -->
+        <div class="block lg:hidden">
+          @if (filteredBetriebe().length === 0) {
+            <div class="text-center py-16 bg-card rounded-lg border border-border">
+              <div class="flex justify-center mb-6">
+                <div class="flex items-center justify-center w-16 h-16 bg-primary/10 rounded-lg">
+                  <mat-icon class="text-primary text-4xl">business</mat-icon>
+                </div>
+              </div>
+              <h3 class="text-xl font-medium text-card-foreground mb-3">Keine aktiven Betriebe</h3>
+              <p class="text-base text-muted-foreground mb-8">
+                @if (isAdmin()) {
+                  Erstellen Sie Ihr erstes Unternehmensprofil.
+                } @else {
+                  Keine Betriebe verfügbar. Wenden Sie sich an einen Administrator.
+                }
+              </p>
+              @if (isAdmin()) {
+                <button 
+                  (click)="openCreateForm()" 
+                  class="h-12 px-6 bg-primary text-primary-foreground rounded-md font-medium hover:bg-primary/90 transition-colors inline-flex items-center gap-2">
+                  <mat-icon>add</mat-icon>
+                  Ersten Betrieb erstellen
+                </button>
+              }
+            </div>
+          } @else {
+            <div class="space-y-4">
+              @for (betrieb of filteredBetriebe(); track betrieb.id) {
+                <div class="bg-card rounded-lg border border-border p-5 shadow-sm">
+                  <div class="flex items-start justify-between mb-4">
+                    <div class="flex-1 min-w-0">
+                      <h3 class="text-lg font-semibold text-card-foreground truncate">{{ betrieb.name }}</h3>
+                      <p class="text-base text-muted-foreground mt-1">{{ betrieb.email }}</p>
+                    </div>
+                    <span class="ml-3 px-3 py-2 rounded-full text-sm font-medium whitespace-nowrap" 
+                          [class]="getStatusColor(betrieb.status) === 'primary' ? 'bg-primary text-primary-foreground' : 
+                                   getStatusColor(betrieb.status) === 'warn' ? 'bg-destructive text-destructive-foreground' : 
+                                   'bg-accent text-accent-foreground'">
+                      {{ getStatusText(betrieb.status) }}
+                    </span>
+                  </div>
+                  
+                  <div class="space-y-2 text-sm text-muted-foreground mb-4">
+                    <p>{{ betrieb.telefon || 'Keine Telefonnummer' }}</p>
+                    <p>{{ betrieb.adresse }}</p>
+                  </div>
+
+                  @if (isAdmin()) {
+                    <div class="flex gap-2">
+                      <button 
+                        (click)="openEditForm(betrieb)" 
+                        class="flex-1 h-10 px-3 border border-primary text-primary rounded-md text-sm font-medium hover:bg-primary/10 transition-colors flex items-center justify-center gap-2">
+                        <mat-icon class="text-base">edit</mat-icon>
+                        Bearbeiten
+                      </button>
+                      <button 
+                        (click)="toggleStatus(betrieb)" 
+                        class="flex-1 h-10 px-3 rounded-md text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                        [class]="betrieb.status === BetriebStatus.AKTIV ? 'border border-destructive text-destructive hover:bg-destructive/10' : 'border border-primary text-primary hover:bg-primary/10'">
+                        <mat-icon class="text-base">{{ betrieb.status === BetriebStatus.AKTIV ? 'pause' : 'play_arrow' }}</mat-icon>
+                        {{ betrieb.status === BetriebStatus.AKTIV ? 'Pausieren' : 'Aktivieren' }}
+                      </button>
+                      <button 
+                        (click)="deleteBetrieb(betrieb)" 
+                        class="h-10 w-10 border border-destructive text-destructive rounded-md hover:bg-destructive/10 transition-colors flex items-center justify-center">
+                        <mat-icon class="text-base">delete</mat-icon>
+                      </button>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Desktop Table -->
+        <div class="hidden lg:block bg-card rounded-lg border border-border overflow-hidden">
+          @if (filteredBetriebe().length === 0) {
+            <div class="text-center py-16">
+              <div class="flex justify-center mb-6">
+                <div class="flex items-center justify-center w-16 h-16 bg-primary/10 rounded-lg">
+                  <mat-icon class="text-primary text-4xl">business</mat-icon>
+                </div>
+              </div>
+              <h3 class="text-lg font-medium text-card-foreground mb-3">Keine aktiven Betriebe</h3>
+              <p class="text-muted-foreground mb-6">Erstellen Sie Ihr erstes Unternehmensprofil.</p>
+              <button 
+                (click)="openCreateForm()" 
+                class="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-2 rounded-md font-medium transition-colors inline-flex items-center gap-2">
+                <mat-icon>add</mat-icon>
+                Ersten Betrieb erstellen
+              </button>
+            </div>
+          } @else {
+            <table class="w-full">
+              <thead class="bg-muted/30">
+                <tr>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Firma</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Kontakt</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Status</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Aktionen</th>
+                </tr>
+              </thead>
+              <tbody class="bg-card divide-y divide-border">
+                @for (betrieb of filteredBetriebe(); track betrieb.id) {
+                  <tr class="hover:bg-muted/50 transition-colors">
+                    <td class="px-6 py-4">
+                      <div>
+                        <div class="font-medium text-card-foreground">{{ betrieb.name }}</div>
+                        <div class="text-sm text-muted-foreground">{{ betrieb.adresse }}</div>
+                      </div>
+                    </td>
+                    <td class="px-6 py-4">
+                      <div>
+                        <div class="text-sm text-card-foreground">{{ betrieb.email }}</div>
+                        <div class="text-sm text-muted-foreground">{{ betrieb.telefon || 'Keine Telefonnummer' }}</div>
+                      </div>
+                    </td>
+                    <td class="px-6 py-4">
+                      <span class="px-2 py-1 rounded-full text-xs font-medium"
+                            [class]="getStatusColor(betrieb.status) === 'primary' ? 'bg-primary text-primary-foreground' : 
+                                     getStatusColor(betrieb.status) === 'warn' ? 'bg-destructive text-destructive-foreground' : 
+                                     'bg-accent text-accent-foreground'">
+                        {{ getStatusText(betrieb.status) }}
+                      </span>
+                    </td>
+                    <td class="px-6 py-4">
+                      @if (isAdmin()) {
+                        <div class="flex gap-1">
+                          <button 
+                            (click)="openEditForm(betrieb)" 
+                            class="p-2 text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors">
+                            <mat-icon class="text-base">edit</mat-icon>
+                          </button>
+                          <button 
+                            (click)="toggleStatus(betrieb)"
+                            class="p-2 rounded-md transition-colors"
+                            [class]="betrieb.status === BetriebStatus.AKTIV ? 'text-destructive hover:bg-destructive/10' : 'text-primary hover:bg-primary/10'">
+                            <mat-icon class="text-base">{{ betrieb.status === BetriebStatus.AKTIV ? 'pause' : 'play_arrow' }}</mat-icon>
+                          </button>
+                          <button 
+                            (click)="deleteBetrieb(betrieb)" 
+                            class="p-2 text-destructive hover:bg-destructive/10 rounded-md transition-colors">
+                            <mat-icon class="text-base">delete</mat-icon>
+                          </button>
+                        </div>
+                      } @else {
+                        <span class="text-sm text-muted-foreground">Nur für Administratoren</span>
+                      }
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</div>

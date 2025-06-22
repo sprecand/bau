@@ -1,0 +1,232 @@
+---
+description: frontend tasks
+globs: 
+alwaysApply: false
+---
+# Angular 20+ Development Rules
+
+## Documentation References
+- **Bau Coding Standards**: `doc/tech/08-cross-cutting-concepts/coding-standards.md`
+- **Bau Project Overview**: `workspace.mdc`
+
+## Angular 20+ Best Practices
+
+### Standalone Components
+- Use standalone components instead of NgModules
+- Import only required dependencies
+- Use `changeDetection: ChangeDetectionStrategy.OnPush` for performance
+- Use `inject()` function for dependency injection
+
+### Signals (Modern State Management)
+- Use signals for reactive state management
+- Use `signal()` for mutable state
+- Use `computed()` for derived state
+- Use `effect()` for side effects
+- Prefer signals over RxJS for simple state
+
+```typescript
+export class ExampleComponent {
+  private readonly data = signal<Data[]>([]);
+  private readonly loading = signal(false);
+  
+  readonly dataCount = computed(() => this.data().length);
+  readonly hasData = computed(() => this.dataCount() > 0);
+  
+  constructor() {
+    effect(() => {
+      console.log('Data count changed:', this.dataCount());
+    });
+  }
+}
+```
+
+### Dependency Injection
+- Use `inject()` function instead of constructor injection
+- Use `providedIn: 'root'` for singleton services
+- Use `providedIn: 'any'` for component-scoped services
+- Use `providedIn: 'platform'` for platform-wide services
+
+### TypeScript Best Practices
+- Use strict TypeScript configuration
+- Use interfaces for object shapes
+- Use type aliases for complex types
+- Use generics for reusable components
+- Use union types for discriminated unions
+
+### Component Architecture
+- Keep components small and focused
+- Use composition over inheritance
+- Use content projection with `<ng-content>`
+- Use structural directives (`*ngIf`, `*ngFor`)
+- Use attribute directives for reusable behavior
+
+### Template Syntax
+- Use interpolation `{{ }}` for simple values
+- Use property binding `[property]` for dynamic values
+- Use event binding `(event)` for user interactions
+- Use two-way binding `[(ngModel)]` for forms
+- Use template reference variables `#ref`
+
+## Angular Material Integration
+
+### Component Usage
+- Import only required Material modules
+- Use Material components consistently
+- Customize Material themes with CSS variables
+- Use Material icons for consistent iconography
+
+### Form Integration
+- Use `ReactiveFormsModule` for complex forms
+- Use `FormGroup` and `FormControl` for form structure
+- Use `Validators` for form validation
+- Use Material form field components
+
+### Styling with Tailwind CSS
+- Use Tailwind utilities for custom styling
+- Combine Material components with Tailwind classes
+- Use responsive design utilities
+- Use Tailwind's color palette consistently
+
+## Routing & Navigation
+
+### Route Configuration
+- Use lazy loading for feature modules
+- Use route guards for authentication
+- Use route resolvers for data loading
+- Use child routes for nested navigation
+
+### Navigation
+- Use `Router` service for programmatic navigation
+- Use `ActivatedRoute` for route parameters
+- Use `RouterLink` directive for template navigation
+- Use `RouterLinkActive` for active route styling
+
+## HTTP & API Communication
+
+### HttpClient Usage
+- Use `HttpClient` for API calls
+- Use interceptors for common headers
+- Use error handling with `catchError`
+- Use `HttpParams` for query parameters
+
+### Error Handling
+- Use global error interceptor
+- Use specific error types
+- Provide user-friendly error messages
+- Log errors for debugging
+
+## Performance Optimization
+
+### Change Detection
+- Use `OnPush` change detection strategy
+- Use `trackBy` function for `*ngFor`
+- Use `async` pipe for observables
+- Avoid expensive operations in templates
+
+### Lazy Loading
+- Use lazy loading for feature modules
+- Use preloading strategies
+- Use route-based code splitting
+- Monitor bundle sizes
+
+### Memory Management
+- Unsubscribe from observables
+- Use `takeUntil` operator with destroy subject
+- Use `OnDestroy` lifecycle hook
+- Avoid memory leaks in components
+
+## Testing
+
+### Unit Testing
+- Use Jasmine and Karma for unit tests
+- Test component logic in isolation
+- Mock dependencies with `TestBed`
+- Use `ComponentFixture` for component testing
+
+### Integration Testing
+- Test component interactions
+- Test routing behavior
+- Test form submissions
+- Test API integrations
+
+### E2E Testing
+- Use Playwright or Cypress for E2E tests
+- Test user workflows
+- Test responsive design
+- Test accessibility features
+
+## Security
+
+### XSS Prevention
+- Use Angular's built-in XSS protection
+- Sanitize user inputs
+- Use `DomSanitizer` for trusted content
+- Avoid `innerHTML` with user data
+
+### CSRF Protection
+- Use CSRF tokens for state-changing requests
+- Validate request origins
+- Use secure cookies
+- Implement proper session management
+
+## Accessibility
+
+### ARIA Support
+- Use semantic HTML elements
+- Add ARIA labels and descriptions
+- Use proper heading hierarchy
+- Test with screen readers
+
+### Keyboard Navigation
+- Ensure all interactive elements are keyboard accessible
+- Use proper focus management
+- Implement skip links
+- Test tab order
+
+## Build & Deployment
+
+### Build Configuration
+- Use Angular CLI for builds
+- Configure environment-specific builds
+- Optimize bundle sizes
+- Use source maps for debugging
+
+### Deployment
+- Use static file hosting (Netlify, Vercel, AWS S3)
+- Configure proper caching headers
+- Use CDN for static assets
+- Monitor performance metrics
+
+## Development Tools
+
+### Angular CLI
+- Use `ng generate` for scaffolding
+- Use `ng serve` for development server
+- Use `ng build` for production builds
+- Use `ng test` for running tests
+
+### VS Code Extensions
+- Angular Language Service
+- Angular Snippets
+- TypeScript Importer
+- Tailwind CSS IntelliSense
+
+### Debugging
+- Use Angular DevTools browser extension
+- Use browser developer tools
+- Use console logging strategically
+- Use source maps for debugging
+
+## Code Quality
+
+### Linting
+- Use ESLint with Angular rules
+- Use Prettier for code formatting
+- Use Husky for pre-commit hooks
+- Use lint-staged for staged files
+
+### Code Organization
+- Use feature-based folder structure
+- Separate concerns (components, services, models)
+- Use barrel exports for clean imports
+- Follow naming conventions consistently

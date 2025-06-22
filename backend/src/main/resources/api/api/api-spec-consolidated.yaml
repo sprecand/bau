@@ -1,0 +1,812 @@
+openapi: 3.0.3
+info:
+  title: Bau Platform API
+  description: API for connecting construction companies with temporary workers
+  version: 1.0.0
+  contact:
+    name: Bau Platform Team
+    email: support@bau-platform.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://api.bau-platform.com/api/v1
+    description: Production server
+  - url: https://staging-api.bau-platform.com/api/v1
+    description: Staging server
+  - url: http://localhost:8080/api/v1
+    description: Local development server
+
+security:
+  - BearerAuth: []
+
+paths:
+  /bedarfs:
+    get:
+      summary: List bedarfs (demands)
+      description: Get paginated list of bedarfs with optional filtering
+      tags:
+        - bedarf-controller
+      parameters:
+        - name: page
+          in: query
+          description: Page number (0-based)
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: size
+          in: query
+          description: Page size
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: status
+          in: query
+          description: Filter by status
+          required: false
+          schema:
+            type: string
+            enum: [AKTIV, INACTIV, ABGESCHLOSSEN]
+        - name: datumVon
+          in: query
+          description: Filter by start date (YYYY-MM-DD)
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: datumBis
+          in: query
+          description: Filter by end date (YYYY-MM-DD)
+          required: false
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: List of bedarfs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BedarfListResponse'
+        '401':
+          description: Unauthorized
+
+    post:
+      summary: Create new bedarf
+      description: Create a new bedarf (demand) for temporary workers
+      tags:
+        - bedarf-controller
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBedarfRequest'
+      responses:
+        '201':
+          description: Bedarf created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BedarfResponse'
+        '400':
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - insufficient permissions
+
+  /bedarfs/{id}:
+    get:
+      summary: Get bedarf by ID
+      description: Retrieve a specific bedarf by its ID
+      tags:
+        - bedarf-controller
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Bedarf ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Bedarf details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BedarfResponse'
+        '404':
+          description: Bedarf not found
+        '401':
+          description: Unauthorized
+
+    put:
+      summary: Update bedarf
+      description: Update an existing bedarf
+      tags:
+        - bedarf-controller
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Bedarf ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBedarfRequest'
+      responses:
+        '200':
+          description: Bedarf updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BedarfResponse'
+        '400':
+          description: Invalid request data
+        '401':
+          description: Unauthorized
+        '404':
+          description: Bedarf not found
+
+    delete:
+      summary: Delete bedarf
+      description: Delete a bedarf by its ID
+      tags:
+        - bedarf-controller
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Bedarf ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Bedarf deleted successfully
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - insufficient permissions
+        '404':
+          description: Bedarf not found
+
+  /bedarfs/{id}/status:
+    patch:
+      summary: Update bedarf status
+      description: Update the status of a bedarf
+      tags:
+        - bedarf-controller
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Bedarf ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBedarfStatusRequest'
+      responses:
+        '200':
+          description: Bedarf status updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BedarfResponse'
+        '400':
+          description: Invalid request data
+        '401':
+          description: Unauthorized
+        '404':
+          description: Bedarf not found
+
+  /bedarfs/betrieb/{betriebId}:
+    get:
+      summary: Get bedarfs by betrieb
+      description: Retrieve all bedarfs for a specific betrieb (company)
+      tags:
+        - bedarf-controller
+      parameters:
+        - name: betriebId
+          in: path
+          required: true
+          description: Betrieb ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: List of bedarfs for the betrieb
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BedarfResponse'
+        '401':
+          description: Unauthorized
+
+  /betriebs:
+    get:
+      summary: List betriebs (companies)
+      description: Get paginated list of betriebs with optional filtering
+      tags:
+        - betrieb-controller
+      parameters:
+        - name: page
+          in: query
+          description: Page number (0-based)
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: size
+          in: query
+          description: Page size
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: status
+          in: query
+          description: Filter by status
+          required: false
+          schema:
+            type: string
+            enum: [AKTIV, INACTIV]
+      responses:
+        '200':
+          description: List of betriebs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BetriebListResponse'
+        '401':
+          description: Unauthorized
+
+    post:
+      summary: Create new betrieb
+      description: Create a new betrieb (company)
+      tags:
+        - betrieb-controller
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBetriebRequest'
+      responses:
+        '201':
+          description: Betrieb created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BetriebResponse'
+        '400':
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - insufficient permissions
+
+  /betriebs/{id}:
+    get:
+      summary: Get betrieb by ID
+      description: Retrieve a specific betrieb by its ID
+      tags:
+        - betrieb-controller
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Betrieb ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Betrieb details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BetriebResponse'
+        '404':
+          description: Betrieb not found
+        '401':
+          description: Unauthorized
+
+    put:
+      summary: Update betrieb
+      description: Update an existing betrieb
+      tags:
+        - betrieb-controller
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Betrieb ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBetriebRequest'
+      responses:
+        '200':
+          description: Betrieb updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BetriebResponse'
+        '400':
+          description: Invalid request data
+        '401':
+          description: Unauthorized
+        '404':
+          description: Betrieb not found
+
+    delete:
+      summary: Delete betrieb
+      description: Delete a betrieb by its ID
+      tags:
+        - betrieb-controller
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Betrieb ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Betrieb deleted successfully
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - insufficient permissions
+        '404':
+          description: Betrieb not found
+
+  /betriebs/{id}/status:
+    patch:
+      summary: Update betrieb status
+      description: Update the status of a betrieb
+      tags:
+        - betrieb-controller
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Betrieb ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBetriebStatusRequest'
+      responses:
+        '200':
+          description: Betrieb status updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BetriebResponse'
+        '400':
+          description: Invalid request data
+        '401':
+          description: Unauthorized
+        '404':
+          description: Betrieb not found
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token from AWS Cognito
+  
+  schemas:
+    BedarfResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        betriebId:
+          type: string
+          format: uuid
+          description: Company ID
+          example: "123e4567-e89b-12d3-a456-426614174001"
+        betriebName:
+          type: string
+          description: Company name
+          example: "Bau AG Grabs"
+        holzbauAnzahl:
+          type: integer
+          format: int32
+          description: Number of carpenters needed
+          example: 2
+        zimmermannAnzahl:
+          type: integer
+          format: int32
+          description: Number of joiners needed
+          example: 1
+        datumVon:
+          type: string
+          format: date
+          description: Start date
+          example: "2024-02-01"
+        datumBis:
+          type: string
+          format: date
+          description: End date
+          example: "2024-02-15"
+        adresse:
+          type: string
+          description: Work location address
+          example: "Dorfstrasse 1234, 9472 Grabs"
+        mitWerkzeug:
+          type: boolean
+          description: Tools required
+          example: true
+        mitFahrzeug:
+          type: boolean
+          description: Vehicle required
+          example: false
+        status:
+          type: string
+          enum: [AKTIV, INACTIV, ABGESCHLOSSEN]
+          description: Current status
+          example: "AKTIV"
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation timestamp
+          example: "2024-01-15T10:30:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+          example: "2024-01-15T10:30:00Z"
+
+    CreateBedarfRequest:
+      type: object
+      required:
+        - holzbauAnzahl
+        - zimmermannAnzahl
+        - datumVon
+        - datumBis
+        - adresse
+      properties:
+        holzbauAnzahl:
+          type: integer
+          format: int32
+          minimum: 0
+          description: Number of carpenters needed
+          example: 2
+        zimmermannAnzahl:
+          type: integer
+          format: int32
+          minimum: 0
+          description: Number of joiners needed
+          example: 1
+        datumVon:
+          type: string
+          format: date
+          description: Start date
+          example: "2024-02-01"
+        datumBis:
+          type: string
+          format: date
+          description: End date
+          example: "2024-02-15"
+        adresse:
+          type: string
+          minLength: 1
+          maxLength: 1000
+          description: Work location address
+          example: "Dorfstrasse 1234, 9472 Grabs"
+        mitWerkzeug:
+          type: boolean
+          description: Tools required
+          example: true
+        mitFahrzeug:
+          type: boolean
+          description: Vehicle required
+          example: false
+
+    UpdateBedarfRequest:
+      type: object
+      properties:
+        holzbauAnzahl:
+          type: integer
+          format: int32
+          minimum: 0
+          description: Number of carpenters needed
+          example: 2
+        zimmermannAnzahl:
+          type: integer
+          format: int32
+          minimum: 0
+          description: Number of joiners needed
+          example: 1
+        datumVon:
+          type: string
+          format: date
+          description: Start date
+          example: "2024-02-01"
+        datumBis:
+          type: string
+          format: date
+          description: End date
+          example: "2024-02-15"
+        adresse:
+          type: string
+          minLength: 1
+          maxLength: 1000
+          description: Work location address
+          example: "Dorfstrasse 1234, 9472 Grabs"
+        mitWerkzeug:
+          type: boolean
+          description: Tools required
+          example: true
+        mitFahrzeug:
+          type: boolean
+          description: Vehicle required
+          example: false
+
+    UpdateBedarfStatusRequest:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum: [AKTIV, INACTIV, ABGESCHLOSSEN]
+          description: New status
+          example: "ABGESCHLOSSEN"
+
+    BedarfListResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/BedarfResponse'
+        totalElements:
+          type: integer
+          format: int32
+          description: Total number of elements
+          example: 100
+        totalPages:
+          type: integer
+          format: int32
+          description: Total number of pages
+          example: 5
+        currentPage:
+          type: integer
+          format: int32
+          description: Current page number (0-based)
+          example: 0
+        pageSize:
+          type: integer
+          format: int32
+          description: Page size
+          example: 20
+        hasNext:
+          type: boolean
+          description: Has next page
+          example: true
+        hasPrevious:
+          type: boolean
+          description: Has previous page
+          example: false
+
+    BetriebResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        name:
+          type: string
+          description: Company name
+          example: "Bau AG Grabs"
+        adresse:
+          type: string
+          description: Company address
+          example: "Dorfstrasse 1234, 9472 Grabs"
+        email:
+          type: string
+          format: email
+          description: Contact email
+          example: "info@bau-ag-grabs.ch"
+        telefon:
+          type: string
+          description: Contact phone number
+          example: "+41 81 123 45 67"
+        status:
+          type: string
+          enum: [AKTIV, INACTIV]
+          description: Current status
+          example: "AKTIV"
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation timestamp
+          example: "2024-01-15T10:30:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+          example: "2024-01-15T10:30:00Z"
+
+    CreateBetriebRequest:
+      type: object
+      required:
+        - name
+        - adresse
+        - email
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: Company name
+          example: "Bau AG Grabs"
+        adresse:
+          type: string
+          minLength: 1
+          maxLength: 1000
+          description: Company address
+          example: "Dorfstrasse 1234, 9472 Grabs"
+        email:
+          type: string
+          format: email
+          description: Contact email
+          example: "info@bau-ag-grabs.ch"
+        telefon:
+          type: string
+          maxLength: 50
+          description: Contact phone number
+          example: "+41 81 123 45 67"
+
+    UpdateBetriebRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: Company name
+          example: "Bau AG Grabs"
+        adresse:
+          type: string
+          minLength: 1
+          maxLength: 1000
+          description: Company address
+          example: "Dorfstrasse 1234, 9472 Grabs"
+        email:
+          type: string
+          format: email
+          description: Contact email
+          example: "info@bau-ag-grabs.ch"
+        telefon:
+          type: string
+          maxLength: 50
+          description: Contact phone number
+          example: "+41 81 123 45 67"
+
+    UpdateBetriebStatusRequest:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum: [AKTIV, INACTIV]
+          description: New status
+          example: "INACTIV"
+
+    BetriebListResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/BetriebResponse'
+        totalElements:
+          type: integer
+          format: int32
+          description: Total number of elements
+          example: 100
+        totalPages:
+          type: integer
+          format: int32
+          description: Total number of pages
+          example: 5
+        currentPage:
+          type: integer
+          format: int32
+          description: Current page number (0-based)
+          example: 0
+        pageSize:
+          type: integer
+          format: int32
+          description: Page size
+          example: 20
+        hasNext:
+          type: boolean
+          description: Has next page
+          example: true
+        hasPrevious:
+          type: boolean
+          description: Has previous page
+          example: false
+
+    ErrorResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          description: Error timestamp
+          example: "2024-01-15T10:30:00Z"
+        status:
+          type: integer
+          format: int32
+          description: HTTP status code
+          example: 400
+        error:
+          type: string
+          description: Error type
+          example: "Bad Request"
+        message:
+          type: string
+          description: Error message
+          example: "Validation failed"
+        path:
+          type: string
+          description: Request path
+          example: "/api/v1/bedarfs"

@@ -1,0 +1,67 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+ # No TODO Rule
+
+## Implementation Over Documentation
+
+### Principle
+**NEVER create TODO comments or placeholder code when you can implement the actual functionality immediately.**
+
+### When NOT to Use TODOs
+- ❌ **Missing implementations** that can be coded right away
+- ❌ **Placeholder methods** when the logic is straightforward
+- ❌ **Skeleton classes** when the full implementation is clear
+- ❌ **Database entities** when the schema is defined
+- ❌ **Repository implementations** when the interface exists
+- ❌ **Business logic methods** when the requirements are clear
+
+### When TODOs Are Acceptable
+- ✅ **Complex business rules** requiring stakeholder clarification
+- ✅ **External integrations** not yet available
+- ✅ **Performance optimizations** for future iterations
+- ✅ **Features explicitly marked for future releases**
+
+### Implementation Guidelines
+
+#### Instead of TODO Comments:
+```java
+// ❌ DON'T DO THIS
+public class UserService {
+    // TODO: Implement user validation
+    public boolean validateUser(User user) {
+        return true; // placeholder
+    }
+}
+```
+
+#### Implement Immediately:
+```java
+// ✅ DO THIS INSTEAD
+public class UserService {
+    public boolean validateUser(User user) {
+        if (user == null || user.getEmail() == null) {
+            return false;
+        }
+        return user.getEmail().contains("@") && user.getEmail().length() > 5;
+    }
+}
+```
+
+### Documentation Approach
+- Document **what IS implemented**, not what will be
+- Use **present tense** for existing functionality
+- Mark missing features as **"Not yet implemented"** rather than TODO
+- Update documentation **immediately** when code changes
+
+### Code Review Checklist
+- [ ] No TODO comments for implementable features
+- [ ] All placeholder methods have real logic
+- [ ] Documentation reflects actual implementation
+- [ ] Missing pieces are implemented or clearly documented as unavailable
+
+## Related Rules
+- [Documentation Management](mdc:documentation.md)
+- [Coding Standards](mdc:../doc/tech/08-cross-cutting-concepts/coding-standards.md) 

@@ -1,0 +1,197 @@
+# Users schemas
+UserResponse:
+  type: object
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: User ID
+      example: "123e4567-e89b-12d3-a456-426614174000"
+    username:
+      type: string
+      description: Username
+      example: "john.doe@bau-ag-grabs.ch"
+    email:
+      type: string
+      format: email
+      description: Email address
+      example: "john.doe@bau-ag-grabs.ch"
+    firstName:
+      type: string
+      description: First name
+      example: "John"
+    lastName:
+      type: string
+      description: Last name
+      example: "Doe"
+    betriebId:
+      type: string
+      format: uuid
+      description: Company ID
+      example: "123e4567-e89b-12d3-a456-426614174001"
+    betriebName:
+      type: string
+      description: Company name
+      example: "Bau AG Grabs"
+    role:
+      type: string
+      enum: [ADMIN, BETRIEB]
+      description: User role
+      example: "BETRIEB"
+    status:
+      type: string
+      enum: [AKTIV, INACTIV]
+      description: User status
+      example: "AKTIV"
+    emailVerified:
+      type: boolean
+      description: Email verification status
+      example: true
+    createdAt:
+      type: string
+      format: date-time
+      description: Account creation timestamp
+      example: "2024-01-15T10:30:00Z"
+    updatedAt:
+      type: string
+      format: date-time
+      description: Last update timestamp
+      example: "2024-01-15T10:30:00Z"
+
+CreateUserRequest:
+  type: object
+  required:
+    - username
+    - email
+    - firstName
+    - lastName
+    - betriebId
+    - role
+  properties:
+    username:
+      type: string
+      description: Username
+      example: "john.doe@bau-ag-grabs.ch"
+    email:
+      type: string
+      format: email
+      description: Email address
+      example: "john.doe@bau-ag-grabs.ch"
+    firstName:
+      type: string
+      description: First name
+      example: "John"
+    lastName:
+      type: string
+      description: Last name
+      example: "Doe"
+    betriebId:
+      type: string
+      format: uuid
+      description: Company ID
+      example: "123e4567-e89b-12d3-a456-426614174001"
+    role:
+      type: string
+      enum: [ADMIN, BETRIEB]
+      description: User role
+      example: "BETRIEB"
+
+UpdateUserRequest:
+  type: object
+  properties:
+    username:
+      type: string
+      description: Username
+      example: "john.doe@bau-ag-grabs.ch"
+    email:
+      type: string
+      format: email
+      description: Email address
+      example: "john.doe@bau-ag-grabs.ch"
+    firstName:
+      type: string
+      description: First name
+      example: "John"
+    lastName:
+      type: string
+      description: Last name
+      example: "Doe"
+    betriebId:
+      type: string
+      format: uuid
+      description: Company ID
+      example: "123e4567-e89b-12d3-a456-426614174001"
+    role:
+      type: string
+      enum: [ADMIN, BETRIEB]
+      description: User role
+      example: "BETRIEB"
+    status:
+      type: string
+      enum: [AKTIV, INACTIV]
+      description: User status
+      example: "AKTIV"
+
+UpdateUserProfileRequest:
+  type: object
+  properties:
+    firstName:
+      type: string
+      description: First name
+      example: "John"
+    lastName:
+      type: string
+      description: Last name
+      example: "Doe"
+    email:
+      type: string
+      format: email
+      description: Email address
+      example: "john.doe@bau-ag-grabs.ch"
+
+ChangePasswordRequest:
+  type: object
+  required:
+    - currentPassword
+    - newPassword
+  properties:
+    currentPassword:
+      type: string
+      description: Current password
+      example: "oldPassword123"
+    newPassword:
+      type: string
+      description: New password
+      example: "newPassword123"
+
+UserListResponse:
+  type: object
+  properties:
+    content:
+      type: array
+      items:
+        $ref: '#/UserResponse'
+    totalElements:
+      type: integer
+      description: Total number of elements
+      example: 100
+    totalPages:
+      type: integer
+      description: Total number of pages
+      example: 5
+    currentPage:
+      type: integer
+      description: Current page number
+      example: 1
+    pageSize:
+      type: integer
+      description: Page size
+      example: 20
+    hasNext:
+      type: boolean
+      description: Has next page
+      example: true
+    hasPrevious:
+      type: boolean
+      description: Has previous page
+      example: false 

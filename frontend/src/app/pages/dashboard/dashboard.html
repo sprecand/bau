@@ -1,0 +1,120 @@
+<div class="bg-background">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <!-- Header -->
+    <div class="mb-6 sm:mb-8">
+      <h1 class="text-3xl sm:text-4xl font-bold text-foreground mb-3 sm:mb-4">Dashboard</h1>
+      <p class="text-lg text-muted-foreground max-w-2xl">
+        Willkommen bei der B2B-Plattform für Zimmerei-Betriebe. Verwalten Sie Ihre Holzbau-Bedarfe und vernetzen Sie sich mit anderen Baufirmen für Personalkooperationen.
+      </p>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+      <!-- Active Bedarfe -->
+      <div class="bg-card rounded-lg border border-border p-5 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-base font-medium text-muted-foreground">Aktive Bedarfe</p>
+            <p class="text-3xl font-bold text-card-foreground mt-1">{{ stats().activeBedarfe }}</p>
+          </div>
+          <div class="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-lg shrink-0">
+            <mat-icon class="text-primary text-2xl">construction</mat-icon>
+          </div>
+        </div>
+        <div class="mt-4">
+          <span class="text-sm text-muted-foreground">
+            Bereit für Bewerbungen
+          </span>
+        </div>
+      </div>
+
+      <!-- Recent Bedarfe (30 days) -->
+      <div class="bg-card rounded-lg border border-border p-5 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-base font-medium text-muted-foreground">Bedarfe letzten 30 Tage</p>
+            <p class="text-3xl font-bold text-card-foreground mt-1">{{ stats().monthlyBedarfe }}</p>
+          </div>
+          <div class="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-lg shrink-0">
+            <mat-icon class="text-primary text-2xl">calendar_month</mat-icon>
+          </div>
+        </div>
+        <div class="mt-4">
+          <span class="text-sm text-muted-foreground">
+            Aktuelle Aktivität
+          </span>
+        </div>
+      </div>
+
+      <!-- Total Bedarfe -->
+      <div class="bg-card rounded-lg border border-border p-5 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-base font-medium text-muted-foreground">Gesamt Bedarfe</p>
+            <p class="text-3xl font-bold text-card-foreground mt-1">{{ stats().totalBedarfe }}</p>
+          </div>
+          <div class="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-lg shrink-0">
+            <mat-icon class="text-primary text-2xl">format_list_bulleted</mat-icon>
+          </div>
+        </div>
+        <div class="mt-4">
+          <span class="text-sm text-muted-foreground">
+            Alle erstellten Bedarfe
+          </span>
+        </div>
+      </div>
+
+      <!-- Total Betriebe -->
+      <div class="bg-card rounded-lg border border-border p-5 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-base font-medium text-muted-foreground">Zimmerei-Betriebe</p>
+            <p class="text-3xl font-bold text-card-foreground mt-1">{{ stats().totalBetriebe }}</p>
+          </div>
+          <div class="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-lg shrink-0">
+            <mat-icon class="text-primary text-2xl">business</mat-icon>
+          </div>
+        </div>
+        <div class="mt-4">
+          <span class="text-sm text-muted-foreground">
+            Aktive Partnerschaften
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="bg-card rounded-lg border border-border p-5 sm:p-6 shadow-sm">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-semibold text-card-foreground">Letzte Aktivitäten</h2>
+      </div>
+
+      <div class="space-y-4">
+        @for (activity of recentActivities(); track activity.id) {
+          <div class="flex items-start gap-4 p-4 bg-muted/30 rounded-lg">
+            <div class="flex items-center justify-center w-10 h-10 bg-primary/10 rounded-lg shrink-0">
+              <mat-icon class="text-primary text-lg">{{ activity.icon }}</mat-icon>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-base font-medium text-card-foreground">{{ activity.title }}</p>
+              <p class="text-sm text-muted-foreground mt-1">{{ activity.description }}</p>
+              <p class="text-xs text-muted-foreground mt-2">{{ activity.timestamp }}</p>
+            </div>
+          </div>
+        }
+      </div>
+
+      @if (recentActivities().length === 0) {
+        <div class="text-center py-12">
+          <div class="flex justify-center mb-6">
+            <div class="flex items-center justify-center w-16 h-16 bg-muted/30 rounded-lg">
+              <mat-icon class="text-muted-foreground text-4xl">inbox</mat-icon>
+            </div>
+          </div>
+          <h3 class="text-lg font-medium text-card-foreground mb-2">Keine aktuellen Aktivitäten</h3>
+          <p class="text-base text-muted-foreground">Aktivitäten werden hier angezeigt, sobald sie verfügbar sind.</p>
+        </div>
+      }
+    </div>
+  </div>
+</div>

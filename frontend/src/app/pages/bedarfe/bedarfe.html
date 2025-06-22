@@ -1,0 +1,425 @@
+<div class="bg-background">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <!-- Header -->
+    <div class="mb-6 sm:mb-8">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 class="text-3xl sm:text-3xl font-bold text-foreground">Bedarf verwalten</h1>
+          <p class="text-base sm:text-base text-muted-foreground mt-2">
+            Erstellen und verwalten Sie Ihre Baustellenbedarfe
+          </p>
+        </div>
+        <button 
+          (click)="openCreateForm()"
+          class="w-full sm:w-auto h-12 px-6 bg-primary text-primary-foreground rounded-md font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2">
+          <mat-icon>add</mat-icon>
+          Neuer Bedarf
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    @if (loading()) {
+      <div class="flex justify-center items-center py-12">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    }
+
+    <!-- Form Modal -->
+    @if (showForm()) {
+      <div class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-3">
+        <div class="bg-card rounded-lg shadow-xl w-full max-w-2xl max-h-[95vh] overflow-y-auto">
+          <div class="p-6">
+            <div class="flex items-center justify-between mb-6">
+              <h2 class="text-xl font-semibold text-card-foreground">
+                {{ isEditing() ? 'Bedarf bearbeiten' : 'Neuer Bedarf' }}
+              </h2>
+              <button (click)="closeForm()" class="h-10 w-10 rounded-md hover:bg-accent flex items-center justify-center">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+
+            <form [formGroup]="bedarfForm" (ngSubmit)="onSubmit()" class="space-y-4">
+              <!-- Titel -->
+              <div>
+                <label class="block text-sm font-medium text-foreground mb-2">Titel</label>
+                <input 
+                  type="text"
+                  formControlName="titel" 
+                  placeholder="z.B. Zimmermann für Dachstuhl"
+                  class="w-full h-12 px-3 border border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                @if (bedarfForm.get('titel')?.hasError('required') && bedarfForm.get('titel')?.touched) {
+                  <p class="text-destructive text-sm mt-1">Titel ist erforderlich</p>
+                }
+                @if (bedarfForm.get('titel')?.hasError('minlength') && bedarfForm.get('titel')?.touched) {
+                  <p class="text-destructive text-sm mt-1">Titel muss mindestens 3 Zeichen lang sein</p>
+                }
+              </div>
+
+              <!-- Beschreibung / Qualifikationen -->
+              <div>
+                <label class="block text-sm font-medium text-foreground mb-2">Beschreibung & Qualifikationen</label>
+                <textarea 
+                  formControlName="beschreibung" 
+                  rows="4"
+                  placeholder="Beschreibung der Arbeiten und erforderliche Qualifikationen (z.B. Zimmermannsausbildung, 5 Jahre Erfahrung, Dachstuhlbau)..."
+                  class="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none">
+                </textarea>
+                <p class="text-muted-foreground text-xs mt-1">Beschreiben Sie die Arbeiten und listen Sie erforderliche Qualifikationen auf</p>
+              </div>
+
+              <!-- Standort -->
+              <div>
+                <label class="block text-sm font-medium text-foreground mb-2">Standort</label>
+                <input 
+                  type="text"
+                  formControlName="adresse" 
+                  placeholder="z.B. Grabs, Dorfstrasse 123"
+                  class="w-full h-12 px-3 border border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                @if (bedarfForm.get('adresse')?.hasError('required') && bedarfForm.get('adresse')?.touched) {
+                  <p class="text-destructive text-sm mt-1">Standort ist erforderlich</p>
+                }
+              </div>
+
+              <!-- Datum Range -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-foreground mb-2">Startdatum</label>
+                  <div class="relative">
+                    <input 
+                      matInput 
+                      [matDatepicker]="startPicker"
+                      formControlName="datumVon"
+                      placeholder="Startdatum auswählen"
+                      readonly
+                      class="w-full h-12 px-3 pr-12 border-2 border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 cursor-pointer hover:border-primary/50">
+                    <button 
+                      type="button"
+                      (click)="startPicker.open()"
+                      class="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 text-muted-foreground hover:text-primary transition-colors rounded-md hover:bg-accent">
+                      <mat-icon>calendar_today</mat-icon>
+                    </button>
+                    <mat-datepicker #startPicker></mat-datepicker>
+                  </div>
+                  @if (bedarfForm.get('datumVon')?.hasError('required') && bedarfForm.get('datumVon')?.touched) {
+                    <p class="text-destructive text-sm mt-1">Startdatum ist erforderlich</p>
+                  }
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-foreground mb-2">Enddatum</label>
+                  <div class="relative">
+                    <input 
+                      matInput 
+                      [matDatepicker]="endPicker"
+                      formControlName="datumBis"
+                      placeholder="Enddatum auswählen"
+                      readonly
+                      class="w-full h-12 px-3 pr-12 border-2 border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 cursor-pointer hover:border-primary/50">
+                    <button 
+                      type="button"
+                      (click)="endPicker.open()"
+                      class="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 text-muted-foreground hover:text-primary transition-colors rounded-md hover:bg-accent">
+                      <mat-icon>calendar_today</mat-icon>
+                    </button>
+                    <mat-datepicker #endPicker></mat-datepicker>
+                  </div>
+                  @if (bedarfForm.get('datumBis')?.hasError('required') && bedarfForm.get('datumBis')?.touched) {
+                    <p class="text-destructive text-sm mt-1">Enddatum ist erforderlich</p>
+                  }
+                </div>
+              </div>
+
+              <!-- Arbeiter Spezifikationen -->
+              <div class="space-y-4">
+                <h3 class="text-lg font-medium text-foreground">Benötigte Arbeitskräfte</h3>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-foreground mb-2">Zimmermann/Zimmerin EFZ</label>
+                    <input 
+                      type="number" 
+                      formControlName="zimmermannAnzahl" 
+                      min="0"
+                      placeholder="0"
+                      class="w-full h-12 px-3 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                    @if (bedarfForm.get('zimmermannAnzahl')?.hasError('min') && bedarfForm.get('zimmermannAnzahl')?.touched) {
+                      <p class="text-destructive text-sm mt-1">Anzahl muss 0 oder höher sein</p>
+                    }
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-foreground mb-2">Holzbau Mitarbeiter</label>
+                    <input 
+                      type="number" 
+                      formControlName="holzbauAnzahl" 
+                      min="0"
+                      placeholder="0"
+                      class="w-full h-12 px-3 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                    @if (bedarfForm.get('holzbauAnzahl')?.hasError('min') && bedarfForm.get('holzbauAnzahl')?.touched) {
+                      <p class="text-destructive text-sm mt-1">Anzahl muss 0 oder höher sein</p>
+                    }
+                  </div>
+                </div>
+              </div>
+
+              <!-- Arbeitsdetails -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-foreground mb-2">Stunden pro Tag</label>
+                  <input 
+                    type="number" 
+                    formControlName="stundenProTag" 
+                    min="1" 
+                    max="12"
+                    class="w-full h-12 px-3 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                  @if (bedarfForm.get('stundenProTag')?.hasError('required') && bedarfForm.get('stundenProTag')?.touched) {
+                    <p class="text-destructive text-sm mt-1">Stunden sind erforderlich</p>
+                  }
+                  @if (bedarfForm.get('stundenProTag')?.hasError('min') && bedarfForm.get('stundenProTag')?.touched) {
+                    <p class="text-destructive text-sm mt-1">Mindestens 1 Stunde erforderlich</p>
+                  }
+                  @if (bedarfForm.get('stundenProTag')?.hasError('max') && bedarfForm.get('stundenProTag')?.touched) {
+                    <p class="text-destructive text-sm mt-1">Maximal 12 Stunden erlaubt</p>
+                  }
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-foreground mb-2">Stundenlohn (CHF)</label>
+                  <input 
+                    type="number" 
+                    formControlName="stundenlohn" 
+                    min="0" 
+                    step="0.50"
+                    class="w-full h-12 px-3 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                  @if (bedarfForm.get('stundenlohn')?.hasError('min') && bedarfForm.get('stundenlohn')?.touched) {
+                    <p class="text-destructive text-sm mt-1">Lohn muss positiv sein</p>
+                  }
+                </div>
+              </div>
+
+              <!-- Zusätzliche Anforderungen -->
+              <div class="space-y-3">
+                <h3 class="text-base font-medium text-foreground">Zusätzliche Anforderungen</h3>
+                
+                <!-- Werkzeuge erforderlich -->
+                <div class="flex items-center gap-3">
+                  <input 
+                    type="checkbox" 
+                    id="werkzeuge"
+                    formControlName="mitWerkzeug"
+                    class="h-4 w-4 text-primary border-border rounded focus:ring-2 focus:ring-primary">
+                  <label for="werkzeuge" class="text-base text-foreground">
+                    Eigene Werkzeuge erforderlich
+                  </label>
+                </div>
+
+                <!-- Fahrzeug erforderlich -->
+                <div class="flex items-center gap-3">
+                  <input 
+                    type="checkbox" 
+                    id="fahrzeug"
+                    formControlName="mitFahrzeug"
+                    class="h-4 w-4 text-primary border-border rounded focus:ring-2 focus:ring-primary">
+                  <label for="fahrzeug" class="text-base text-foreground">
+                    Eigenes Fahrzeug erforderlich
+                  </label>
+                </div>
+              </div>
+
+              <!-- Form Actions -->
+              <div class="flex flex-col-reverse sm:flex-row gap-3 pt-4">
+                <button 
+                  type="button" 
+                  (click)="closeForm()"
+                  class="w-full sm:w-auto h-12 px-6 border border-border rounded-md font-medium text-foreground hover:bg-accent transition-colors">
+                  Abbrechen
+                </button>
+                <button 
+                  type="submit" 
+                  [disabled]="loading()"
+                  class="w-full sm:w-auto h-12 px-6 bg-primary text-primary-foreground rounded-md font-medium hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2">
+                  @if (loading()) {
+                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-foreground"></div>
+                  } @else {
+                    <mat-icon>{{ isEditing() ? 'save' : 'add' }}</mat-icon>
+                  }
+                  {{ isEditing() ? 'Aktualisieren' : 'Erstellen' }}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Bedarfe List -->
+    @if (!loading() && !showForm()) {
+      <!-- Mobile Cards (visible on small screens) -->
+      <div class="block lg:hidden">
+        @if (filteredBedarfe().length === 0) {
+          <div class="text-center py-16 bg-card rounded-lg border border-border">
+            <div class="flex justify-center mb-4">
+              <div class="p-4 bg-primary/10 rounded-lg">
+                <mat-icon class="text-primary text-4xl">construction</mat-icon>
+              </div>
+            </div>
+            <h3 class="text-xl font-medium text-card-foreground mb-3">Kein aktiver Bedarf</h3>
+            <p class="text-base text-muted-foreground mb-8">Erstellen Sie Ihren ersten Bedarf, um loszulegen.</p>
+            <button 
+              (click)="openCreateForm()" 
+              class="h-12 px-6 bg-primary text-primary-foreground rounded-md font-medium hover:bg-primary/90 transition-colors inline-flex items-center gap-2">
+              <mat-icon>add</mat-icon>
+              Ersten Bedarf erstellen
+            </button>
+          </div>
+        } @else {
+          <div class="space-y-4">
+            @for (bedarf of filteredBedarfe(); track bedarf.id) {
+              <div class="bg-card rounded-lg border border-border p-5 shadow-sm">
+                <div class="flex items-start justify-between mb-4">
+                  <div class="flex-1 min-w-0">
+                    <h3 class="text-lg font-semibold text-card-foreground truncate">{{ bedarf.titel }}</h3>
+                    <p class="text-base text-muted-foreground mt-2 truncate">{{ bedarf.adresse }}</p>
+                  </div>
+                  <span class="ml-3 px-3 py-2 rounded-full text-sm font-medium whitespace-nowrap" 
+                        [class]="getStatusColor(bedarf.status) === 'primary' ? 'bg-primary text-primary-foreground' : 
+                                 getStatusColor(bedarf.status) === 'warn' ? 'bg-destructive text-destructive-foreground' : 
+                                 'bg-accent text-accent-foreground'">
+                    {{ getStatusText(bedarf.status) }}
+                  </span>
+                </div>
+                
+                <div class="space-y-3 text-base text-muted-foreground mb-5">
+                  <div class="flex justify-between">
+                    <span>Zeitraum:</span>
+                    <span class="text-right font-medium">{{ formatDate(bedarf.datumVon) }} - {{ formatDate(bedarf.datumBis) }}</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span>Arbeiter:</span>
+                    <span class="font-medium">{{ bedarf.anzahlArbeiter }}</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span>Stunden/Tag:</span>
+                    <span class="font-medium">{{ bedarf.stundenProTag }}h</span>
+                  </div>
+                  @if (bedarf.stundenlohn && bedarf.stundenlohn > 0) {
+                    <div class="flex justify-between">
+                      <span>Stundenlohn:</span>
+                      <span class="font-medium">CHF {{ bedarf.stundenlohn }}</span>
+                    </div>
+                  }
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3">
+                  <button 
+                    (click)="openEditForm(bedarf)" 
+                    class="flex-1 h-11 px-4 border border-primary text-primary rounded-md font-medium hover:bg-primary/10 transition-colors flex items-center justify-center gap-2">
+                    <mat-icon>edit</mat-icon>
+                    Bearbeiten
+                  </button>
+                  <button 
+                    (click)="toggleStatus(bedarf)" 
+                    class="flex-1 h-11 px-4 rounded-md font-medium transition-colors flex items-center justify-center gap-2"
+                    [class]="bedarf.status === BedarfStatus.AKTIV ? 'border border-destructive text-destructive hover:bg-destructive/10' : 'border border-primary text-primary hover:bg-primary/10'">
+                    <mat-icon>{{ bedarf.status === BedarfStatus.AKTIV ? 'pause' : 'play_arrow' }}</mat-icon>
+                    {{ bedarf.status === BedarfStatus.AKTIV ? 'Deaktivieren' : 'Aktivieren' }}
+                  </button>
+                  <button 
+                    (click)="deleteBedarf(bedarf)" 
+                    class="shrink-0 h-11 w-11 border border-destructive text-destructive rounded-md hover:bg-destructive/10 transition-colors flex items-center justify-center">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Desktop Table (hidden on small screens) -->
+      <div class="hidden lg:block bg-card rounded-lg border border-border overflow-hidden">
+        @if (filteredBedarfe().length === 0) {
+          <div class="text-center py-16">
+            <div class="flex justify-center mb-6">
+              <div class="flex items-center justify-center w-16 h-16 bg-primary/10 rounded-lg">
+                <mat-icon class="text-primary text-4xl">construction</mat-icon>
+              </div>
+            </div>
+            <h3 class="text-lg font-medium text-card-foreground mb-3">Kein aktiver Bedarf</h3>
+            <p class="text-muted-foreground mb-8">Erstellen Sie Ihren ersten Bedarf, um loszulegen.</p>
+            <button 
+              (click)="openCreateForm()" 
+              class="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-2 rounded-md font-medium transition-colors inline-flex items-center gap-2">
+              <mat-icon>add</mat-icon>
+              Ersten Bedarf erstellen
+            </button>
+          </div>
+        } @else {
+          <table class="w-full">
+            <thead class="bg-muted/30">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Titel</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Standort</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Start</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Ende</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Arbeiter</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Aktionen</th>
+              </tr>
+            </thead>
+            <tbody class="bg-card divide-y divide-border">
+              @for (bedarf of filteredBedarfe(); track bedarf.id) {
+                <tr class="hover:bg-muted/50 transition-colors">
+                  <td class="px-6 py-4">
+                    <div>
+                      <div class="font-medium text-card-foreground">{{ bedarf.titel }}</div>
+                      <div class="text-sm text-muted-foreground truncate max-w-xs">{{ bedarf.beschreibung }}</div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-card-foreground">{{ bedarf.adresse }}</td>
+                  <td class="px-6 py-4 text-sm text-card-foreground">{{ formatDate(bedarf.datumVon) }}</td>
+                  <td class="px-6 py-4 text-sm text-card-foreground">{{ formatDate(bedarf.datumBis) }}</td>
+                  <td class="px-6 py-4">
+                    <div class="text-center">
+                      <div class="font-medium text-card-foreground">{{ bedarf.anzahlArbeiter }}</div>
+                      <div class="text-xs text-muted-foreground">{{ bedarf.stundenProTag }}h/Tag</div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4">
+                    <span class="px-2 py-1 rounded-full text-xs font-medium"
+                          [class]="getStatusColor(bedarf.status) === 'primary' ? 'bg-primary text-primary-foreground' : 
+                                   getStatusColor(bedarf.status) === 'warn' ? 'bg-destructive text-destructive-foreground' : 
+                                   'bg-accent text-accent-foreground'">
+                      {{ getStatusText(bedarf.status) }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4">
+                    <div class="flex gap-1">
+                      <button 
+                        (click)="openEditForm(bedarf)" 
+                        class="p-2 text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors">
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                      <button 
+                        (click)="toggleStatus(bedarf)"
+                        class="p-2 rounded-md transition-colors"
+                        [class]="bedarf.status === BedarfStatus.AKTIV ? 'text-destructive hover:bg-destructive/10' : 'text-primary hover:bg-primary/10'">
+                        <mat-icon>{{ bedarf.status === BedarfStatus.AKTIV ? 'pause' : 'play_arrow' }}</mat-icon>
+                      </button>
+                      <button 
+                        (click)="deleteBedarf(bedarf)" 
+                        class="p-2 text-destructive hover:bg-destructive/10 rounded-md transition-colors">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      </div>
+    }
+  </div>
+</div>

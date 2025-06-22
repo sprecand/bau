@@ -1,0 +1,144 @@
+# Betrieb (Company) schemas
+BetriebResponse:
+  type: object
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier
+      example: "123e4567-e89b-12d3-a456-426614174000"
+    name:
+      type: string
+      description: Company name
+      example: "Bau AG Grabs"
+    adresse:
+      type: string
+      description: Company address
+      example: "Dorfstrasse 1234, 9472 Grabs"
+    email:
+      type: string
+      format: email
+      description: Contact email
+      example: "info@bau-ag-grabs.ch"
+    telefon:
+      type: string
+      description: Contact phone number
+      example: "+41 81 123 45 67"
+    status:
+      type: string
+      enum: [AKTIV, INACTIV]
+      description: Current status
+      example: "AKTIV"
+    createdAt:
+      type: string
+      format: date-time
+      description: Creation timestamp
+      example: "2024-01-15T10:30:00Z"
+    updatedAt:
+      type: string
+      format: date-time
+      description: Last update timestamp
+      example: "2024-01-15T10:30:00Z"
+
+CreateBetriebRequest:
+  type: object
+  required:
+    - name
+    - adresse
+    - email
+  properties:
+    name:
+      type: string
+      minLength: 1
+      maxLength: 255
+      description: Company name
+      example: "Bau AG Grabs"
+    adresse:
+      type: string
+      minLength: 1
+      maxLength: 1000
+      description: Company address
+      example: "Dorfstrasse 1234, 9472 Grabs"
+    email:
+      type: string
+      format: email
+      description: Contact email
+      example: "info@bau-ag-grabs.ch"
+    telefon:
+      type: string
+      maxLength: 50
+      description: Contact phone number
+      example: "+41 81 123 45 67"
+
+UpdateBetriebRequest:
+  type: object
+  properties:
+    name:
+      type: string
+      minLength: 1
+      maxLength: 255
+      description: Company name
+      example: "Bau AG Grabs"
+    adresse:
+      type: string
+      minLength: 1
+      maxLength: 1000
+      description: Company address
+      example: "Dorfstrasse 1234, 9472 Grabs"
+    email:
+      type: string
+      format: email
+      description: Contact email
+      example: "info@bau-ag-grabs.ch"
+    telefon:
+      type: string
+      maxLength: 50
+      description: Contact phone number
+      example: "+41 81 123 45 67"
+
+UpdateBetriebStatusRequest:
+  type: object
+  required:
+    - status
+  properties:
+    status:
+      type: string
+      enum: [AKTIV, INACTIV]
+      description: New status
+      example: "INACTIV"
+
+BetriebListResponse:
+  type: object
+  properties:
+    content:
+      type: array
+      items:
+        $ref: '#/BetriebResponse'
+    totalElements:
+      type: integer
+      format: int32
+      description: Total number of elements
+      example: 100
+    totalPages:
+      type: integer
+      format: int32
+      description: Total number of pages
+      example: 5
+    currentPage:
+      type: integer
+      format: int32
+      description: Current page number (0-based)
+      example: 0
+    pageSize:
+      type: integer
+      format: int32
+      description: Page size
+      example: 20
+    hasNext:
+      type: boolean
+      description: Has next page
+      example: true
+    hasPrevious:
+      type: boolean
+      description: Has previous page
+      example: false 

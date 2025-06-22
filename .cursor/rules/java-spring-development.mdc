@@ -1,0 +1,181 @@
+---
+description: backend tasks
+globs: 
+alwaysApply: false
+---
+# Java & Spring Boot Development Rules
+
+## Documentation References
+- **Bau Coding Standards**: `doc/tech/08-cross-cutting-concepts/coding-standards.md`
+- **Bau Project Overview**: `workspace.mdc`
+
+## Java 21 Best Practices
+
+### Language Features
+- Use **records** for immutable data transfer objects
+- Use **pattern matching** for switch expressions and instanceof
+- Use **text blocks** for multi-line strings
+- Use **sealed classes** for type hierarchies
+- Use **virtual threads** for I/O operations (Spring Boot 3.2+)
+
+### Null Safety
+- Prefer `Optional<T>` over nullable references
+- Use `Optional.ofNullable()` for potentially null values
+- Use `Optional.orElse()` or `Optional.orElseGet()` for defaults
+- Avoid `Optional.get()` without checking `isPresent()`
+
+### Exception Handling
+- Use specific exception types, not generic `Exception`
+- Log exceptions with appropriate levels (DEBUG, INFO, WARN, ERROR)
+- Don't catch exceptions unless you can handle them meaningfully
+- Use `@ExceptionHandler` in controllers for consistent error responses
+
+### Logging (SLF4J)
+```java
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@Slf4j  // Lombok annotation
+public class ExampleService {
+    private static final Logger log = LoggerFactory.getLogger(ExampleService.class);
+    
+    public void processData(String data) {
+        log.debug("Processing data: {}", data);
+        
+        try {
+            // processing logic
+            log.info("Successfully processed data: {}", data);
+        } catch (Exception e) {
+            log.error("Failed to process data: {}", data, e);
+            throw e;
+        }
+    }
+}
+```
+
+### Documentation
+- Use **Javadoc** for public APIs, not inline comments
+- Keep Javadoc concise and focused on "what" and "why"
+- Use `@param`, `@return`, `@throws` tags appropriately
+- Document business rules and constraints
+
+## Spring Boot 3.x Patterns
+
+### Configuration
+- Use `@ConfigurationProperties` for externalized configuration
+- Use `@ConditionalOnProperty` for conditional beans
+- Use `@Profile` for environment-specific configurations
+- Use `application.yml` for hierarchical configuration
+
+### Dependency Injection
+- Use constructor injection for required dependencies
+- Use `@Autowired` sparingly (constructor injection is preferred)
+- Use `@Qualifier` when multiple beans of same type exist
+- Use `@Lazy` for expensive beans that aren't always needed
+
+### Validation
+- Use Bean Validation annotations on DTOs
+- Use `@Valid` in controller methods
+- Create custom validators for complex business rules
+- Use `@Validated` for method-level validation
+
+### Testing
+- Use `@SpringBootTest` for integration tests
+- Use `@WebMvcTest` for controller tests
+- Use `@DataJpaTest` for repository tests
+- Use `@TestConfiguration` for test-specific beans
+
+### Security
+- Use Spring Security with JWT tokens
+- Use `@PreAuthorize` for method-level security
+- Use `@Secured` for role-based access control
+- Use `@EnableMethodSecurity` for method security
+
+## Database Patterns
+
+### JPA Best Practices
+- Use `@Entity` for database entities only
+- Use `@Table` to specify table names
+- Use `@Column` for column mappings
+- Use `@Id` and `@GeneratedValue` for primary keys
+- Use `@CreatedDate` and `@LastModifiedDate` for audit fields
+
+### Repository Pattern
+- Extend `JpaRepository` for basic CRUD operations
+- Use `@Query` for complex queries
+- Use `@Modifying` for update/delete operations
+- Use `@Transactional` for multi-step operations
+
+### Transaction Management
+- Use `@Transactional` at service layer
+- Use `REQUIRED` propagation (default)
+- Use `READ_COMMITTED` isolation level (default)
+- Use `@Transactional(readOnly = true)` for read operations
+
+## API Design
+
+### REST Controllers
+- Use `@RestController` for REST APIs
+- Use `@RequestMapping` for base paths
+- Use `@GetMapping`, `@PostMapping`, etc. for HTTP methods
+- Use `@PathVariable` for path parameters
+- Use `@RequestParam` for query parameters
+- Use `@RequestBody` for request bodies
+
+### Response Handling
+- Use `ResponseEntity<T>` for custom responses
+- Use appropriate HTTP status codes
+- Use consistent error response format
+- Use `@ResponseStatus` for default status codes
+
+### Error Handling
+- Use `@ControllerAdvice` for global exception handling
+- Use `@ExceptionHandler` for specific exceptions
+- Return consistent error response format
+- Log errors appropriately
+
+## Performance
+
+### Caching
+- Use `@Cacheable` for method results
+- Use `@CacheEvict` for cache invalidation
+- Use `@CachePut` for cache updates
+- Configure cache providers (Redis, Caffeine)
+
+### Async Processing
+- Use `@Async` for background processing
+- Use `CompletableFuture` for async results
+- Use `@EnableAsync` to enable async processing
+- Configure thread pool for async operations
+
+### Database Optimization
+- Use `@QueryHints` for query optimization
+- Use `@EntityGraph` for eager loading
+- Use pagination for large result sets
+- Use `@BatchSize` for batch operations
+
+## Security Best Practices
+
+### Input Validation
+- Validate all inputs at API boundaries
+- Use Bean Validation annotations
+- Sanitize user inputs
+- Use parameterized queries
+
+### Authentication
+- Use JWT tokens for stateless authentication
+- Validate token signatures
+- Check token expiration
+- Use secure token storage
+
+### Authorization
+- Use role-based access control
+- Use method-level security
+- Use URL-level security
+- Implement least privilege principle
+
+### Data Protection
+- Encrypt sensitive data at rest
+- Use HTTPS for all communications
+- Implement proper session management
+- Follow GDPR/privacy regulations

@@ -1,10 +1,16 @@
 # Fachdoku
+
+## Geschäftsmodell
 Baufirmen haben kurzfristig Bedarf an Arbeitern. Andere Baufirmen haben kurzfristig Arbeiter die sie nicht beschäftigen können. Bedarf kann auf der Platform ausgeschrieben werden.
+
+## Zielgruppe
+**Ausschließlich Baufirmen/Zimmerei-Betriebe** - Diese Plattform ist eine B2B-Lösung für den Austausch von Arbeitskräften zwischen Bauunternehmen. Private Arbeiter können sich nicht direkt registrieren oder die Plattform nutzen.
+
 ## Bedarf
 Ein Bedarf ist weder ein Arbeitsbeschreib noch ein Personenbeschreib. Es sind eine oder mehr Fachkräfte die über einen klar abgegrenzten Zeitraum genutzt oder zur Verfügung gestellt werden können.
 
 Bedarf beinhaltet:
-- Anzahl Hilfsarbeiter (textfeld nummer)
+- Anzahl Holzbau Mitarbeiter (textfeld nummer)
 - Anzahl Zimmermänner (textfeld nummer)
 - Datum von (textfeld datum)
 - Datum bis (textfeld datum)
