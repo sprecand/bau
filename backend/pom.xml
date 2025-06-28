@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.bau</groupId>
     <artifactId>backend</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>Bau Backend</name>
+    <name>bau-backend</name>
     <description>Bau platform backend (Spring Boot, Hexagonal Architecture)</description>
 
     <properties>

@@ -26,7 +26,7 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("Bau Platform API")
                         .description("API for the Bau construction worker matching platform")
-                        .version("1.0.0")
+                        .version("1.0.0-SNAPSHOT")
                         .contact(new Contact()
                                 .name("Bau Development Team")))
                 .servers(List.of(
