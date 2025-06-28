@@ -74,6 +74,7 @@ bau/
 - **Security**: AWS Cognito integration, JWT validation, Swiss data protection compliance
 - **Coding Standards**: See `doc/tech/08-cross-cutting-concepts/coding-standards.md`
 - **Documentation**: Keep documentation in sync with code changes
+- **Commit Messages**: Use conventional commits format, keep concise
 
 ## Implementation Priority
 1. **Phase 1**: Project setup, database schema, basic CRUD
@@ -84,3 +85,4 @@ bau/
 - Use `java-spring-development.mdc` for backend development
 - Use `angular-development.mdc` for frontend development
 - Use `documentation.mdc` for documentation management
+- Use `conventional-commits.mdc` for commit message standards

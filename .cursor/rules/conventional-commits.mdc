@@ -1,0 +1,42 @@
+# Conventional Commits Rule
+
+## Format
+```
+<type>(<scope>): <description>
+```
+
+## Types
+- **feat**: New feature
+- **fix**: Bug fix
+- **docs**: Documentation
+- **style**: Formatting, no code change
+- **refactor**: Code change that neither fixes bug nor adds feature
+- **test**: Adding tests
+- **chore**: Build process or auxiliary tools
+
+## Guidelines
+- **Keep it short**: Max 50 characters for subject line
+- **No verbose explanations**: The code diff tells the story
+- **Present tense**: "Add feature" not "Added feature"
+- **No period**: Don't end with punctuation
+- **Scope is optional**: Only use when it adds clarity
+
+## Examples
+```
+feat: add user authentication
+fix: resolve login validation error
+docs: update API documentation
+refactor: simplify user service logic
+test: add bedarf validation tests
+chore: update dependencies
+```
+
+## What NOT to do
+- ❌ `fix: Update JaCoCo to 0.8.12 for Java 21 compatibility\n\n- Fixes JaCoCo report generation error...`
+- ❌ Long explanations in commit messages
+- ❌ Multiple paragraphs describing what the code does
+
+## What TO do
+- ✅ `fix: update jacoco for java 21 compatibility`
+- ✅ `feat: add bedarf crud operations`
+- ✅ `refactor: improve error handling` 
