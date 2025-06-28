@@ -1,21 +1,21 @@
-<header class="bg-card border-b border-border shadow-sm">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex justify-between h-16">
+<header class="shadow-xs border-b border-border bg-card">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex h-16 justify-between">
       <!-- Logo and Brand -->
       <div class="flex items-center">
-        <div class="flex-shrink-0 flex items-center">
-          <mat-icon class="text-primary text-2xl mr-3">construction</mat-icon>
+        <div class="flex shrink-0 items-center">
+          <mat-icon class="mr-3 text-2xl text-primary">construction</mat-icon>
           <span class="text-xl font-bold text-foreground">Bau Platform</span>
         </div>
       </div>
 
       <!-- Desktop Navigation -->
-      <nav class="hidden md:flex items-center space-x-8">
+      <nav class="hidden items-center space-x-8 md:flex">
         <!-- Dashboard - always visible when any user state is active -->
         @if (isAuthenticated()) {
           <a routerLink="/dashboard" 
-             routerLinkActive="text-primary" 
-             class="text-foreground hover:text-primary transition-colors">
+             routerLinkActive="!text-primary font-semibold" 
+             class="text-foreground transition-colors hover:text-primary">
             Dashboard
           </a>
         }
@@ -23,21 +23,21 @@
         <!-- Bedarfe and Betriebe - only for authenticated users (not logged out) -->
         @if (effectivelyAuthenticated()) {
           <a routerLink="/bedarfe" 
-             routerLinkActive="text-primary" 
-             class="text-foreground hover:text-primary transition-colors">
+             routerLinkActive="!text-primary font-semibold" 
+             class="text-foreground transition-colors hover:text-primary">
             Bedarf
           </a>
           <a routerLink="/betriebe" 
-             routerLinkActive="text-primary" 
-             class="text-foreground hover:text-primary transition-colors">
+             routerLinkActive="!text-primary font-semibold" 
+             class="text-foreground transition-colors hover:text-primary">
             Betriebe
           </a>
         }
         
         <!-- About Us - always visible for all users -->
         <a routerLink="/about" 
-           routerLinkActive="text-primary" 
-           class="text-foreground hover:text-primary transition-colors">
+           routerLinkActive="!text-primary font-semibold" 
+           class="text-foreground transition-colors hover:text-primary">
           Über uns
         </a>
       </nav>
@@ -47,7 +47,7 @@
         <!-- Theme Toggle (Always visible) -->
         <button 
           (click)="toggleTheme()"
-          class="p-2 text-muted-foreground hover:text-foreground transition-colors"
+          class="p-2 text-muted-foreground transition-colors hover:text-foreground"
           [title]="getThemeTooltip()">
           <mat-icon>{{ getThemeIcon() }}</mat-icon>
         </button>
@@ -59,7 +59,7 @@
               <select 
                 [value]="localRole() || user()?.role || ''"
                 (change)="onRoleSelectChange($event)"
-                class="text-sm px-3 py-1 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
+                class="focus:outline-hidden rounded-md border border-border bg-background px-3 py-1 text-sm text-foreground focus:ring-2 focus:ring-primary">
                 <option value="">Abgemeldet</option>
                 <option [value]="UserRole.ADMIN">{{ getRoleDisplayName(UserRole.ADMIN) }}</option>
                 <option [value]="UserRole.BETRIEB">{{ getRoleDisplayName(UserRole.BETRIEB) }}</option>
@@ -68,14 +68,14 @@
           }
 
           <!-- User Info -->
-          <div class="hidden md:flex items-center space-x-3">
+          <div class="hidden items-center space-x-3 md:flex">
             <div class="text-right">
               <p class="text-sm font-medium text-foreground">{{ user()?.name }}</p>
               <p class="text-xs text-muted-foreground">{{ getRoleDisplayName(user()?.role || UserRole.BETRIEB) }}</p>
             </div>
             <button 
               (click)="logout()"
-              class="p-2 text-muted-foreground hover:text-foreground transition-colors"
+              class="p-2 text-muted-foreground transition-colors hover:text-foreground"
               title="Abmelden">
               <mat-icon>logout</mat-icon>
             </button>
@@ -84,20 +84,20 @@
           <!-- Mobile Menu Button -->
           <button 
             (click)="toggleMobileMenu()"
-            class="md:hidden p-2 text-foreground hover:text-primary transition-colors">
+            class="p-2 text-foreground transition-colors hover:text-primary md:hidden">
             <mat-icon>{{ mobileMenuOpen() ? 'close' : 'menu' }}</mat-icon>
           </button>
         } @else {
           <!-- Not authenticated - show login link and mobile menu -->
           <div class="flex items-center space-x-2">
             <a routerLink="/login" 
-               class="text-foreground hover:text-primary transition-colors">
+               class="text-foreground transition-colors hover:text-primary">
               Anmelden
             </a>
             <!-- Mobile Menu Button for non-authenticated users -->
             <button 
               (click)="toggleMobileMenu()"
-              class="md:hidden p-2 text-foreground hover:text-primary transition-colors">
+              class="p-2 text-foreground transition-colors hover:text-primary md:hidden">
               <mat-icon>{{ mobileMenuOpen() ? 'close' : 'menu' }}</mat-icon>
             </button>
           </div>
@@ -107,14 +107,14 @@
 
     <!-- Mobile Menu -->
     @if (mobileMenuOpen()) {
-      <div class="md:hidden border-t border-border">
-        <div class="px-2 pt-2 pb-3 space-y-1">
+      <div class="border-t border-border md:hidden">
+        <div class="space-y-1 px-2 pb-3 pt-2">
           <!-- Dashboard - visible when authenticated -->
           @if (isAuthenticated()) {
             <a routerLink="/dashboard" 
                (click)="closeMobileMenu()"
-               routerLinkActive="text-primary bg-primary/10" 
-               class="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:text-primary hover:bg-primary/10 transition-colors">
+               routerLinkActive="!text-primary !bg-primary/10 font-semibold" 
+               class="block rounded-md px-3 py-2 text-base font-medium text-foreground transition-colors hover:bg-primary/10 hover:text-primary">
               Dashboard
             </a>
           }
@@ -123,14 +123,14 @@
           @if (effectivelyAuthenticated()) {
             <a routerLink="/bedarfe" 
                (click)="closeMobileMenu()"
-               routerLinkActive="text-primary bg-primary/10" 
-               class="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:text-primary hover:bg-primary/10 transition-colors">
+               routerLinkActive="!text-primary !bg-primary/10 font-semibold" 
+               class="block rounded-md px-3 py-2 text-base font-medium text-foreground transition-colors hover:bg-primary/10 hover:text-primary">
               Bedarf
             </a>
             <a routerLink="/betriebe" 
                (click)="closeMobileMenu()"
-               routerLinkActive="text-primary bg-primary/10" 
-               class="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:text-primary hover:bg-primary/10 transition-colors">
+               routerLinkActive="!text-primary !bg-primary/10 font-semibold" 
+               class="block rounded-md px-3 py-2 text-base font-medium text-foreground transition-colors hover:bg-primary/10 hover:text-primary">
               Betriebe
             </a>
           }
@@ -138,17 +138,17 @@
           <!-- About Us - always visible for all users -->
           <a routerLink="/about" 
              (click)="closeMobileMenu()"
-             routerLinkActive="text-primary bg-primary/10" 
-             class="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:text-primary hover:bg-primary/10 transition-colors">
+             routerLinkActive="!text-primary !bg-primary/10 font-semibold" 
+             class="block rounded-md px-3 py-2 text-base font-medium text-foreground transition-colors hover:bg-primary/10 hover:text-primary">
             Über uns
           </a>
           
           @if (isAuthenticated()) {
             <!-- Mobile Theme Toggle -->
-            <div class="px-3 py-2 border-t border-border">
+            <div class="border-t border-border px-3 py-2">
               <button 
                 (click)="toggleTheme(); closeMobileMenu()"
-                class="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                class="flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground">
                 <mat-icon class="text-base">{{ getThemeIcon() }}</mat-icon>
                 {{ getThemeTooltip() }}
               </button>
@@ -157,12 +157,12 @@
             <!-- Mobile Role Selector -->
             @if (showRoleSelector()) {
               <div class="px-3 py-2">
-                <label for="mobile-role-selector" class="block text-xs font-medium text-muted-foreground mb-1">Entwicklungsrolle</label>
+                <label for="mobile-role-selector" class="mb-1 block text-xs font-medium text-muted-foreground">Entwicklungsrolle</label>
                 <select 
                   id="mobile-role-selector"
                   [value]="localRole() || user()?.role || ''"
                   (change)="onRoleSelectChange($event)"
-                  class="w-full text-sm px-3 py-1 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
+                  class="focus:outline-hidden w-full rounded-md border border-border bg-background px-3 py-1 text-sm text-foreground focus:ring-2 focus:ring-primary">
                   <option value="">Abgemeldet</option>
                   <option [value]="UserRole.ADMIN">{{ getRoleDisplayName(UserRole.ADMIN) }}</option>
                   <option [value]="UserRole.BETRIEB">{{ getRoleDisplayName(UserRole.BETRIEB) }}</option>
@@ -171,12 +171,12 @@
             }
             
             <!-- Mobile User Info -->
-            <div class="px-3 py-2 border-t border-border">
+            <div class="border-t border-border px-3 py-2">
               <p class="text-sm font-medium text-foreground">{{ user()?.name }}</p>
-              <p class="text-xs text-muted-foreground mb-2">{{ getRoleDisplayName(user()?.role || UserRole.BETRIEB) }}</p>
+              <p class="mb-2 text-xs text-muted-foreground">{{ getRoleDisplayName(user()?.role || UserRole.BETRIEB) }}</p>
               <button 
                 (click)="logout()"
-                class="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                class="flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground">
                 <mat-icon class="text-base">logout</mat-icon>
                 Abmelden
               </button>
@@ -188,21 +188,21 @@
     
     <!-- Mobile Menu for Non-Authenticated Users -->
     @if (!isAuthenticated() && mobileMenuOpen()) {
-      <div class="md:hidden border-t border-border">
-        <div class="px-2 pt-2 pb-3 space-y-1">
+      <div class="border-t border-border md:hidden">
+        <div class="space-y-1 px-2 pb-3 pt-2">
           <!-- About Us - always visible -->
           <a routerLink="/about" 
              (click)="closeMobileMenu()"
-             routerLinkActive="text-primary bg-primary/10" 
-             class="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:text-primary hover:bg-primary/10 transition-colors">
+             routerLinkActive="!text-primary !bg-primary/10 font-semibold" 
+             class="block rounded-md px-3 py-2 text-base font-medium text-foreground transition-colors hover:bg-primary/10 hover:text-primary">
             Über uns
           </a>
           
           <!-- Mobile Theme Toggle -->
-          <div class="px-3 py-2 border-t border-border">
+          <div class="border-t border-border px-3 py-2">
             <button 
               (click)="toggleTheme(); closeMobileMenu()"
-              class="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+              class="flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground">
               <mat-icon class="text-base">{{ getThemeIcon() }}</mat-icon>
               {{ getThemeTooltip() }}
             </button>

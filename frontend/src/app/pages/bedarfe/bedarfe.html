@@ -1,17 +1,17 @@
 <div class="bg-background">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+  <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
     <!-- Header -->
     <div class="mb-6 sm:mb-8">
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 class="text-3xl sm:text-3xl font-bold text-foreground">Bedarf verwalten</h1>
-          <p class="text-base sm:text-base text-muted-foreground mt-2">
+          <h1 class="text-3xl font-bold text-foreground sm:text-3xl">Bedarf verwalten</h1>
+          <p class="mt-2 text-base text-muted-foreground sm:text-base">
             Erstellen und verwalten Sie Ihre Baustellenbedarfe
           </p>
         </div>
         <button 
           (click)="openCreateForm()"
-          class="w-full sm:w-auto h-12 px-6 bg-primary text-primary-foreground rounded-md font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2">
+          class="flex h-12 w-full items-center justify-center gap-2 rounded-md bg-primary px-6 font-medium text-primary-foreground transition-colors hover:bg-primary/90 sm:w-auto">
           <mat-icon>add</mat-icon>
           Neuer Bedarf
         </button>
@@ -20,74 +20,74 @@
 
     <!-- Loading Spinner -->
     @if (loading()) {
-      <div class="flex justify-center items-center py-12">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      <div class="flex items-center justify-center py-12">
+        <div class="size-12 animate-spin rounded-full border-b-2 border-primary"></div>
       </div>
     }
 
     <!-- Form Modal -->
     @if (showForm()) {
-      <div class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-3">
-        <div class="bg-card rounded-lg shadow-xl w-full max-w-2xl max-h-[95vh] overflow-y-auto">
+      <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-3">
+        <div class="max-h-[95vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-card shadow-xl">
           <div class="p-6">
-            <div class="flex items-center justify-between mb-6">
+            <div class="mb-6 flex items-center justify-between">
               <h2 class="text-xl font-semibold text-card-foreground">
                 {{ isEditing() ? 'Bedarf bearbeiten' : 'Neuer Bedarf' }}
               </h2>
-              <button (click)="closeForm()" class="h-10 w-10 rounded-md hover:bg-accent flex items-center justify-center">
+              <button (click)="closeForm()" class="flex size-10 items-center justify-center rounded-md hover:bg-accent">
                 <mat-icon>close</mat-icon>
               </button>
             </div>
 
             <form [formGroup]="bedarfForm" (ngSubmit)="onSubmit()" class="space-y-4">
-              <!-- Titel -->
-              <div>
-                <label for="titel" class="block text-sm font-medium text-foreground mb-2">Titel</label>
-                <input 
-                  id="titel"
-                  type="text"
-                  formControlName="titel" 
-                  placeholder="z.B. Zimmermann für Dachstuhl"
-                  class="w-full h-12 px-3 border border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                              <!-- Titel -->
+                <div>
+                  <label for="titel" class="mb-2 block text-sm font-medium text-foreground">Titel</label>
+                  <input 
+                    id="titel"
+                    type="text"
+                    formControlName="titel" 
+                    placeholder="z.B. Zimmermann für Dachstuhl"
+                    class="focus:outline-hidden h-12 w-full rounded-md border border-border bg-background px-3 text-foreground placeholder:text-muted-foreground focus:border-transparent focus:ring-2 focus:ring-primary">
                 @if (bedarfForm.get('titel')?.hasError('required') && bedarfForm.get('titel')?.touched) {
-                  <p class="text-destructive text-sm mt-1">Titel ist erforderlich</p>
+                  <p class="mt-1 text-sm text-destructive">Titel ist erforderlich</p>
                 }
                 @if (bedarfForm.get('titel')?.hasError('minlength') && bedarfForm.get('titel')?.touched) {
-                  <p class="text-destructive text-sm mt-1">Titel muss mindestens 3 Zeichen lang sein</p>
+                  <p class="mt-1 text-sm text-destructive">Titel muss mindestens 3 Zeichen lang sein</p>
                 }
               </div>
 
               <!-- Beschreibung / Qualifikationen -->
               <div>
-                <label for="beschreibung" class="block text-sm font-medium text-foreground mb-2">Beschreibung & Qualifikationen</label>
+                <label for="beschreibung" class="mb-2 block text-sm font-medium text-foreground">Beschreibung & Qualifikationen</label>
                 <textarea 
                   id="beschreibung"
                   formControlName="beschreibung" 
                   rows="4"
                   placeholder="Beschreibung der Arbeiten und erforderliche Qualifikationen (z.B. Zimmermannsausbildung, 5 Jahre Erfahrung, Dachstuhlbau)..."
-                  class="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none">
+                  class="focus:outline-hidden w-full resize-none rounded-md border border-border bg-background px-3 py-2 text-foreground placeholder:text-muted-foreground focus:border-transparent focus:ring-2 focus:ring-primary">
                 </textarea>
-                <p class="text-muted-foreground text-xs mt-1">Beschreiben Sie die Arbeiten und listen Sie erforderliche Qualifikationen auf</p>
+                <p class="mt-1 text-xs text-muted-foreground">Beschreiben Sie die Arbeiten und listen Sie erforderliche Qualifikationen auf</p>
               </div>
 
               <!-- Standort -->
               <div>
-                <label for="adresse" class="block text-sm font-medium text-foreground mb-2">Standort</label>
+                <label for="adresse" class="mb-2 block text-sm font-medium text-foreground">Standort</label>
                 <input 
                   id="adresse"
                   type="text"
                   formControlName="adresse" 
                   placeholder="z.B. Grabs, Dorfstrasse 123"
-                  class="w-full h-12 px-3 border border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                  class="focus:outline-hidden h-12 w-full rounded-md border border-border bg-background px-3 text-foreground placeholder:text-muted-foreground focus:border-transparent focus:ring-2 focus:ring-primary">
                 @if (bedarfForm.get('adresse')?.hasError('required') && bedarfForm.get('adresse')?.touched) {
-                  <p class="text-destructive text-sm mt-1">Standort ist erforderlich</p>
+                  <p class="mt-1 text-sm text-destructive">Standort ist erforderlich</p>
                 }
               </div>
 
               <!-- Datum Range -->
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
-                  <label for="datumVon" class="block text-sm font-medium text-foreground mb-2">Startdatum</label>
+                  <label for="datumVon" class="mb-2 block text-sm font-medium text-foreground">Startdatum</label>
                   <div class="relative">
                     <input 
                       id="datumVon"
@@ -96,22 +96,22 @@
                       formControlName="datumVon"
                       placeholder="Startdatum auswählen"
                       readonly
-                      class="w-full h-12 px-3 pr-12 border-2 border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 cursor-pointer hover:border-primary/50">
+                      class="focus:outline-hidden h-12 w-full cursor-pointer rounded-md border-2 border-border bg-background px-3 pr-12 text-foreground transition-all duration-200 placeholder:text-muted-foreground hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary">
                     <button 
                       type="button"
                       (click)="startPicker.open()"
-                      class="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 text-muted-foreground hover:text-primary transition-colors rounded-md hover:bg-accent">
+                      class="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-primary">
                       <mat-icon>calendar_today</mat-icon>
                     </button>
                     <mat-datepicker #startPicker></mat-datepicker>
                   </div>
                   @if (bedarfForm.get('datumVon')?.hasError('required') && bedarfForm.get('datumVon')?.touched) {
-                    <p class="text-destructive text-sm mt-1">Startdatum ist erforderlich</p>
+                    <p class="mt-1 text-sm text-destructive">Startdatum ist erforderlich</p>
                   }
                 </div>
 
                 <div>
-                  <label for="datumBis" class="block text-sm font-medium text-foreground mb-2">Enddatum</label>
+                  <label for="datumBis" class="mb-2 block text-sm font-medium text-foreground">Enddatum</label>
                   <div class="relative">
                     <input 
                       id="datumBis"
@@ -120,17 +120,17 @@
                       formControlName="datumBis"
                       placeholder="Enddatum auswählen"
                       readonly
-                      class="w-full h-12 px-3 pr-12 border-2 border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 cursor-pointer hover:border-primary/50">
+                      class="focus:outline-hidden h-12 w-full cursor-pointer rounded-md border-2 border-border bg-background px-3 pr-12 text-foreground transition-all duration-200 placeholder:text-muted-foreground hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary">
                     <button 
                       type="button"
                       (click)="endPicker.open()"
-                      class="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 text-muted-foreground hover:text-primary transition-colors rounded-md hover:bg-accent">
+                      class="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-primary">
                       <mat-icon>calendar_today</mat-icon>
                     </button>
                     <mat-datepicker #endPicker></mat-datepicker>
                   </div>
                   @if (bedarfForm.get('datumBis')?.hasError('required') && bedarfForm.get('datumBis')?.touched) {
-                    <p class="text-destructive text-sm mt-1">Enddatum ist erforderlich</p>
+                    <p class="mt-1 text-sm text-destructive">Enddatum ist erforderlich</p>
                   }
                 </div>
               </div>
@@ -139,70 +139,70 @@
               <div class="space-y-4">
                 <h3 class="text-lg font-medium text-foreground">Benötigte Arbeitskräfte</h3>
                 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
-                    <label for="zimmermannAnzahl" class="block text-sm font-medium text-foreground mb-2">Zimmermann/Zimmerin EFZ</label>
+                    <label for="zimmermannAnzahl" class="mb-2 block text-sm font-medium text-foreground">Zimmermann/Zimmerin EFZ</label>
                     <input 
                       id="zimmermannAnzahl"
                       type="number" 
                       formControlName="zimmermannAnzahl" 
                       min="0"
                       placeholder="0"
-                      class="w-full h-12 px-3 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                      class="focus:outline-hidden h-12 w-full rounded-md border border-border bg-background px-3 text-foreground focus:border-transparent focus:ring-2 focus:ring-primary">
                     @if (bedarfForm.get('zimmermannAnzahl')?.hasError('min') && bedarfForm.get('zimmermannAnzahl')?.touched) {
-                      <p class="text-destructive text-sm mt-1">Anzahl muss 0 oder höher sein</p>
+                      <p class="mt-1 text-sm text-destructive">Anzahl muss 0 oder höher sein</p>
                     }
                   </div>
 
                   <div>
-                    <label for="holzbauAnzahl" class="block text-sm font-medium text-foreground mb-2">Holzbau Mitarbeiter</label>
+                    <label for="holzbauAnzahl" class="mb-2 block text-sm font-medium text-foreground">Holzbau Mitarbeiter</label>
                     <input 
                       id="holzbauAnzahl"
                       type="number" 
                       formControlName="holzbauAnzahl" 
                       min="0"
                       placeholder="0"
-                      class="w-full h-12 px-3 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                      class="focus:outline-hidden h-12 w-full rounded-md border border-border bg-background px-3 text-foreground focus:border-transparent focus:ring-2 focus:ring-primary">
                     @if (bedarfForm.get('holzbauAnzahl')?.hasError('min') && bedarfForm.get('holzbauAnzahl')?.touched) {
-                      <p class="text-destructive text-sm mt-1">Anzahl muss 0 oder höher sein</p>
+                      <p class="mt-1 text-sm text-destructive">Anzahl muss 0 oder höher sein</p>
                     }
                   </div>
                 </div>
               </div>
 
               <!-- Arbeitsdetails -->
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
-                  <label for="stundenProTag" class="block text-sm font-medium text-foreground mb-2">Stunden pro Tag</label>
+                  <label for="stundenProTag" class="mb-2 block text-sm font-medium text-foreground">Stunden pro Tag</label>
                   <input 
                     id="stundenProTag"
                     type="number" 
                     formControlName="stundenProTag" 
                     min="1" 
                     max="12"
-                    class="w-full h-12 px-3 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                    class="focus:outline-hidden h-12 w-full rounded-md border border-border bg-background px-3 text-foreground focus:border-transparent focus:ring-2 focus:ring-primary">
                   @if (bedarfForm.get('stundenProTag')?.hasError('required') && bedarfForm.get('stundenProTag')?.touched) {
-                    <p class="text-destructive text-sm mt-1">Stunden sind erforderlich</p>
+                    <p class="mt-1 text-sm text-destructive">Stunden sind erforderlich</p>
                   }
                   @if (bedarfForm.get('stundenProTag')?.hasError('min') && bedarfForm.get('stundenProTag')?.touched) {
-                    <p class="text-destructive text-sm mt-1">Mindestens 1 Stunde erforderlich</p>
+                    <p class="mt-1 text-sm text-destructive">Mindestens 1 Stunde erforderlich</p>
                   }
                   @if (bedarfForm.get('stundenProTag')?.hasError('max') && bedarfForm.get('stundenProTag')?.touched) {
-                    <p class="text-destructive text-sm mt-1">Maximal 12 Stunden erlaubt</p>
+                    <p class="mt-1 text-sm text-destructive">Maximal 12 Stunden erlaubt</p>
                   }
                 </div>
 
                 <div>
-                  <label for="stundenlohn" class="block text-sm font-medium text-foreground mb-2">Stundenlohn (CHF)</label>
+                  <label for="stundenlohn" class="mb-2 block text-sm font-medium text-foreground">Stundenlohn (CHF)</label>
                   <input 
                     id="stundenlohn"
                     type="number" 
                     formControlName="stundenlohn" 
                     min="0" 
                     step="0.50"
-                    class="w-full h-12 px-3 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                    class="focus:outline-hidden h-12 w-full rounded-md border border-border bg-background px-3 text-foreground focus:border-transparent focus:ring-2 focus:ring-primary">
                   @if (bedarfForm.get('stundenlohn')?.hasError('min') && bedarfForm.get('stundenlohn')?.touched) {
-                    <p class="text-destructive text-sm mt-1">Lohn muss positiv sein</p>
+                    <p class="mt-1 text-sm text-destructive">Lohn muss positiv sein</p>
                   }
                 </div>
               </div>
@@ -217,7 +217,7 @@
                     type="checkbox" 
                     id="werkzeuge"
                     formControlName="mitWerkzeug"
-                    class="h-4 w-4 text-primary border-border rounded focus:ring-2 focus:ring-primary">
+                    class="size-4 rounded-sm border-border text-primary focus:ring-2 focus:ring-primary">
                   <label for="werkzeuge" class="text-base text-foreground">
                     Eigene Werkzeuge erforderlich
                   </label>
@@ -229,7 +229,7 @@
                     type="checkbox" 
                     id="fahrzeug"
                     formControlName="mitFahrzeug"
-                    class="h-4 w-4 text-primary border-border rounded focus:ring-2 focus:ring-primary">
+                    class="size-4 rounded-sm border-border text-primary focus:ring-2 focus:ring-primary">
                   <label for="fahrzeug" class="text-base text-foreground">
                     Eigenes Fahrzeug erforderlich
                   </label>
@@ -237,19 +237,19 @@
               </div>
 
               <!-- Form Actions -->
-              <div class="flex flex-col-reverse sm:flex-row gap-3 pt-4">
+              <div class="flex flex-col-reverse gap-3 pt-4 sm:flex-row">
                 <button 
                   type="button" 
                   (click)="closeForm()"
-                  class="w-full sm:w-auto h-12 px-6 border border-border rounded-md font-medium text-foreground hover:bg-accent transition-colors">
+                  class="h-12 w-full rounded-md border border-border px-6 font-medium text-foreground transition-colors hover:bg-accent sm:w-auto">
                   Abbrechen
                 </button>
                 <button 
                   type="submit" 
                   [disabled]="loading()"
-                  class="w-full sm:w-auto h-12 px-6 bg-primary text-primary-foreground rounded-md font-medium hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2">
+                  class="flex h-12 w-full items-center justify-center gap-2 rounded-md bg-primary px-6 font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto">
                   @if (loading()) {
-                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-foreground"></div>
+                    <div class="size-4 animate-spin rounded-full border-b-2 border-primary-foreground"></div>
                   } @else {
                     <mat-icon>{{ isEditing() ? 'save' : 'add' }}</mat-icon>
                   }
@@ -267,17 +267,17 @@
       <!-- Mobile Cards (visible on small screens) -->
       <div class="block lg:hidden">
         @if (filteredBedarfe().length === 0) {
-          <div class="text-center py-16 bg-card rounded-lg border border-border">
-            <div class="flex justify-center mb-4">
-              <div class="p-4 bg-primary/10 rounded-lg">
-                <mat-icon class="text-primary text-4xl">construction</mat-icon>
+          <div class="rounded-lg border border-border bg-card py-16 text-center">
+            <div class="mb-4 flex justify-center">
+              <div class="rounded-lg bg-primary/10 p-4">
+                <mat-icon class="text-4xl text-primary">construction</mat-icon>
               </div>
             </div>
-            <h3 class="text-xl font-medium text-card-foreground mb-3">Kein aktiver Bedarf</h3>
-            <p class="text-base text-muted-foreground mb-8">Erstellen Sie Ihren ersten Bedarf, um loszulegen.</p>
+            <h3 class="mb-3 text-xl font-medium text-card-foreground">Kein aktiver Bedarf</h3>
+            <p class="mb-8 text-base text-muted-foreground">Erstellen Sie Ihren ersten Bedarf, um loszulegen.</p>
             <button 
               (click)="openCreateForm()" 
-              class="h-12 px-6 bg-primary text-primary-foreground rounded-md font-medium hover:bg-primary/90 transition-colors inline-flex items-center gap-2">
+              class="inline-flex h-12 items-center gap-2 rounded-md bg-primary px-6 font-medium text-primary-foreground transition-colors hover:bg-primary/90">
               <mat-icon>add</mat-icon>
               Ersten Bedarf erstellen
             </button>
@@ -285,13 +285,13 @@
         } @else {
           <div class="space-y-4">
             @for (bedarf of filteredBedarfe(); track bedarf.id) {
-              <div class="bg-card rounded-lg border border-border p-5 shadow-sm">
-                <div class="flex items-start justify-between mb-4">
-                  <div class="flex-1 min-w-0">
-                    <h3 class="text-lg font-semibold text-card-foreground truncate">{{ bedarf.titel }}</h3>
-                    <p class="text-base text-muted-foreground mt-2 truncate">{{ bedarf.adresse }}</p>
+                              <div class="shadow-xs rounded-lg border border-border bg-card p-5">
+                <div class="mb-4 flex items-start justify-between">
+                  <div class="min-w-0 flex-1">
+                    <h3 class="truncate text-lg font-semibold text-card-foreground">{{ bedarf.titel }}</h3>
+                    <p class="mt-2 truncate text-base text-muted-foreground">{{ bedarf.adresse }}</p>
                   </div>
-                  <span class="ml-3 px-3 py-2 rounded-full text-sm font-medium whitespace-nowrap" 
+                  <span class="ml-3 whitespace-nowrap rounded-full px-3 py-2 text-sm font-medium" 
                         [class]="getStatusColor(bedarf.status) === 'primary' ? 'bg-primary text-primary-foreground' : 
                                  getStatusColor(bedarf.status) === 'warn' ? 'bg-destructive text-destructive-foreground' : 
                                  'bg-accent text-accent-foreground'">
@@ -299,7 +299,7 @@
                   </span>
                 </div>
                 
-                <div class="space-y-3 text-base text-muted-foreground mb-5">
+                <div class="mb-5 space-y-3 text-base text-muted-foreground">
                   <div class="flex justify-between">
                     <span>Zeitraum:</span>
                     <span class="text-right font-medium">{{ formatDate(bedarf.datumVon) }} - {{ formatDate(bedarf.datumBis) }}</span>
@@ -320,23 +320,23 @@
                   }
                 </div>
 
-                <div class="flex flex-col sm:flex-row gap-3">
+                <div class="flex flex-col gap-3 sm:flex-row">
                   <button 
                     (click)="openEditForm(bedarf)" 
-                    class="flex-1 h-11 px-4 border border-primary text-primary rounded-md font-medium hover:bg-primary/10 transition-colors flex items-center justify-center gap-2">
+                    class="flex h-11 flex-1 items-center justify-center gap-2 rounded-md border border-primary px-4 font-medium text-primary transition-colors hover:bg-primary/10">
                     <mat-icon>edit</mat-icon>
                     Bearbeiten
                   </button>
                   <button 
                     (click)="toggleStatus(bedarf)" 
-                    class="flex-1 h-11 px-4 rounded-md font-medium transition-colors flex items-center justify-center gap-2"
+                    class="flex h-11 flex-1 items-center justify-center gap-2 rounded-md px-4 font-medium transition-colors"
                     [class]="bedarf.status === BedarfStatus.AKTIV ? 'border border-destructive text-destructive hover:bg-destructive/10' : 'border border-primary text-primary hover:bg-primary/10'">
                     <mat-icon>{{ bedarf.status === BedarfStatus.AKTIV ? 'pause' : 'play_arrow' }}</mat-icon>
                     {{ bedarf.status === BedarfStatus.AKTIV ? 'Deaktivieren' : 'Aktivieren' }}
                   </button>
                   <button 
                     (click)="deleteBedarf(bedarf)" 
-                    class="shrink-0 h-11 w-11 border border-destructive text-destructive rounded-md hover:bg-destructive/10 transition-colors flex items-center justify-center">
+                    class="flex size-11 shrink-0 items-center justify-center rounded-md border border-destructive text-destructive transition-colors hover:bg-destructive/10">
                     <mat-icon>delete</mat-icon>
                   </button>
                 </div>
@@ -347,19 +347,19 @@
       </div>
 
       <!-- Desktop Table (hidden on small screens) -->
-      <div class="hidden lg:block bg-card rounded-lg border border-border overflow-hidden">
+      <div class="hidden overflow-hidden rounded-lg border border-border bg-card lg:block">
         @if (filteredBedarfe().length === 0) {
-          <div class="text-center py-16">
-            <div class="flex justify-center mb-6">
-              <div class="flex items-center justify-center w-16 h-16 bg-primary/10 rounded-lg">
-                <mat-icon class="text-primary text-4xl">construction</mat-icon>
+          <div class="py-16 text-center">
+            <div class="mb-6 flex justify-center">
+              <div class="flex size-16 items-center justify-center rounded-lg bg-primary/10">
+                <mat-icon class="text-4xl text-primary">construction</mat-icon>
               </div>
             </div>
-            <h3 class="text-lg font-medium text-card-foreground mb-3">Kein aktiver Bedarf</h3>
-            <p class="text-muted-foreground mb-8">Erstellen Sie Ihren ersten Bedarf, um loszulegen.</p>
+            <h3 class="mb-3 text-lg font-medium text-card-foreground">Kein aktiver Bedarf</h3>
+            <p class="mb-8 text-muted-foreground">Erstellen Sie Ihren ersten Bedarf, um loszulegen.</p>
             <button 
               (click)="openCreateForm()" 
-              class="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-2 rounded-md font-medium transition-colors inline-flex items-center gap-2">
+              class="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-2 font-medium text-primary-foreground transition-colors hover:bg-primary/90">
               <mat-icon>add</mat-icon>
               Ersten Bedarf erstellen
             </button>
@@ -368,22 +368,22 @@
           <table class="w-full">
             <thead class="bg-muted/30">
               <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Titel</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Standort</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Start</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Ende</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Arbeiter</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Status</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Aktionen</th>
+                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Titel</th>
+                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Standort</th>
+                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Start</th>
+                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Ende</th>
+                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Arbeiter</th>
+                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Aktionen</th>
               </tr>
             </thead>
-            <tbody class="bg-card divide-y divide-border">
+            <tbody class="divide-y divide-border bg-card">
               @for (bedarf of filteredBedarfe(); track bedarf.id) {
-                <tr class="hover:bg-muted/50 transition-colors">
+                <tr class="transition-colors hover:bg-muted/50">
                   <td class="px-6 py-4">
                     <div>
                       <div class="font-medium text-card-foreground">{{ bedarf.titel }}</div>
-                      <div class="text-sm text-muted-foreground truncate max-w-xs">{{ bedarf.beschreibung }}</div>
+                      <div class="max-w-xs truncate text-sm text-muted-foreground">{{ bedarf.beschreibung }}</div>
                     </div>
                   </td>
                   <td class="px-6 py-4 text-sm text-card-foreground">{{ bedarf.adresse }}</td>
@@ -396,7 +396,7 @@
                     </div>
                   </td>
                   <td class="px-6 py-4">
-                    <span class="px-2 py-1 rounded-full text-xs font-medium"
+                    <span class="rounded-full px-2 py-1 text-xs font-medium"
                           [class]="getStatusColor(bedarf.status) === 'primary' ? 'bg-primary text-primary-foreground' : 
                                    getStatusColor(bedarf.status) === 'warn' ? 'bg-destructive text-destructive-foreground' : 
                                    'bg-accent text-accent-foreground'">
@@ -407,18 +407,18 @@
                     <div class="flex gap-1">
                       <button 
                         (click)="openEditForm(bedarf)" 
-                        class="p-2 text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors">
+                        class="rounded-md p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
                         <mat-icon>edit</mat-icon>
                       </button>
                       <button 
                         (click)="toggleStatus(bedarf)"
-                        class="p-2 rounded-md transition-colors"
+                        class="rounded-md p-2 transition-colors"
                         [class]="bedarf.status === BedarfStatus.AKTIV ? 'text-destructive hover:bg-destructive/10' : 'text-primary hover:bg-primary/10'">
                         <mat-icon>{{ bedarf.status === BedarfStatus.AKTIV ? 'pause' : 'play_arrow' }}</mat-icon>
                       </button>
                       <button 
                         (click)="deleteBedarf(bedarf)" 
-                        class="p-2 text-destructive hover:bg-destructive/10 rounded-md transition-colors">
+                        class="rounded-md p-2 text-destructive transition-colors hover:bg-destructive/10">
                         <mat-icon>delete</mat-icon>
                       </button>
                     </div>

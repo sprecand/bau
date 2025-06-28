@@ -1,15 +1,15 @@
 <div class="bg-background">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+  <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
     <!-- Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+    <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div>
-        <h1 class="text-2xl sm:text-3xl font-bold text-foreground">Betriebe</h1>
-        <p class="text-base text-muted-foreground mt-2">Verwalten Sie Ihre Unternehmen und deren Profile</p>
+        <h1 class="text-2xl font-bold text-foreground sm:text-3xl">Betriebe</h1>
+        <p class="mt-2 text-base text-muted-foreground">Verwalten Sie Ihre Unternehmen und deren Profile</p>
       </div>
       @if (isAdmin()) {
         <button 
           (click)="openCreateForm()" 
-          class="w-full sm:w-auto h-12 px-6 bg-primary text-primary-foreground rounded-md font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2">
+          class="flex h-12 w-full items-center justify-center gap-2 rounded-md bg-primary px-6 font-medium text-primary-foreground transition-colors hover:bg-primary/90 sm:w-auto">
           <mat-icon>add</mat-icon>
           Neuen Betrieb erstellen
         </button>
@@ -19,23 +19,23 @@
     <div class="space-y-6">
       <!-- Loading State -->
       @if (loading() && !showForm()) {
-        <div class="flex justify-center items-center py-16">
-          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <div class="flex items-center justify-center py-16">
+          <div class="size-8 animate-spin rounded-full border-b-2 border-primary"></div>
         </div>
       }
 
       <!-- Form Modal -->
       @if (showForm()) {
-        <div class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div class="bg-card rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div class="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-card shadow-xl">
             <div class="p-6">
-              <div class="flex items-center justify-between mb-6">
+              <div class="mb-6 flex items-center justify-between">
                 <h2 class="text-xl font-semibold text-card-foreground">
                   {{ isEditing() ? 'Betrieb bearbeiten' : 'Neuen Betrieb erstellen' }}
                 </h2>
                 <button 
                   (click)="closeForm()" 
-                  class="p-2 hover:bg-accent rounded-md transition-colors">
+                  class="rounded-md p-2 transition-colors hover:bg-accent">
                   <mat-icon>close</mat-icon>
                 </button>
               </div>
@@ -43,7 +43,7 @@
               <form [formGroup]="betriebForm" (ngSubmit)="onSubmit()" class="space-y-6">
                 <!-- Firmenname -->
                 <div>
-                  <label for="name" class="block text-sm font-medium text-card-foreground mb-2">
+                  <label for="name" class="mb-2 block text-sm font-medium text-card-foreground">
                     Firmenname *
                   </label>
                   <input 
@@ -51,18 +51,18 @@
                     type="text" 
                     formControlName="name"
                     placeholder="z.B. Bau AG Grabs"
-                    class="w-full h-12 px-3 border border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                    class="focus:outline-hidden h-12 w-full rounded-md border border-border bg-background px-3 text-foreground placeholder:text-muted-foreground focus:border-transparent focus:ring-2 focus:ring-primary">
                   @if (betriebForm.get('name')?.hasError('required') && betriebForm.get('name')?.touched) {
-                    <p class="text-destructive text-sm mt-1">Firmenname ist erforderlich</p>
+                    <p class="mt-1 text-sm text-destructive">Firmenname ist erforderlich</p>
                   }
                   @if (betriebForm.get('name')?.hasError('minlength') && betriebForm.get('name')?.touched) {
-                    <p class="text-destructive text-sm mt-1">Firmenname muss mindestens 2 Zeichen lang sein</p>
+                    <p class="mt-1 text-sm text-destructive">Firmenname muss mindestens 2 Zeichen lang sein</p>
                   }
                 </div>
 
                 <!-- Adresse -->
                 <div>
-                  <label for="adresse" class="block text-sm font-medium text-card-foreground mb-2">
+                  <label for="adresse" class="mb-2 block text-sm font-medium text-card-foreground">
                     Adresse *
                   </label>
                   <textarea 
@@ -70,15 +70,15 @@
                     formControlName="adresse"
                     rows="3"
                     placeholder="Vollständige Adresse mit PLZ und Ort"
-                    class="w-full px-3 py-3 border border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"></textarea>
+                    class="focus:outline-hidden w-full resize-none rounded-md border border-border bg-background p-3 text-foreground placeholder:text-muted-foreground focus:border-transparent focus:ring-2 focus:ring-primary"></textarea>
                   @if (betriebForm.get('adresse')?.hasError('required') && betriebForm.get('adresse')?.touched) {
-                    <p class="text-destructive text-sm mt-1">Adresse ist erforderlich</p>
+                    <p class="mt-1 text-sm text-destructive">Adresse ist erforderlich</p>
                   }
                 </div>
 
                 <!-- Email -->
                 <div>
-                  <label for="email-betrieb" class="block text-sm font-medium text-card-foreground mb-2">
+                  <label for="email-betrieb" class="mb-2 block text-sm font-medium text-card-foreground">
                     E-Mail *
                   </label>
                   <input 
@@ -86,18 +86,18 @@
                     type="email" 
                     formControlName="email"
                     placeholder="info@unternehmen.ch"
-                    class="w-full h-12 px-3 border border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                    class="focus:outline-hidden h-12 w-full rounded-md border border-border bg-background px-3 text-foreground placeholder:text-muted-foreground focus:border-transparent focus:ring-2 focus:ring-primary">
                   @if (betriebForm.get('email')?.hasError('required') && betriebForm.get('email')?.touched) {
-                    <p class="text-destructive text-sm mt-1">E-Mail ist erforderlich</p>
+                    <p class="mt-1 text-sm text-destructive">E-Mail ist erforderlich</p>
                   }
                   @if (betriebForm.get('email')?.hasError('email') && betriebForm.get('email')?.touched) {
-                    <p class="text-destructive text-sm mt-1">Bitte geben Sie eine gültige E-Mail-Adresse ein</p>
+                    <p class="mt-1 text-sm text-destructive">Bitte geben Sie eine gültige E-Mail-Adresse ein</p>
                   }
                 </div>
 
                 <!-- Telefon -->
                 <div>
-                  <label for="telefon" class="block text-sm font-medium text-card-foreground mb-2">
+                  <label for="telefon" class="mb-2 block text-sm font-medium text-card-foreground">
                     Telefon
                   </label>
                   <input 
@@ -105,26 +105,26 @@
                     type="tel" 
                     formControlName="telefon"
                     placeholder="+41 81 123 45 67"
-                    class="w-full h-12 px-3 border border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                    class="focus:outline-hidden h-12 w-full rounded-md border border-border bg-background px-3 text-foreground placeholder:text-muted-foreground focus:border-transparent focus:ring-2 focus:ring-primary">
                   @if (betriebForm.get('telefon')?.hasError('pattern') && betriebForm.get('telefon')?.touched) {
-                    <p class="text-destructive text-sm mt-1">Bitte geben Sie eine gültige Telefonnummer ein</p>
+                    <p class="mt-1 text-sm text-destructive">Bitte geben Sie eine gültige Telefonnummer ein</p>
                   }
                 </div>
 
                 <!-- Form Actions -->
-                <div class="flex flex-col-reverse sm:flex-row gap-3 pt-4">
+                <div class="flex flex-col-reverse gap-3 pt-4 sm:flex-row">
                   <button 
                     type="button" 
                     (click)="closeForm()"
-                    class="w-full sm:w-auto h-12 px-6 border border-border rounded-md font-medium text-foreground hover:bg-accent transition-colors">
+                    class="h-12 w-full rounded-md border border-border px-6 font-medium text-foreground transition-colors hover:bg-accent sm:w-auto">
                     Abbrechen
                   </button>
                   <button 
                     type="submit" 
                     [disabled]="betriebForm.invalid || loading()"
-                    class="w-full sm:w-auto h-12 px-6 bg-primary text-primary-foreground rounded-md font-medium hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2">
+                    class="flex h-12 w-full items-center justify-center gap-2 rounded-md bg-primary px-6 font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto">
                     @if (loading()) {
-                      <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-foreground"></div>
+                      <div class="size-4 animate-spin rounded-full border-b-2 border-primary-foreground"></div>
                     } @else {
                       <mat-icon>{{ isEditing() ? 'save' : 'add' }}</mat-icon>
                     }
@@ -142,14 +142,14 @@
         <!-- Mobile Cards -->
         <div class="block lg:hidden">
           @if (filteredBetriebe().length === 0) {
-            <div class="text-center py-16 bg-card rounded-lg border border-border">
-              <div class="flex justify-center mb-6">
-                <div class="flex items-center justify-center w-16 h-16 bg-primary/10 rounded-lg">
-                  <mat-icon class="text-primary text-4xl">business</mat-icon>
+            <div class="rounded-lg border border-border bg-card py-16 text-center">
+              <div class="mb-6 flex justify-center">
+                <div class="flex size-16 items-center justify-center rounded-lg bg-primary/10">
+                  <mat-icon class="text-4xl text-primary">business</mat-icon>
                 </div>
               </div>
-              <h3 class="text-xl font-medium text-card-foreground mb-3">Keine aktiven Betriebe</h3>
-              <p class="text-base text-muted-foreground mb-8">
+              <h3 class="mb-3 text-xl font-medium text-card-foreground">Keine aktiven Betriebe</h3>
+              <p class="mb-8 text-base text-muted-foreground">
                 @if (isAdmin()) {
                   Erstellen Sie Ihr erstes Unternehmensprofil.
                 } @else {
@@ -159,7 +159,7 @@
               @if (isAdmin()) {
                 <button 
                   (click)="openCreateForm()" 
-                  class="h-12 px-6 bg-primary text-primary-foreground rounded-md font-medium hover:bg-primary/90 transition-colors inline-flex items-center gap-2">
+                  class="inline-flex h-12 items-center gap-2 rounded-md bg-primary px-6 font-medium text-primary-foreground transition-colors hover:bg-primary/90">
                   <mat-icon>add</mat-icon>
                   Ersten Betrieb erstellen
                 </button>
@@ -168,13 +168,13 @@
           } @else {
             <div class="space-y-4">
               @for (betrieb of filteredBetriebe(); track betrieb.id) {
-                <div class="bg-card rounded-lg border border-border p-5 shadow-sm">
-                  <div class="flex items-start justify-between mb-4">
-                    <div class="flex-1 min-w-0">
-                      <h3 class="text-lg font-semibold text-card-foreground truncate">{{ betrieb.name }}</h3>
-                      <p class="text-base text-muted-foreground mt-1">{{ betrieb.email }}</p>
+                <div class="shadow-xs rounded-lg border border-border bg-card p-5">
+                  <div class="mb-4 flex items-start justify-between">
+                    <div class="min-w-0 flex-1">
+                      <h3 class="truncate text-lg font-semibold text-card-foreground">{{ betrieb.name }}</h3>
+                      <p class="mt-1 text-base text-muted-foreground">{{ betrieb.email }}</p>
                     </div>
-                    <span class="ml-3 px-3 py-2 rounded-full text-sm font-medium whitespace-nowrap" 
+                    <span class="ml-3 whitespace-nowrap rounded-full px-3 py-2 text-sm font-medium" 
                           [class]="getStatusColor(betrieb.status) === 'primary' ? 'bg-primary text-primary-foreground' : 
                                    getStatusColor(betrieb.status) === 'warn' ? 'bg-destructive text-destructive-foreground' : 
                                    'bg-accent text-accent-foreground'">
@@ -182,7 +182,7 @@
                     </span>
                   </div>
                   
-                  <div class="space-y-2 text-sm text-muted-foreground mb-4">
+                  <div class="mb-4 space-y-2 text-sm text-muted-foreground">
                     <p>{{ betrieb.telefon || 'Keine Telefonnummer' }}</p>
                     <p>{{ betrieb.adresse }}</p>
                   </div>
@@ -191,20 +191,20 @@
                     <div class="flex gap-2">
                       <button 
                         (click)="openEditForm(betrieb)" 
-                        class="flex-1 h-10 px-3 border border-primary text-primary rounded-md text-sm font-medium hover:bg-primary/10 transition-colors flex items-center justify-center gap-2">
+                        class="flex h-10 flex-1 items-center justify-center gap-2 rounded-md border border-primary px-3 text-sm font-medium text-primary transition-colors hover:bg-primary/10">
                         <mat-icon class="text-base">edit</mat-icon>
                         Bearbeiten
                       </button>
                       <button 
                         (click)="toggleStatus(betrieb)" 
-                        class="flex-1 h-10 px-3 rounded-md text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                        class="flex h-10 flex-1 items-center justify-center gap-2 rounded-md px-3 text-sm font-medium transition-colors"
                         [class]="betrieb.status === BetriebStatus.AKTIV ? 'border border-destructive text-destructive hover:bg-destructive/10' : 'border border-primary text-primary hover:bg-primary/10'">
                         <mat-icon class="text-base">{{ betrieb.status === BetriebStatus.AKTIV ? 'pause' : 'play_arrow' }}</mat-icon>
                         {{ betrieb.status === BetriebStatus.AKTIV ? 'Pausieren' : 'Aktivieren' }}
                       </button>
                       <button 
                         (click)="deleteBetrieb(betrieb)" 
-                        class="h-10 w-10 border border-destructive text-destructive rounded-md hover:bg-destructive/10 transition-colors flex items-center justify-center">
+                        class="flex size-10 items-center justify-center rounded-md border border-destructive text-destructive transition-colors hover:bg-destructive/10">
                         <mat-icon class="text-base">delete</mat-icon>
                       </button>
                     </div>
@@ -216,19 +216,19 @@
         </div>
 
         <!-- Desktop Table -->
-        <div class="hidden lg:block bg-card rounded-lg border border-border overflow-hidden">
+        <div class="hidden overflow-hidden rounded-lg border border-border bg-card lg:block">
           @if (filteredBetriebe().length === 0) {
-            <div class="text-center py-16">
-              <div class="flex justify-center mb-6">
-                <div class="flex items-center justify-center w-16 h-16 bg-primary/10 rounded-lg">
-                  <mat-icon class="text-primary text-4xl">business</mat-icon>
+            <div class="py-16 text-center">
+              <div class="mb-6 flex justify-center">
+                <div class="flex size-16 items-center justify-center rounded-lg bg-primary/10">
+                  <mat-icon class="text-4xl text-primary">business</mat-icon>
                 </div>
               </div>
-              <h3 class="text-lg font-medium text-card-foreground mb-3">Keine aktiven Betriebe</h3>
-              <p class="text-muted-foreground mb-6">Erstellen Sie Ihr erstes Unternehmensprofil.</p>
+              <h3 class="mb-3 text-lg font-medium text-card-foreground">Keine aktiven Betriebe</h3>
+              <p class="mb-6 text-muted-foreground">Erstellen Sie Ihr erstes Unternehmensprofil.</p>
               <button 
                 (click)="openCreateForm()" 
-                class="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-2 rounded-md font-medium transition-colors inline-flex items-center gap-2">
+                class="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-2 font-medium text-primary-foreground transition-colors hover:bg-primary/90">
                 <mat-icon>add</mat-icon>
                 Ersten Betrieb erstellen
               </button>
@@ -237,15 +237,15 @@
             <table class="w-full">
               <thead class="bg-muted/30">
                 <tr>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Firma</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Kontakt</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Status</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Aktionen</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Firma</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Kontakt</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Status</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Aktionen</th>
                 </tr>
               </thead>
-              <tbody class="bg-card divide-y divide-border">
+              <tbody class="divide-y divide-border bg-card">
                 @for (betrieb of filteredBetriebe(); track betrieb.id) {
-                  <tr class="hover:bg-muted/50 transition-colors">
+                  <tr class="transition-colors hover:bg-muted/50">
                     <td class="px-6 py-4">
                       <div>
                         <div class="font-medium text-card-foreground">{{ betrieb.name }}</div>
@@ -259,7 +259,7 @@
                       </div>
                     </td>
                     <td class="px-6 py-4">
-                      <span class="px-2 py-1 rounded-full text-xs font-medium"
+                      <span class="rounded-full px-2 py-1 text-xs font-medium"
                             [class]="getStatusColor(betrieb.status) === 'primary' ? 'bg-primary text-primary-foreground' : 
                                      getStatusColor(betrieb.status) === 'warn' ? 'bg-destructive text-destructive-foreground' : 
                                      'bg-accent text-accent-foreground'">
@@ -271,18 +271,18 @@
                         <div class="flex gap-1">
                           <button 
                             (click)="openEditForm(betrieb)" 
-                            class="p-2 text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors">
+                            class="rounded-md p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
                             <mat-icon class="text-base">edit</mat-icon>
                           </button>
                           <button 
                             (click)="toggleStatus(betrieb)"
-                            class="p-2 rounded-md transition-colors"
+                            class="rounded-md p-2 transition-colors"
                             [class]="betrieb.status === BetriebStatus.AKTIV ? 'text-destructive hover:bg-destructive/10' : 'text-primary hover:bg-primary/10'">
                             <mat-icon class="text-base">{{ betrieb.status === BetriebStatus.AKTIV ? 'pause' : 'play_arrow' }}</mat-icon>
                           </button>
                           <button 
                             (click)="deleteBetrieb(betrieb)" 
-                            class="p-2 text-destructive hover:bg-destructive/10 rounded-md transition-colors">
+                            class="rounded-md p-2 text-destructive transition-colors hover:bg-destructive/10">
                             <mat-icon class="text-base">delete</mat-icon>
                           </button>
                         </div>

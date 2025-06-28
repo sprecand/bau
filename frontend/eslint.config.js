@@ -2,6 +2,7 @@
 const eslint = require("@eslint/js");
 const tseslint = require("typescript-eslint");
 const angular = require("angular-eslint");
+const tailwind = require("eslint-plugin-tailwindcss");
 
 module.exports = tseslint.config(
   {
@@ -37,7 +38,28 @@ module.exports = tseslint.config(
     extends: [
       ...angular.configs.templateRecommended,
       ...angular.configs.templateAccessibility,
+      ...tailwind.configs["flat/recommended"],
     ],
-    rules: {},
+    rules: {
+      // Tailwind-specific rules (customized for v4 compatibility)
+      "tailwindcss/classnames-order": "warn",
+      "tailwindcss/enforces-shorthand": "warn", 
+      "tailwindcss/no-contradicting-classname": "error",
+      "tailwindcss/no-unnecessary-arbitrary-value": "warn",
+      // Disable rules that might conflict with v4
+      "tailwindcss/no-custom-classname": "off", // Allow custom classes during v4 transition
+    },
+    settings: {
+      tailwindcss: {
+        config: "tailwind.config.js",
+        cssFiles: [
+          "**/*.css",
+          "**/*.scss", 
+          "!**/node_modules",
+          "!**/dist"
+        ],
+        whitelist: [], // Add any custom classes you want to allow
+      },
+    },
   }
 );

@@ -1,24 +1,24 @@
 <div class="bg-background">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+  <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
     <!-- Header -->
     <div class="mb-6 sm:mb-8">
-      <h1 class="text-3xl sm:text-4xl font-bold text-foreground mb-3 sm:mb-4">Dashboard</h1>
-      <p class="text-lg text-muted-foreground max-w-2xl">
+      <h1 class="mb-3 text-3xl font-bold text-foreground sm:mb-4 sm:text-4xl">Dashboard</h1>
+      <p class="max-w-2xl text-lg text-muted-foreground">
         Willkommen bei der B2B-Plattform für Zimmerei-Betriebe. Verwalten Sie Ihre Holzbau-Bedarfe und vernetzen Sie sich mit anderen Baufirmen für Personalkooperationen.
       </p>
     </div>
 
     <!-- Stats Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+    <div class="mb-6 grid grid-cols-1 gap-4 sm:mb-8 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
       <!-- Active Bedarfe -->
-      <div class="bg-card rounded-lg border border-border p-5 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
+      <div class="shadow-xs rounded-lg border border-border bg-card p-5 transition-shadow hover:shadow-md sm:p-6">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-base font-medium text-muted-foreground">Aktive Bedarfe</p>
-            <p class="text-3xl font-bold text-card-foreground mt-1">{{ stats().activeBedarfe }}</p>
+            <p class="mt-1 text-3xl font-bold text-card-foreground">{{ stats().activeBedarfe }}</p>
           </div>
-          <div class="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-lg shrink-0">
-            <mat-icon class="text-primary text-2xl">construction</mat-icon>
+          <div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+            <mat-icon class="text-2xl text-primary">construction</mat-icon>
           </div>
         </div>
         <div class="mt-4">
@@ -29,14 +29,14 @@
       </div>
 
       <!-- Recent Bedarfe (30 days) -->
-      <div class="bg-card rounded-lg border border-border p-5 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
+      <div class="shadow-xs rounded-lg border border-border bg-card p-5 transition-shadow hover:shadow-md sm:p-6">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-base font-medium text-muted-foreground">Bedarfe letzten 30 Tage</p>
-            <p class="text-3xl font-bold text-card-foreground mt-1">{{ stats().monthlyBedarfe }}</p>
+            <p class="mt-1 text-3xl font-bold text-card-foreground">{{ stats().monthlyBedarfe }}</p>
           </div>
-          <div class="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-lg shrink-0">
-            <mat-icon class="text-primary text-2xl">calendar_month</mat-icon>
+          <div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+            <mat-icon class="text-2xl text-primary">calendar_month</mat-icon>
           </div>
         </div>
         <div class="mt-4">
@@ -47,14 +47,14 @@
       </div>
 
       <!-- Total Bedarfe -->
-      <div class="bg-card rounded-lg border border-border p-5 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
+      <div class="shadow-xs rounded-lg border border-border bg-card p-5 transition-shadow hover:shadow-md sm:p-6">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-base font-medium text-muted-foreground">Gesamt Bedarfe</p>
-            <p class="text-3xl font-bold text-card-foreground mt-1">{{ stats().totalBedarfe }}</p>
+            <p class="mt-1 text-3xl font-bold text-card-foreground">{{ stats().totalBedarfe }}</p>
           </div>
-          <div class="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-lg shrink-0">
-            <mat-icon class="text-primary text-2xl">format_list_bulleted</mat-icon>
+          <div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+            <mat-icon class="text-2xl text-primary">format_list_bulleted</mat-icon>
           </div>
         </div>
         <div class="mt-4">
@@ -65,14 +65,14 @@
       </div>
 
       <!-- Total Betriebe -->
-      <div class="bg-card rounded-lg border border-border p-5 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
+      <div class="shadow-xs rounded-lg border border-border bg-card p-5 transition-shadow hover:shadow-md sm:p-6">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-base font-medium text-muted-foreground">Zimmerei-Betriebe</p>
-            <p class="text-3xl font-bold text-card-foreground mt-1">{{ stats().totalBetriebe }}</p>
+            <p class="mt-1 text-3xl font-bold text-card-foreground">{{ stats().totalBetriebe }}</p>
           </div>
-          <div class="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-lg shrink-0">
-            <mat-icon class="text-primary text-2xl">business</mat-icon>
+          <div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+            <mat-icon class="text-2xl text-primary">business</mat-icon>
           </div>
         </div>
         <div class="mt-4">
@@ -84,34 +84,34 @@
     </div>
 
     <!-- Recent Activity -->
-    <div class="bg-card rounded-lg border border-border p-5 sm:p-6 shadow-sm">
-      <div class="flex items-center justify-between mb-6">
+    <div class="shadow-xs rounded-lg border border-border bg-card p-5 sm:p-6">
+      <div class="mb-6 flex items-center justify-between">
         <h2 class="text-xl font-semibold text-card-foreground">Letzte Aktivitäten</h2>
       </div>
 
       <div class="space-y-4">
         @for (activity of recentActivities(); track activity.id) {
-          <div class="flex items-start gap-4 p-4 bg-muted/30 rounded-lg">
-            <div class="flex items-center justify-center w-10 h-10 bg-primary/10 rounded-lg shrink-0">
-              <mat-icon class="text-primary text-lg">{{ activity.icon }}</mat-icon>
+          <div class="flex items-start gap-4 rounded-lg bg-muted/30 p-4">
+            <div class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+              <mat-icon class="text-lg text-primary">{{ activity.icon }}</mat-icon>
             </div>
-            <div class="flex-1 min-w-0">
+            <div class="min-w-0 flex-1">
               <p class="text-base font-medium text-card-foreground">{{ activity.title }}</p>
-              <p class="text-sm text-muted-foreground mt-1">{{ activity.description }}</p>
-              <p class="text-xs text-muted-foreground mt-2">{{ activity.timestamp }}</p>
+              <p class="mt-1 text-sm text-muted-foreground">{{ activity.description }}</p>
+              <p class="mt-2 text-xs text-muted-foreground">{{ activity.timestamp }}</p>
             </div>
           </div>
         }
       </div>
 
       @if (recentActivities().length === 0) {
-        <div class="text-center py-12">
-          <div class="flex justify-center mb-6">
-            <div class="flex items-center justify-center w-16 h-16 bg-muted/30 rounded-lg">
-              <mat-icon class="text-muted-foreground text-4xl">inbox</mat-icon>
+        <div class="py-12 text-center">
+          <div class="mb-6 flex justify-center">
+            <div class="flex size-16 items-center justify-center rounded-lg bg-muted/30">
+              <mat-icon class="text-4xl text-muted-foreground">inbox</mat-icon>
             </div>
           </div>
-          <h3 class="text-lg font-medium text-card-foreground mb-2">Keine aktuellen Aktivitäten</h3>
+          <h3 class="mb-2 text-lg font-medium text-card-foreground">Keine aktuellen Aktivitäten</h3>
           <p class="text-base text-muted-foreground">Aktivitäten werden hier angezeigt, sobald sie verfügbar sind.</p>
         </div>
       }

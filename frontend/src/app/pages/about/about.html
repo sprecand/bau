@@ -1,30 +1,30 @@
 <div class="bg-background">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+  <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
     <!-- Header Section -->
-    <div class="text-center mb-12">
-      <h1 class="text-3xl sm:text-4xl font-bold text-foreground mb-4">Über uns</h1>
-      <p class="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+    <div class="mb-12 text-center">
+      <h1 class="mb-4 text-3xl font-bold text-foreground sm:text-4xl">Über uns</h1>
+      <p class="mx-auto max-w-3xl text-lg leading-relaxed text-muted-foreground">
         Wir verbinden Zimmerei-Betriebe und schaffen eine Plattform für effiziente Personalkooperationen im Baugewerbe.
       </p>
     </div>
 
     <!-- Mission Section -->
-    <div class="bg-card rounded-lg border border-border p-6 sm:p-8 mb-12 shadow-sm">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+    <div class="shadow-xs mb-12 rounded-lg border border-border bg-card p-6 sm:p-8">
+      <div class="grid grid-cols-1 items-center gap-8 lg:grid-cols-2">
         <div>
-          <h2 class="text-2xl font-semibold text-card-foreground mb-4">Unsere Mission</h2>
-          <p class="text-muted-foreground leading-relaxed mb-4">
+          <h2 class="mb-4 text-2xl font-semibold text-card-foreground">Unsere Mission</h2>
+          <p class="mb-4 leading-relaxed text-muted-foreground">
             Die Bau Platform wurde entwickelt, um Zimmerei-Betrieben zu helfen, flexibel auf Personalengpässe und -überschüsse zu reagieren. 
             Durch unsere B2B-Plattform können Unternehmen schnell und unkompliziert qualifizierte Fachkräfte finden oder ihre eigenen Mitarbeiter temporär anderen Betrieben zur Verfügung stellen.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
+          <p class="leading-relaxed text-muted-foreground">
             Wir glauben an Zusammenarbeit und möchten das Baugewerbe durch innovative Technologie stärken.
           </p>
         </div>
         <div class="flex justify-center">
-          <div class="bg-primary/10 rounded-lg p-8 text-center">
-            <mat-icon class="text-primary text-6xl mb-4">handshake</mat-icon>
-            <h3 class="text-xl font-semibold text-card-foreground mb-2">Partnerschaft</h3>
+          <div class="rounded-lg bg-primary/10 p-8 text-center">
+            <mat-icon class="mb-4 text-6xl text-primary">handshake</mat-icon>
+            <h3 class="mb-2 text-xl font-semibold text-card-foreground">Partnerschaft</h3>
             <p class="text-muted-foreground">Gemeinsam stark im Schweizer Baugewerbe</p>
           </div>
         </div>
@@ -33,43 +33,43 @@
 
     <!-- Team Section -->
     <div class="mb-12">
-      <div class="text-center mb-8">
-        <h2 class="text-2xl sm:text-3xl font-semibold text-foreground mb-4">Unser Team</h2>
-        <p class="text-muted-foreground max-w-2xl mx-auto">
+      <div class="mb-8 text-center">
+        <h2 class="mb-4 text-2xl font-semibold text-foreground sm:text-3xl">Unser Team</h2>
+        <p class="mx-auto max-w-2xl text-muted-foreground">
           Lernen Sie die Menschen kennen, die daran arbeiten, Zimmerei-Betriebe zu vernetzen und den Schweizer Holzbau zu stärken.
         </p>
       </div>
 
       <!-- Team Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
         @for (member of teamMembers; track member.name) {
-          <div class="bg-card rounded-lg border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+          <div class="shadow-xs overflow-hidden rounded-lg border border-border bg-card transition-shadow hover:shadow-md">
             <!-- Profile Image -->
             <div class="aspect-square overflow-hidden">
               <img 
                 [src]="member.image" 
                 [alt]="member.name"
-                class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                class="size-full object-cover transition-transform duration-300 hover:scale-105"
                 loading="lazy">
             </div>
             
             <!-- Member Info -->
             <div class="p-6">
-              <h3 class="text-xl font-semibold text-card-foreground mb-1">{{ member.name }}</h3>
-              <p class="text-primary font-medium mb-3">{{ member.position }}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed mb-4">{{ member.description }}</p>
+              <h3 class="mb-1 text-xl font-semibold text-card-foreground">{{ member.name }}</h3>
+              <p class="mb-3 font-medium text-primary">{{ member.position }}</p>
+              <p class="mb-4 text-sm leading-relaxed text-muted-foreground">{{ member.description }}</p>
               
               <!-- Contact Info -->
               <div class="space-y-2">
                 <div class="flex items-center gap-2 text-sm text-muted-foreground">
                   <mat-icon class="text-base">email</mat-icon>
-                  <a [href]="'mailto:' + member.email" class="hover:text-primary transition-colors">
+                  <a [href]="'mailto:' + member.email" class="transition-colors hover:text-primary">
                     {{ member.email }}
                   </a>
                 </div>
                 <div class="flex items-center gap-2 text-sm text-muted-foreground">
                   <mat-icon class="text-base">phone</mat-icon>
-                  <a [href]="'tel:' + member.phone" class="hover:text-primary transition-colors">
+                  <a [href]="'tel:' + member.phone" class="transition-colors hover:text-primary">
                     {{ member.phone }}
                   </a>
                 </div>
@@ -81,22 +81,22 @@
     </div>
 
     <!-- Contact Section -->
-    <div class="bg-card rounded-lg border border-border p-6 sm:p-8 shadow-sm">
+    <div class="shadow-xs rounded-lg border border-border bg-card p-6 sm:p-8">
       <div class="text-center">
-        <h2 class="text-2xl font-semibold text-card-foreground mb-4">Kontaktieren Sie uns</h2>
-        <p class="text-muted-foreground mb-6 max-w-2xl mx-auto">
+        <h2 class="mb-4 text-2xl font-semibold text-card-foreground">Kontaktieren Sie uns</h2>
+        <p class="mx-auto mb-6 max-w-2xl text-muted-foreground">
           Haben Sie Fragen zu unserer Plattform oder möchten Sie Teil unseres Netzwerks werden? 
           Wir freuen uns auf Ihre Nachricht.
         </p>
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
           <!-- Address -->
           <div class="text-center">
-            <div class="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3">
+            <div class="mx-auto mb-3 flex size-12 items-center justify-center rounded-lg bg-primary/10">
               <mat-icon class="text-primary">location_on</mat-icon>
             </div>
-            <h3 class="font-semibold text-card-foreground mb-1">Adresse</h3>
-            <p class="text-muted-foreground text-sm">
+            <h3 class="mb-1 font-semibold text-card-foreground">Adresse</h3>
+            <p class="text-sm text-muted-foreground">
               Dorfstrasse 1234<br>
               9472 Grabs<br>
               Schweiz
@@ -105,12 +105,12 @@
 
           <!-- Phone -->
           <div class="text-center">
-            <div class="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3">
+            <div class="mx-auto mb-3 flex size-12 items-center justify-center rounded-lg bg-primary/10">
               <mat-icon class="text-primary">phone</mat-icon>
             </div>
-            <h3 class="font-semibold text-card-foreground mb-1">Telefon</h3>
-            <p class="text-muted-foreground text-sm">
-              <a href="tel:+41441234567" class="hover:text-primary transition-colors">
+            <h3 class="mb-1 font-semibold text-card-foreground">Telefon</h3>
+            <p class="text-sm text-muted-foreground">
+              <a href="tel:+41441234567" class="transition-colors hover:text-primary">
                 +41 44 123 45 67
               </a>
             </p>
@@ -118,12 +118,12 @@
 
           <!-- Email -->
           <div class="text-center">
-            <div class="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3">
+            <div class="mx-auto mb-3 flex size-12 items-center justify-center rounded-lg bg-primary/10">
               <mat-icon class="text-primary">email</mat-icon>
             </div>
-            <h3 class="font-semibold text-card-foreground mb-1">E-Mail</h3>
-            <p class="text-muted-foreground text-sm">
-              <a [href]="'mailto:' + contactEmail" class="hover:text-primary transition-colors">
+            <h3 class="mb-1 font-semibold text-card-foreground">E-Mail</h3>
+            <p class="text-sm text-muted-foreground">
+              <a [href]="'mailto:' + contactEmail" class="transition-colors hover:text-primary">
                 {{ contactEmailDisplay }}
               </a>
             </p>

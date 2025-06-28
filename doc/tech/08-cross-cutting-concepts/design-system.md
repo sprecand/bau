@@ -335,7 +335,7 @@ button:focus-visible {
 ### CSS Setup
 ```css
 /* globals.css */
-@import url('./design-system.css');
+@use url('./design-system.css');
 
 * {
   box-sizing: border-box;
