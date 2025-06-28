@@ -20,8 +20,7 @@ interface TeamMember {
     MatCardModule,
     MatIconModule
   ],
-  templateUrl: './about.html',
-  styleUrls: ['./about.scss']
+  templateUrl: './about.html'
 })
 export class AboutComponent {
   readonly teamMembers: TeamMember[] = [

@@ -19,8 +19,7 @@ import { ThemeService } from '../../../services/theme.service';
     MatMenuModule,
     MatSelectModule
   ],
-  templateUrl: './header.html',
-  styleUrls: ['./header.scss']
+  templateUrl: './header.html'
 })
 export class HeaderComponent {
   private readonly authService = inject(AuthService);

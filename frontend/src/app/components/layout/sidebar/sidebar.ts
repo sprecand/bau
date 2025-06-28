@@ -11,8 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
     RouterModule,
     MatIconModule
   ],
-  templateUrl: './sidebar.html',
-  styleUrls: ['./sidebar.scss']
+  templateUrl: './sidebar.html'
 })
 export class SidebarComponent {
 

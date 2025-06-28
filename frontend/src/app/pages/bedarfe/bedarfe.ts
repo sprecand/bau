@@ -64,8 +64,7 @@ export const SWISS_DATE_FORMATS = {
     { provide: MAT_DATE_LOCALE, useValue: 'de-CH' },
     { provide: LOCALE_ID, useValue: 'de-CH' }
   ],
-  templateUrl: './bedarfe.html',
-  styleUrls: ['./bedarfe.scss']
+  templateUrl: './bedarfe.html'
 })
 export class BedarfeComponent implements OnInit {
   private readonly bedarfService = inject(BedarfService);

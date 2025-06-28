@@ -33,8 +33,7 @@ interface Activity {
     MatButtonModule,
     MatIconModule
   ],
-  templateUrl: './dashboard.html',
-  styleUrls: ['./dashboard.scss']
+  templateUrl: './dashboard.html'
 })
 export class DashboardComponent {
   private bedarfService = inject(BedarfService);

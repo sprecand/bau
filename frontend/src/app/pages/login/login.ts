@@ -24,8 +24,7 @@ import { environment } from '../../../environments/environment';
     MatInputModule,
     MatSnackBarModule
   ],
-  templateUrl: './login.html',
-  styleUrls: ['./login.scss']
+  templateUrl: './login.html'
 })
 export class LoginComponent {
   private readonly authService = inject(AuthService);

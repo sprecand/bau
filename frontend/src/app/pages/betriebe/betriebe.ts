@@ -17,8 +17,7 @@ import { AuthService } from '../../services/auth.service';
     MatIconModule,
     MatSnackBarModule
   ],
-  templateUrl: './betriebe.html',
-  styleUrl: './betriebe.scss'
+  templateUrl: './betriebe.html'
 })
 export class BetriebeComponent implements OnInit {
   private readonly betriebService = inject(BetriebService);

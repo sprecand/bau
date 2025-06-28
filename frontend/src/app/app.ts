@@ -11,8 +11,7 @@ import { ThemeService } from './services/theme.service';
     RouterOutlet,
     HeaderComponent
   ],
-  templateUrl: './app.html',
-  styleUrls: ['./app.scss']
+  templateUrl: './app.html'
 })
 export class AppComponent {
   // Inject AuthService to make it available in template
