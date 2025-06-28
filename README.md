@@ -58,6 +58,31 @@ git push origin main
 # Go to: Actions → "CD - Deploy" → "Run workflow"
 ```
 
+## 💰 Cost Management
+
+**Save money with the AWS management script!**
+
+```bash
+# Turn app ON (costs ~$17/month)
+./manage-app.sh start
+
+# Turn app OFF (saves ~$16/month, costs ~$0.30/month)  
+./manage-app.sh stop
+
+# Check current status and costs
+./manage-app.sh status
+
+# Completely destroy infrastructure (saves ~$17/month)
+./manage-app.sh destroy
+```
+
+**Smart cost savings:**
+- **Daily on/off**: Save ~$5-8/month (work 8 hours/day)
+- **Weekend shutdown**: Save ~$4-5/month  
+- **Auto-shutdown**: 10 PM UTC daily (already enabled)
+
+📖 **Full guide**: [AWS Cost Management Guide](AWS-MANAGEMENT.md)
+
 ## Documentation
 
 - [Business Requirements](doc/fach/fachlich.md) - Domain model and business rules
