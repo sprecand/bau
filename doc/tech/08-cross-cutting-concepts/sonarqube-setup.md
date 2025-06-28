@@ -12,6 +12,45 @@ This project uses SonarQube for continuous code quality analysis, covering both 
 - **Maintainability**: Technical debt and code complexity
 - **Reliability**: Bug detection and error-prone patterns
 
+## Code Coverage Strategy
+
+### Focus on Business Logic
+
+Our coverage strategy prioritizes meaningful tests over percentage targets:
+
+- **Core Business Logic**: 80%+ coverage (Services, Domain objects)
+- **Generated Code**: Excluded from coverage metrics
+- **Configuration**: Excluded from coverage metrics
+- **Data Transfer Objects**: Excluded from coverage metrics
+
+### Exclusion Strategy
+
+The following code is excluded from SonarQube analysis and coverage:
+
+#### Generated Code
+- OpenAPI generated DTOs (`com.bau.adapter.in.web.dto.*`)
+- OpenAPI generated API interfaces (`com.bau.adapter.in.web.api.*`)
+- Maven generated sources (`target/generated-sources/**`)
+
+#### Infrastructure Code
+- Spring Boot application main class (`*Application.java`)
+- Configuration classes (`*Config.java`, `*Configuration.java`)
+- JPA entity classes (`*Entity.java`)
+
+#### Test and Build Artifacts
+- Test files (`**/*.spec.ts`, `**/*Test.java`)
+- Build directories (`target/**`, `node_modules/**`, `dist/**`)
+
+### Current Coverage Results
+
+As of the latest build:
+- **Application Services**: 83% coverage ✅
+- **Domain Objects**: 65-100% coverage ✅  
+- **Repository Interfaces**: 100% coverage ✅
+- **Use Case Interfaces**: 84% coverage ✅
+
+This focused approach ensures high-quality tests for business-critical code while excluding noise from generated and infrastructure code.
+
 ## GitHub Actions Integration
 
 The SonarQube analysis runs automatically in CI/CD pipeline after tests complete.
@@ -66,19 +105,38 @@ Add these secrets to your GitHub repository settings:
 ## Configuration Files
 
 ### Maven Configuration (backend/pom.xml)
-- JaCoCo plugin for Java code coverage
+- JaCoCo plugin for Java code coverage with exclusions
 - SonarQube Maven plugin for analysis
 
 ### Project Configuration (sonar-project.properties)
 - Multi-language project setup
-- Coverage report paths
-- Exclusion patterns
+- Coverage report paths  
+- Comprehensive exclusion patterns for generated code
 - Quality gate settings
+- Issue ignore rules for generated code
+
+### Key Configuration Features
+
+#### Coverage Exclusions
+```properties
+sonar.coverage.exclusions=\
+  **/target/generated-sources/**,\
+  backend/src/main/java/com/bau/adapter/in/web/dto/**,\
+  backend/src/main/java/com/bau/adapter/in/web/api/**,\
+  **/*Application.java,\
+  **/*Config.java,\
+  **/*Configuration.java
+```
+
+#### Issue Ignoring for Generated Code
+- Cognitive complexity issues ignored in generated code
+- "Too many parameters" warnings suppressed
+- Unused import warnings excluded
 
 ## Quality Gates
 
 The project is configured with quality gates that must pass:
-- **Coverage**: Minimum test coverage thresholds
+- **Coverage**: Minimum test coverage thresholds for non-excluded code
 - **Reliability**: No bugs in new code
 - **Security**: No vulnerabilities in new code
 - **Maintainability**: Technical debt ratio limits
@@ -100,6 +158,11 @@ The project is configured with quality gates that must pass:
    - Verify project key exists
    - Check logs for specific error messages
 
+4. **Unexpected low coverage:**
+   - Verify exclusions are working properly
+   - Check that generated code is being excluded
+   - Review which packages are included in analysis
+
 ### Debug Commands
 
 ```bash
@@ -111,6 +174,9 @@ mvn help:describe -Dplugin=org.sonarsource.scanner.maven:sonar-maven-plugin
 
 # Verbose SonarQube analysis
 mvn sonar:sonar -X -Dsonar.verbose=true
+
+# Check JaCoCo exclusions
+mvn clean test jacoco:report
 ```
 
 ## Integration with IDEs

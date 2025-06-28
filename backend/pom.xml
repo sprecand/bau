@@ -177,6 +177,19 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.13</version>
+                <configuration>
+                    <excludes>
+                        <!-- Exclude generated OpenAPI code -->
+                        <exclude>com/bau/adapter/in/web/dto/**</exclude>
+                        <exclude>com/bau/adapter/in/web/api/**</exclude>
+                        <!-- Exclude configuration classes -->
+                        <exclude>**/*Application.class</exclude>
+                        <exclude>**/*Config.class</exclude>
+                        <exclude>**/*Configuration.class</exclude>
+                        <!-- Exclude JPA entities (data classes) -->
+                        <exclude>**/entity/**Entity.class</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
