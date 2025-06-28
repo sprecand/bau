@@ -1,4 +1,4 @@
-import { Component, signal, computed, inject } from '@angular/core';
+import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,7 +6,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { BedarfService } from '../../services/bedarf';
 import { BetriebService } from '../../services/betrieb';
 import { BedarfDto, BedarfStatus } from '../../models/bedarf.model';
-import { BetriebDto } from '../../models/betrieb.model';
 import { firstValueFrom } from 'rxjs';
 
 interface DashboardStats {

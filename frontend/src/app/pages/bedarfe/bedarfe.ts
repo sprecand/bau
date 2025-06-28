@@ -1,4 +1,4 @@
-import { Component, signal, computed, inject, LOCALE_ID, OnInit, Injectable } from '@angular/core';
+import { Component, inject, signal, computed, LOCALE_ID, OnInit, Injectable } from '@angular/core';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -6,13 +6,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule, MAT_DATE_LOCALE, MAT_DATE_FORMATS, NativeDateAdapter, DateAdapter } from '@angular/material/core';
+import { MatNativeDateModule, MAT_DATE_LOCALE, NativeDateAdapter, DateAdapter } from '@angular/material/core';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { BedarfService } from '../../services/bedarf';
 import { AuthService } from '../../services/auth.service';
 import { BedarfDto, BedarfCreateDto, BedarfUpdateDto, BedarfStatus, BedarfStatusUpdateDto } from '../../models/bedarf.model';
-import { firstValueFrom } from 'rxjs';
 import localeDe from '@angular/common/locales/de';
 
 registerLocaleData(localeDe);
@@ -20,7 +21,7 @@ registerLocaleData(localeDe);
 // Simple custom date adapter for Swiss format
 @Injectable()
 export class SwissDateAdapter extends NativeDateAdapter {
-  override format(date: Date, displayFormat: any): string {
+  override format(date: Date): string {
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear();
@@ -31,12 +32,12 @@ export class SwissDateAdapter extends NativeDateAdapter {
 // Custom date formats for Swiss format (DD.MM.YYYY)
 export const SWISS_DATE_FORMATS = {
   parse: {
-    dateInput: 'input',
+    dateInput: 'DD.MM.YYYY',
   },
   display: {
-    dateInput: 'input',
+    dateInput: 'DD.MM.YYYY',
     monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'DD.MM.YYYY',
+    dateA11yLabel: 'LL',
     monthYearA11yLabel: 'MMMM YYYY',
   },
 };
@@ -52,8 +53,10 @@ export const SWISS_DATE_FORMATS = {
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatCheckboxModule,
     MatSnackBarModule
   ],
   providers: [

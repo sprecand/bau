@@ -31,7 +31,6 @@ export class ThemeService {
   private setupThemeEffect(): void {
     // Effect to update DOM when theme changes
     effect(() => {
-      const isDark = this._isDark();
       const theme = this._theme();
       const htmlElement = document.documentElement;
       
@@ -86,18 +85,8 @@ export class ThemeService {
 
   toggleTheme(): void {
     const currentTheme = this._theme();
-    const isDark = this._isDark();
-    
-    // If currently system theme, switch to the opposite of what system provides
-    // If currently explicit theme, toggle between light and dark
-    let newTheme: Theme;
-    
-    if (currentTheme === 'system') {
-      newTheme = isDark ? 'light' : 'dark';
-    } else {
-      newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    }
-    
-    this.setTheme(newTheme);
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    this._theme.set(newTheme);
+    this.updateDarkMode();
   }
 } 

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BetriebDto, BetriebCreateDto, BetriebUpdateDto, BetriebStatusUpdateDto, BetriebSearchParams } from '../models/betrieb.model';
@@ -9,9 +9,8 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class BetriebService {
+  private readonly http = inject(HttpClient);
   private readonly apiUrl = `${environment.apiUrl}/api/v1/betriebe`;
-
-  constructor(private http: HttpClient) {}
 
   /**
    * Get all Betriebe with pagination and filtering
@@ -21,7 +20,7 @@ export class BetriebService {
     
     if (params) {
       Object.keys(params).forEach(key => {
-        const value = (params as any)[key];
+        const value = (params as Record<string, unknown>)[key];
         if (value !== undefined && value !== null) {
           if (Array.isArray(value)) {
             value.forEach(v => httpParams = httpParams.append(key, v));

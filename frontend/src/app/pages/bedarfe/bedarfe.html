@@ -42,8 +42,9 @@
             <form [formGroup]="bedarfForm" (ngSubmit)="onSubmit()" class="space-y-4">
               <!-- Titel -->
               <div>
-                <label class="block text-sm font-medium text-foreground mb-2">Titel</label>
+                <label for="titel" class="block text-sm font-medium text-foreground mb-2">Titel</label>
                 <input 
+                  id="titel"
                   type="text"
                   formControlName="titel" 
                   placeholder="z.B. Zimmermann für Dachstuhl"
@@ -58,8 +59,9 @@
 
               <!-- Beschreibung / Qualifikationen -->
               <div>
-                <label class="block text-sm font-medium text-foreground mb-2">Beschreibung & Qualifikationen</label>
+                <label for="beschreibung" class="block text-sm font-medium text-foreground mb-2">Beschreibung & Qualifikationen</label>
                 <textarea 
+                  id="beschreibung"
                   formControlName="beschreibung" 
                   rows="4"
                   placeholder="Beschreibung der Arbeiten und erforderliche Qualifikationen (z.B. Zimmermannsausbildung, 5 Jahre Erfahrung, Dachstuhlbau)..."
@@ -70,8 +72,9 @@
 
               <!-- Standort -->
               <div>
-                <label class="block text-sm font-medium text-foreground mb-2">Standort</label>
+                <label for="adresse" class="block text-sm font-medium text-foreground mb-2">Standort</label>
                 <input 
+                  id="adresse"
                   type="text"
                   formControlName="adresse" 
                   placeholder="z.B. Grabs, Dorfstrasse 123"
@@ -84,9 +87,10 @@
               <!-- Datum Range -->
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label class="block text-sm font-medium text-foreground mb-2">Startdatum</label>
+                  <label for="datumVon" class="block text-sm font-medium text-foreground mb-2">Startdatum</label>
                   <div class="relative">
                     <input 
+                      id="datumVon"
                       matInput 
                       [matDatepicker]="startPicker"
                       formControlName="datumVon"
@@ -107,9 +111,10 @@
                 </div>
 
                 <div>
-                  <label class="block text-sm font-medium text-foreground mb-2">Enddatum</label>
+                  <label for="datumBis" class="block text-sm font-medium text-foreground mb-2">Enddatum</label>
                   <div class="relative">
                     <input 
+                      id="datumBis"
                       matInput 
                       [matDatepicker]="endPicker"
                       formControlName="datumBis"
@@ -136,8 +141,9 @@
                 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label class="block text-sm font-medium text-foreground mb-2">Zimmermann/Zimmerin EFZ</label>
+                    <label for="zimmermannAnzahl" class="block text-sm font-medium text-foreground mb-2">Zimmermann/Zimmerin EFZ</label>
                     <input 
+                      id="zimmermannAnzahl"
                       type="number" 
                       formControlName="zimmermannAnzahl" 
                       min="0"
@@ -149,8 +155,9 @@
                   </div>
 
                   <div>
-                    <label class="block text-sm font-medium text-foreground mb-2">Holzbau Mitarbeiter</label>
+                    <label for="holzbauAnzahl" class="block text-sm font-medium text-foreground mb-2">Holzbau Mitarbeiter</label>
                     <input 
+                      id="holzbauAnzahl"
                       type="number" 
                       formControlName="holzbauAnzahl" 
                       min="0"
@@ -166,8 +173,9 @@
               <!-- Arbeitsdetails -->
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label class="block text-sm font-medium text-foreground mb-2">Stunden pro Tag</label>
+                  <label for="stundenProTag" class="block text-sm font-medium text-foreground mb-2">Stunden pro Tag</label>
                   <input 
+                    id="stundenProTag"
                     type="number" 
                     formControlName="stundenProTag" 
                     min="1" 
@@ -185,8 +193,9 @@
                 </div>
 
                 <div>
-                  <label class="block text-sm font-medium text-foreground mb-2">Stundenlohn (CHF)</label>
+                  <label for="stundenlohn" class="block text-sm font-medium text-foreground mb-2">Stundenlohn (CHF)</label>
                   <input 
+                    id="stundenlohn"
                     type="number" 
                     formControlName="stundenlohn" 
                     min="0" 

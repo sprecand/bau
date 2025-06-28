@@ -37,7 +37,7 @@ export interface ApiError {
 
 export interface ValidationError {
   field: string;
-  rejectedValue: any;
+  rejectedValue: unknown;
   message: string;
 }
 

@@ -43,10 +43,11 @@
               <form [formGroup]="betriebForm" (ngSubmit)="onSubmit()" class="space-y-6">
                 <!-- Firmenname -->
                 <div>
-                  <label class="block text-sm font-medium text-card-foreground mb-2">
+                  <label for="name" class="block text-sm font-medium text-card-foreground mb-2">
                     Firmenname *
                   </label>
                   <input 
+                    id="name"
                     type="text" 
                     formControlName="name"
                     placeholder="z.B. Bau AG Grabs"
@@ -61,10 +62,11 @@
 
                 <!-- Adresse -->
                 <div>
-                  <label class="block text-sm font-medium text-card-foreground mb-2">
+                  <label for="adresse" class="block text-sm font-medium text-card-foreground mb-2">
                     Adresse *
                   </label>
                   <textarea 
+                    id="adresse"
                     formControlName="adresse"
                     rows="3"
                     placeholder="Vollständige Adresse mit PLZ und Ort"
@@ -76,10 +78,11 @@
 
                 <!-- Email -->
                 <div>
-                  <label class="block text-sm font-medium text-card-foreground mb-2">
+                  <label for="email-betrieb" class="block text-sm font-medium text-card-foreground mb-2">
                     E-Mail *
                   </label>
                   <input 
+                    id="email-betrieb"
                     type="email" 
                     formControlName="email"
                     placeholder="info@unternehmen.ch"
@@ -94,10 +97,11 @@
 
                 <!-- Telefon -->
                 <div>
-                  <label class="block text-sm font-medium text-card-foreground mb-2">
+                  <label for="telefon" class="block text-sm font-medium text-card-foreground mb-2">
                     Telefon
                   </label>
                   <input 
+                    id="telefon"
                     type="tel" 
                     formControlName="telefon"
                     placeholder="+41 81 123 45 67"

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { Observable, of } from 'rxjs';
 
 export interface User {
   id: string;
@@ -82,7 +83,7 @@ export class AuthService {
     try {
       if (!environment.production) {
         // Mock login for local development
-        await this.mockLogin(email, password);
+        await this.mockLogin(email);
       } else {
         // Real login for production
         const response = await firstValueFrom(
@@ -134,7 +135,7 @@ export class AuthService {
     return token;
   }
 
-  private async mockLogin(email: string, password: string): Promise<void> {
+  private async mockLogin(email: string): Promise<void> {
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 1000));
     
@@ -201,5 +202,11 @@ export class AuthService {
       this._isAuthenticated.set(false);
       this._user.set(null);
     }
+  }
+
+  changePassword(): Observable<void> {
+    // TODO: Implement password change with AWS Cognito
+    console.log('Changing password (not implemented yet)');
+    return of(undefined);
   }
 } 

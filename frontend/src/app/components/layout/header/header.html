@@ -157,8 +157,9 @@
             <!-- Mobile Role Selector -->
             @if (showRoleSelector()) {
               <div class="px-3 py-2">
-                <label class="block text-xs font-medium text-muted-foreground mb-1">Entwicklungsrolle</label>
+                <label for="mobile-role-selector" class="block text-xs font-medium text-muted-foreground mb-1">Entwicklungsrolle</label>
                 <select 
+                  id="mobile-role-selector"
                   [value]="localRole() || user()?.role || ''"
                   (change)="onRoleSelectChange($event)"
                   class="w-full text-sm px-3 py-1 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
