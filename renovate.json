@@ -11,42 +11,77 @@
     ":automergeDisabled"
   ],
   "timezone": "Europe/Zurich",
-  "schedule": ["before 6am on monday"],
-  "labels": ["dependencies"],
-  "assignees": ["@asp"],
-  "reviewers": ["@asp"],
+  "schedule": [
+    "before 6am on monday"
+  ],
+  "labels": [
+    "dependencies"
+  ],
+  "assignees": [
+    "@asp"
+  ],
+  "reviewers": [
+    "@asp"
+  ],
   "packageRules": [
     {
       "description": "Group Spring Boot dependencies",
       "groupName": "Spring Boot",
-      "matchPackagePatterns": ["^org\\.springframework"],
-      "addLabels": ["spring-boot"]
+      "addLabels": [
+        "spring-boot"
+      ],
+      "matchPackageNames": [
+        "/^org\\.springframework/"
+      ]
     },
     {
-      "description": "Group Angular dependencies", 
+      "description": "Group Angular dependencies",
       "groupName": "Angular",
-      "matchPackagePatterns": ["^@angular"],
-      "addLabels": ["angular"]
+      "addLabels": [
+        "angular"
+      ],
+      "matchPackageNames": [
+        "/^@angular/"
+      ]
     },
     {
       "description": "Auto-merge patch updates for Spring Boot",
-      "matchPackagePatterns": ["^org\\.springframework"],
-      "matchUpdateTypes": ["patch"],
-      "automerge": true
+      "matchUpdateTypes": [
+        "patch"
+      ],
+      "automerge": true,
+      "matchPackageNames": [
+        "/^org\\.springframework/"
+      ]
     },
     {
       "description": "Auto-merge patch updates for Angular",
-      "matchPackagePatterns": ["^@angular"],
-      "matchUpdateTypes": ["patch"],
-      "automerge": true
+      "matchUpdateTypes": [
+        "patch"
+      ],
+      "automerge": true,
+      "matchPackageNames": [
+        "/^@angular/"
+      ]
     },
     {
       "description": "Security updates - high priority",
-      "matchDatasources": ["maven", "npm"],
-      "vulnerabilityAlerts": true,
-      "addLabels": ["security"],
-      "assignees": ["@asp"],
-      "reviewers": ["@asp"],
+      "matchDatasources": [
+        "maven",
+        "npm"
+      ],
+      "vulnerabilityAlerts": {
+        "enabled": true
+      },
+      "addLabels": [
+        "security"
+      ],
+      "assignees": [
+        "@asp"
+      ],
+      "reviewers": [
+        "@asp"
+      ],
       "prPriority": 10
     }
   ],
@@ -58,9 +93,12 @@
   },
   "vulnerabilityAlerts": {
     "enabled": true,
-    "addLabels": ["security", "vulnerability"]
+    "addLabels": [
+      "security",
+      "vulnerability"
+    ]
   },
   "prConcurrentLimit": 3,
   "prHourlyLimit": 2,
   "branchConcurrentLimit": 5
-} 
+}
