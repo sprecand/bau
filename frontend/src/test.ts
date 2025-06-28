@@ -6,8 +6,11 @@ import {
   platformBrowserTesting
 } from '@angular/platform-browser/testing';
 
-// First, initialize the Angular testing environment.
+// Configure zoneless testing environment
 getTestBed().initTestEnvironment(
   BrowserTestingModule,
   platformBrowserTesting(),
+  {
+    teardown: { destroyAfterEach: true }
+  }
 ); 

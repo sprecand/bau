@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
@@ -9,6 +10,7 @@ describe('AppComponent', () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
       providers: [
+        provideZonelessChangeDetection(),
         provideRouter([]),
         provideHttpClient(),
         provideAnimations()
@@ -16,8 +18,9 @@ describe('AppComponent', () => {
     }).compileComponents();
   });
 
-  it('should create the app', () => {
+  it('should create the app', async () => {
     const fixture = TestBed.createComponent(AppComponent);
+    await fixture.whenStable();
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });
