@@ -8,9 +8,10 @@
 
 ### Prerequisites
 - Java 21
-- Node.js 18+
+- Node.js 20+
 - Docker & Docker Compose
-- AWS CLI configured
+- AWS CLI configured (for deployment)
+- OpenTofu (for infrastructure management)
 
 ### Local Development
 ```bash
@@ -29,6 +30,32 @@ mvn spring-boot:run
 cd frontend
 npm install
 npm start
+```
+
+### Test Docker Builds
+```bash
+# Test containers before deployment
+./test-docker-build.sh
+```
+
+### Deploy Infrastructure to AWS
+```bash
+# One-time infrastructure setup with OpenTofu
+./deploy-aws.sh
+
+# Or manual steps:
+cd infrastructure
+make deploy  # Initialize, plan, and apply
+```
+
+### Deploy Application to AWS
+```bash
+# After infrastructure is set up:
+# Automatic deployment on push to main
+git push origin main
+
+# Or manual deployment via GitHub Actions
+# Go to: Actions → "CD - Deploy" → "Run workflow"
 ```
 
 ## Documentation
