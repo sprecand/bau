@@ -145,7 +145,7 @@
                                 <openApiNullable>false</openApiNullable>
                                 <useBeanValidation>true</useBeanValidation>
                                 <performBeanValidation>true</performBeanValidation>
-                                <enumPropertyNaming>UPPERCASE</enumPropertyNaming>
+                                <enumPropertyNaming>MACRO_CASE</enumPropertyNaming>
                                 <enumUnknownDefaultCase>true</enumUnknownDefaultCase>
                             </configOptions>
                         </configuration>
