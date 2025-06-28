@@ -22,6 +22,10 @@ export class ThemeService {
     const savedTheme = localStorage.getItem('theme') as Theme;
     if (savedTheme && ['light', 'dark', 'system'].includes(savedTheme)) {
       this._theme.set(savedTheme);
+    } else {
+      // No saved theme or invalid theme - default to system and save it
+      this._theme.set('system');
+      localStorage.setItem('theme', 'system');
     }
 
     // Set initial dark mode state
@@ -86,7 +90,10 @@ export class ThemeService {
   toggleTheme(): void {
     const currentTheme = this._theme();
     const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-    this._theme.set(newTheme);
-    this.updateDarkMode();
+    this.setTheme(newTheme);
+  }
+
+  resetToSystemTheme(): void {
+    this.setTheme('system');
   }
 } 
