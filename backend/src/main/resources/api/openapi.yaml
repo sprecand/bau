@@ -722,7 +722,7 @@ paths:
       summary: Get bedarfs by betrieb
       description: Retrieve all bedarfs for a specific betrieb (company)
       tags:
-        - bedarf-controller
+        - Bedarf
       parameters:
         - name: betriebId
           in: path
@@ -750,7 +750,7 @@ paths:
       summary: Update bedarf status
       description: Update the status of a bedarf
       tags:
-        - bedarf-controller
+        - Bedarf
       parameters:
         - name: id
           in: path
@@ -786,7 +786,7 @@ paths:
       summary: Get bedarf by ID
       description: Retrieve a specific bedarf by its ID
       tags:
-        - bedarf-controller
+        - Bedarf
       parameters:
         - name: id
           in: path
@@ -812,7 +812,7 @@ paths:
       summary: Update bedarf
       description: Update an existing bedarf
       tags:
-        - bedarf-controller
+        - Bedarf
       parameters:
         - name: id
           in: path
@@ -846,7 +846,7 @@ paths:
       summary: Delete bedarf
       description: Delete a bedarf by its ID
       tags:
-        - bedarf-controller
+        - Bedarf
       parameters:
         - name: id
           in: path
@@ -919,7 +919,7 @@ paths:
       summary: Update betrieb status
       description: Update the status of a betrieb
       tags:
-        - betrieb-controller
+        - Betrieb
       parameters:
         - name: id
           in: path
@@ -955,7 +955,7 @@ paths:
       summary: Get betrieb by ID
       description: Retrieve a specific betrieb by its ID
       tags:
-        - betrieb-controller
+        - Betrieb
       parameters:
         - name: id
           in: path
@@ -981,7 +981,7 @@ paths:
       summary: Update betrieb
       description: Update an existing betrieb
       tags:
-        - betrieb-controller
+        - Betrieb
       parameters:
         - name: id
           in: path
@@ -1015,7 +1015,7 @@ paths:
       summary: Delete betrieb
       description: Delete a betrieb by its ID
       tags:
-        - betrieb-controller
+        - Betrieb
       parameters:
         - name: id
           in: path

@@ -167,7 +167,7 @@ BedarfListResponse:
     content:
       type: array
       items:
-        $ref: '#/BedarfResponse'
+        $ref: '#/components/schemas/BedarfResponse'
     totalElements:
       type: integer
       format: int32

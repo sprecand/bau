@@ -9,13 +9,14 @@ api/
 ├── main.yaml              # Main OpenAPI file with references
 ├── paths/                 # API endpoint definitions
 │   ├── auth.yaml         # Authentication endpoints
-│   ├── bedarf.yaml       # Bedarf (demand) endpoints
-│   ├── betrieb.yaml      # Betrieb (company) endpoints
-│   └── users.yaml        # User management endpoints
+│   ├── bedarfe.yaml      # Bedarf (demand) endpoints - all operations
+│   ├── betriebe.yaml     # Betrieb (company) endpoints - all operations
+│   ├── users.yaml        # User management endpoints
+│   └── index.yaml        # Index/health endpoints
 ├── schemas/              # Data model definitions
 │   ├── auth.yaml         # Authentication schemas
-│   ├── bedarf.yaml       # Bedarf schemas
-│   ├── betrieb.yaml      # Betrieb schemas
+│   ├── bedarfe.yaml      # Bedarf schemas
+│   ├── betriebe.yaml     # Betrieb schemas
 │   ├── users.yaml        # User schemas
 │   └── common.yaml       # Shared/common schemas
 └── README.md             # This file

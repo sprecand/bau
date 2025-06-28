@@ -31,17 +31,17 @@ paths:
   /bedarfe:
     $ref: './paths/bedarfe.yaml#/bedarfe'
   /bedarfe/{id}:
-    $ref: './paths/bedarfe-id.yaml#/bedarfe/{id}'
+    $ref: './paths/bedarfe.yaml#/bedarfe/{id}'
   /bedarfe/{id}/status:
-    $ref: './paths/bedarfe-id-status.yaml#/bedarfe/{id}/status'
+    $ref: './paths/bedarfe.yaml#/bedarfe/{id}/status'
   /bedarfe/betrieb/{betriebId}:
-    $ref: './paths/bedarfe-betrieb-betriebId.yaml#/bedarfe/betrieb/{betriebId}'
+    $ref: './paths/bedarfe.yaml#/bedarfe/betrieb/{betriebId}'
   /betriebe:
     $ref: './paths/betriebe.yaml#/betriebe'
   /betriebe/{id}:
-    $ref: './paths/betriebe-id.yaml#/betriebe/{id}'
+    $ref: './paths/betriebe.yaml#/betriebe/{id}'
   /betriebe/{id}/status:
-    $ref: './paths/betriebe-id-status.yaml#/betriebe/{id}/status'
+    $ref: './paths/betriebe.yaml#/betriebe/{id}/status'
   /users:
     $ref: './paths/users.yaml#/users'
   /users/{id}:

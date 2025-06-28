@@ -1,11 +1,10 @@
 package com.bau.adapter.in.web.betrieb;
 
 import com.bau.adapter.in.web.api.BetriebApi;
-import com.bau.adapter.in.web.dto.BetriebListResponse;
-import com.bau.adapter.in.web.dto.BetriebResponse;
-import com.bau.adapter.in.web.dto.CreateBetriebRequest;
+import com.bau.adapter.in.web.dto.*;
 import com.bau.adapter.in.web.betrieb.mapper.BetriebWebMapper;
 import com.bau.application.domain.betrieb.Betrieb;
+import com.bau.application.domain.betrieb.BetriebStatus;
 import com.bau.application.port.in.BetriebUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * REST controller for Betrieb API endpoints.
@@ -55,6 +55,54 @@ public class BetriebApiController implements BetriebApi {
                 .pageSize(result.getPageSize())
                 .hasNext(result.isHasNext())
                 .hasPrevious(result.isHasPrevious());
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<BetriebResponse> getBetriebById(@PathVariable UUID id) {
+        log.info("Retrieving betrieb with id: {}", id);
+        Optional<Betrieb> betriebOpt = betriebUseCase.getBetriebById(id);
+        if (betriebOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        BetriebResponse response = mapper.toResponse(betriebOpt.get());
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<BetriebResponse> updateBetrieb(@PathVariable UUID id, @Valid @RequestBody UpdateBetriebRequest updateBetriebRequest) {
+        log.info("Updating betrieb with id: {}", id);
+        Betrieb betrieb = mapper.toDomain(updateBetriebRequest);
+        Optional<Betrieb> updatedBetriebOpt = betriebUseCase.updateBetrieb(id, betrieb);
+        if (updatedBetriebOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        BetriebResponse response = mapper.toResponse(updatedBetriebOpt.get());
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteBetrieb(@PathVariable UUID id) {
+        log.info("Deleting betrieb with id: {}", id);
+        boolean deleted = betriebUseCase.deleteBetrieb(id);
+        if (!deleted) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<BetriebResponse> updateBetriebStatus(@PathVariable UUID id, @Valid @RequestBody UpdateBetriebStatusRequest updateBetriebStatusRequest) {
+        log.info("Updating betrieb status for id: {} to status: {}", id, updateBetriebStatusRequest.getStatus());
+        BetriebStatus newStatus = BetriebStatus.valueOf(updateBetriebStatusRequest.getStatus().getValue());
+        Optional<Betrieb> updatedBetriebOpt = betriebUseCase.updateBetriebStatus(id, newStatus);
+        if (updatedBetriebOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        BetriebResponse response = mapper.toResponse(updatedBetriebOpt.get());
         return ResponseEntity.ok(response);
     }
 } 

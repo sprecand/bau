@@ -61,7 +61,8 @@
 - [x] Domain entities (Bedarf, Betrieb, User) with business logic
 - [x] Repository interfaces and JPA implementations
 - [x] Use case implementations (BedarfService, BetriebService, UserService)
-- [x] REST controllers (both API and Controller variants)
+- [x] Consolidated REST controllers (BedarfApiController, BetriebApiController)
+- [x] Eliminated duplicate controllers (removed BedarfController, BetriebController)
 - [x] Mappers for entity/DTO conversion (Web + Entity mappers)
 - [x] Security configuration with AWS Cognito + local mocking
 - [x] Global exception handling
@@ -70,6 +71,7 @@
 - [x] Status management operations
 - [x] Audit trail with timestamps
 - [x] Comprehensive unit tests (100% passing)
+- [x] Consolidated OpenAPI structure (single interface per resource)
 
 ### Frontend Implementation
 - [x] Angular 20 project setup with zoneless architecture

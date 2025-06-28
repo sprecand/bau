@@ -98,29 +98,40 @@ public class {Action}{EntityName}UseCase {
 #### Controller Template
 ```java
 @RestController
-@RequestMapping("/api/v1/{entityName}")
-public class {EntityName}Controller {
-    private static final Logger log = LoggerFactory.getLogger({EntityName}Controller.class);
+@RequiredArgsConstructor
+@Slf4j
+public class {EntityName}ApiController implements {EntityName}Api {
     
-    private final {Action}{EntityName}UseCase {action}{entityName}UseCase;
-    private final {EntityName}Mapper {entityName}Mapper;
+    private final {EntityName}UseCase {entityName}UseCase;
+    private final {EntityName}WebMapper {entityName}WebMapper;
     
-    @PostMapping
-    public ResponseEntity<{EntityName}Response> create{EntityName}(@RequestBody Create{EntityName}Request request) {
-        log.debug("Creating {entityName} for betrieb: {}", request.getBetriebId());
+    @Override
+    public ResponseEntity<{EntityName}ResponseDto> create{EntityName}({EntityName}CreateRequestDto request) {
+        log.debug("Creating {entityName}: {}", request);
         
-        Optional<{EntityName}> {entityName}Opt = {action}{entityName}UseCase.execute(request);
+        Optional<{EntityName}> {entityName}Opt = {entityName}UseCase.create{EntityName}(request);
         
         if ({entityName}Opt.isEmpty()) {
-            log.warn("{EntityName} creation failed for betrieb: {}", request.getBetriebId());
+            log.warn("{EntityName} creation failed");
             return ResponseEntity.badRequest().build();
         }
         
-        {EntityName}Response response = {entityName}Mapper.toResponse({entityName}Opt.get());
+        {EntityName}ResponseDto response = {entityName}WebMapper.toResponseDto({entityName}Opt.get());
         log.info("Successfully created {entityName} with id: {}", {entityName}Opt.get().getId());
         
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+    
+    @Override
+    public ResponseEntity<List<{EntityName}ResponseDto>> getAll{EntityName}s(/* pagination params */) {
+        List<{EntityName}> {entityName}s = {entityName}UseCase.getAll{EntityName}s();
+        List<{EntityName}ResponseDto> response = {entityName}s.stream()
+            .map({entityName}WebMapper::toResponseDto)
+            .toList();
+        return ResponseEntity.ok(response);
+    }
+    
+    // ... other CRUD operations from generated {EntityName}Api interface
 }
 ```
 

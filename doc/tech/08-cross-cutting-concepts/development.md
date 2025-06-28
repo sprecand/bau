@@ -165,44 +165,85 @@ npm run lint
 ### Example: Adding Bedarf Endpoint
 
 ```java
-// 1. Controller
+// 1. API Controller (implements generated interface)
 @RestController
-@RequestMapping("/api/v1/bedarf")
-public class BedarfController {
+@RequiredArgsConstructor
+@Slf4j
+public class BedarfApiController implements BedarfApi {
     
-    @PostMapping
-    public ResponseEntity<BedarfResponse> createBedarf(@RequestBody CreateBedarfRequest request) {
-        Optional<Bedarf> bedarfOpt = createBedarfUseCase.execute(request);
+    private final BedarfUseCase bedarfUseCase;
+    private final BedarfWebMapper bedarfWebMapper;
+    
+    @Override
+    public ResponseEntity<BedarfResponseDto> createBedarf(BedarfCreateRequestDto request) {
+        log.debug("Creating bedarf: {}", request);
+        
+        Optional<Bedarf> bedarfOpt = bedarfUseCase.createBedarf(request);
         
         if (bedarfOpt.isEmpty()) {
+            log.warn("Bedarf creation failed");
             return ResponseEntity.badRequest().build();
         }
         
-        BedarfResponse response = bedarfMapper.toResponse(bedarfOpt.get());
+        BedarfResponseDto response = bedarfWebMapper.toResponseDto(bedarfOpt.get());
+        log.info("Successfully created bedarf with id: {}", bedarfOpt.get().getId());
+        
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+    
+    @Override
+    public ResponseEntity<List<BedarfResponseDto>> getAllBedarfe(/* pagination params */) {
+        List<Bedarf> bedarfe = bedarfUseCase.getAllBedarfe();
+        List<BedarfResponseDto> response = bedarfe.stream()
+            .map(bedarfWebMapper::toResponseDto)
+            .toList();
+        return ResponseEntity.ok(response);
+    }
+    
+    // ... other CRUD operations from BedarfApi interface
 }
 
-// 2. Use Case
+// 2. Use Case Service
 @Service
-public class CreateBedarfUseCase {
+@RequiredArgsConstructor
+@Slf4j
+public class BedarfService implements BedarfUseCase {
     
-    public Optional<Bedarf> execute(CreateBedarfRequest request) {
-        Bedarf bedarf = bedarfMapper.toDomain(request);
+    private final BedarfRepository bedarfRepository;
+    
+    @Override
+    public Optional<Bedarf> createBedarf(BedarfCreateRequestDto request) {
+        Bedarf bedarf = Bedarf.builder()
+            .betriebId(request.getBetriebId())
+            .holzbauAnzahl(request.getHolzbauAnzahl())
+            .zimmermannAnzahl(request.getZimmermannAnzahl())
+            .datumVon(request.getDatumVon())
+            .datumBis(request.getDatumBis())
+            .adresse(request.getAdresse())
+            .mitWerkzeug(request.getMitWerkzeug())
+            .mitFahrzeug(request.getMitFahrzeug())
+            .status(BedarfStatus.INACTIV)
+            .build();
         
         if (!bedarf.isValidDateRange()) {
+            log.warn("Invalid date range for bedarf");
             return Optional.empty();
         }
         
         Bedarf savedBedarf = bedarfRepository.save(bedarf);
+        log.info("Successfully created bedarf with id: {}", savedBedarf.getId());
+        
         return Optional.of(savedBedarf);
     }
 }
 
-// 3. Repository
-@Repository
-public interface BedarfRepository extends JpaRepository<BedarfEntity, Long> {
-    List<BedarfEntity> findByBetriebId(Long betriebId);
+// 3. Repository Interface
+public interface BedarfRepository {
+    Bedarf save(Bedarf bedarf);
+    Optional<Bedarf> findById(UUID id);
+    List<Bedarf> findByBetriebId(UUID betriebId);
+    List<Bedarf> findAll();
+    void deleteById(UUID id);
 }
 ```
 
@@ -240,25 +281,33 @@ CREATE INDEX idx_bedarf_status ON bedarf(status);
 ### Backend Testing
 ```java
 @SpringBootTest
-class BedarfControllerTest {
+class BedarfApiControllerTest {
+    
+    @Autowired
+    private TestRestTemplate restTemplate;
     
     @Test
     void shouldCreateBedarf() {
         // Given
-        CreateBedarfRequest request = new CreateBedarfRequest();
-        request.setHolzbauAnzahl(2);
-        request.setZimmermannAnzahl(1);
-        request.setDatumVon(LocalDate.now().plusDays(1));
-        request.setDatumBis(LocalDate.now().plusDays(15));
-        request.setAdresse("Test Address");
+        BedarfCreateRequestDto request = BedarfCreateRequestDto.builder()
+            .betriebId(UUID.randomUUID())
+            .holzbauAnzahl(2)
+            .zimmermannAnzahl(1)
+            .datumVon(LocalDate.now().plusDays(1))
+            .datumBis(LocalDate.now().plusDays(15))
+            .adresse("Dorfstrasse 1234, 9472 Grabs")
+            .mitWerkzeug(true)
+            .mitFahrzeug(false)
+            .build();
         
         // When
-        ResponseEntity<BedarfResponse> response = restTemplate.postForEntity(
-            "/api/v1/bedarf", request, BedarfResponse.class);
+        ResponseEntity<BedarfResponseDto> response = restTemplate.postForEntity(
+            "/api/v1/bedarfe", request, BedarfResponseDto.class);
         
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(response.getBody().getHolzbauAnzahl()).isEqualTo(2);
+        assertThat(response.getBody().getStatus()).isEqualTo(BedarfStatus.INACTIV);
     }
 }
 ```

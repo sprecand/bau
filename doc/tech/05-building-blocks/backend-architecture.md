@@ -161,29 +161,40 @@ public interface BedarfRepository {
 
 ```java
 @RestController
-@RequestMapping("/api/v1/bedarf")
-public class BedarfController {
-    private static final Logger log = LoggerFactory.getLogger(BedarfController.class);
+@RequiredArgsConstructor
+@Slf4j
+public class BedarfApiController implements BedarfApi {
     
-    private final CreateBedarfUseCase createBedarfUseCase;
-    private final BedarfMapper bedarfMapper;
+    private final BedarfUseCase bedarfUseCase;
+    private final BedarfWebMapper bedarfWebMapper;
     
-    @PostMapping
-    public ResponseEntity<BedarfResponse> createBedarf(@RequestBody CreateBedarfRequest request) {
-        log.debug("Creating bedarf for betrieb: {}", request.getBetriebId());
+    @Override
+    public ResponseEntity<BedarfResponseDto> createBedarf(BedarfCreateRequestDto bedarfCreateRequestDto) {
+        log.debug("Creating bedarf: {}", bedarfCreateRequestDto);
         
-        Optional<Bedarf> bedarfOpt = createBedarfUseCase.execute(request);
+        Optional<Bedarf> bedarfOpt = bedarfUseCase.createBedarf(bedarfCreateRequestDto);
         
         if (bedarfOpt.isEmpty()) {
-            log.warn("Bedarf creation failed for betrieb: {}", request.getBetriebId());
+            log.warn("Bedarf creation failed");
             return ResponseEntity.badRequest().build();
         }
         
-        BedarfResponse response = bedarfMapper.toResponse(bedarfOpt.get());
+        BedarfResponseDto response = bedarfWebMapper.toResponseDto(bedarfOpt.get());
         log.info("Successfully created bedarf with id: {}", bedarfOpt.get().getId());
         
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+    
+    @Override
+    public ResponseEntity<List<BedarfResponseDto>> getAllBedarfe(/* pagination params */) {
+        List<Bedarf> bedarfe = bedarfUseCase.getAllBedarfe();
+        List<BedarfResponseDto> response = bedarfe.stream()
+            .map(bedarfWebMapper::toResponseDto)
+            .toList();
+        return ResponseEntity.ok(response);
+    }
+    
+    // ... other CRUD operations
 }
 ```
 

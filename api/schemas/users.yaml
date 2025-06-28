@@ -170,7 +170,7 @@ UserListResponse:
     content:
       type: array
       items:
-        $ref: '#/UserResponse'
+        $ref: '#/components/schemas/UserResponse'
     totalElements:
       type: integer
       description: Total number of elements
