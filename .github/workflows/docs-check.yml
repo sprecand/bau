@@ -27,7 +27,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'npm'
 
       - name: Install markdownlint
         run: npm install -g markdownlint-cli
@@ -48,7 +47,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'npm'
 
       - name: Install markdown-link-check
         run: npm install -g markdown-link-check
@@ -69,7 +67,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'npm'
 
       - name: Install cspell
         run: npm install -g cspell
@@ -90,7 +87,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'npm'
 
       - name: Install mermaid-cli
         run: npm install -g @mermaid-js/mermaid-cli

@@ -111,9 +111,10 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           echo "Deploying backend..."
-          # Download current task definition
+          # Download current task definition and filter out metadata fields
           aws ecs describe-task-definition --task-definition $ECR_REPOSITORY_BACKEND \
-            --query taskDefinition > task-definition-backend.json
+            --query 'taskDefinition | {family, taskRoleArn, executionRoleArn, networkMode, containerDefinitions, volumes, placementConstraints, requiresCompatibilities, cpu, memory, tags, pidMode, ipcMode, proxyConfiguration, inferenceAccelerators, ephemeralStorage, runtimePlatform}' \
+            > task-definition-backend.json
           
           # Update image in task definition
           jq --arg IMAGE "$ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:$IMAGE_TAG" \
@@ -142,9 +143,10 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           echo "Deploying frontend..."
-          # Download current task definition
+          # Download current task definition and filter out metadata fields
           aws ecs describe-task-definition --task-definition $ECR_REPOSITORY_FRONTEND \
-            --query taskDefinition > task-definition-frontend.json
+            --query 'taskDefinition | {family, taskRoleArn, executionRoleArn, networkMode, containerDefinitions, volumes, placementConstraints, requiresCompatibilities, cpu, memory, tags, pidMode, ipcMode, proxyConfiguration, inferenceAccelerators, ephemeralStorage, runtimePlatform}' \
+            > task-definition-frontend.json
           
           # Update image in task definition
           jq --arg IMAGE "$ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:$IMAGE_TAG" \
