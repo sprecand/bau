@@ -1,0 +1,31 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "schedule": ["before 6am on monday"],
+  "timezone": "Europe/Zurich",
+  "labels": ["dependencies"],
+  "assignees": ["asp"],
+  "packageRules": [
+    {
+      "groupName": "Spring Boot",
+      "matchPackagePatterns": ["^org\\.springframework"],
+      "addLabels": ["spring-boot"]
+    },
+    {
+      "groupName": "Angular", 
+      "matchPackagePatterns": ["^@angular"],
+      "addLabels": ["angular"]
+    },
+    {
+      "matchUpdateTypes": ["patch"],
+      "automerge": true,
+      "automergeType": "pr"
+    }
+  ],
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "addLabels": ["security"]
+  }
+} 

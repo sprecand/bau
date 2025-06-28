@@ -1,0 +1,66 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard",
+    ":semanticCommits",
+    ":separateMajorReleases",
+    ":combinePatchMinorReleases",
+    ":ignoreUnstable",
+    ":updateNotScheduled",
+    ":automergeDisabled"
+  ],
+  "timezone": "Europe/Zurich",
+  "schedule": ["before 6am on monday"],
+  "labels": ["dependencies"],
+  "assignees": ["@asp"],
+  "reviewers": ["@asp"],
+  "packageRules": [
+    {
+      "description": "Group Spring Boot dependencies",
+      "groupName": "Spring Boot",
+      "matchPackagePatterns": ["^org\\.springframework"],
+      "addLabels": ["spring-boot"]
+    },
+    {
+      "description": "Group Angular dependencies", 
+      "groupName": "Angular",
+      "matchPackagePatterns": ["^@angular"],
+      "addLabels": ["angular"]
+    },
+    {
+      "description": "Auto-merge patch updates for Spring Boot",
+      "matchPackagePatterns": ["^org\\.springframework"],
+      "matchUpdateTypes": ["patch"],
+      "automerge": true
+    },
+    {
+      "description": "Auto-merge patch updates for Angular",
+      "matchPackagePatterns": ["^@angular"],
+      "matchUpdateTypes": ["patch"],
+      "automerge": true
+    },
+    {
+      "description": "Security updates - high priority",
+      "matchDatasources": ["maven", "npm"],
+      "vulnerabilityAlerts": true,
+      "addLabels": ["security"],
+      "assignees": ["@asp"],
+      "reviewers": ["@asp"],
+      "prPriority": 10
+    }
+  ],
+  "maven": {
+    "enabled": true
+  },
+  "npm": {
+    "enabled": true
+  },
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "addLabels": ["security", "vulnerability"]
+  },
+  "prConcurrentLimit": 3,
+  "prHourlyLimit": 2,
+  "branchConcurrentLimit": 5
+} 
