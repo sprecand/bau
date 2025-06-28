@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [ main, develop ]
 
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
 env:
   JAVA_VERSION: '21'
   NODE_VERSION: '20'
@@ -109,10 +114,100 @@ jobs:
           path: frontend/coverage/
           retention-days: 30
 
+  sonarqube-scan:
+    name: SonarQube Analysis
+    runs-on: ubuntu-latest
+    needs: [backend-tests, frontend-tests]
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository)
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: bau_test
+          POSTGRES_USER: bau_test_user
+          POSTGRES_PASSWORD: bau_test_password
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for better analysis
+
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Run frontend tests with coverage
+        run: |
+          cd frontend
+          npm run test:ci
+
+      - name: Run backend tests with coverage
+        run: |
+          cd backend
+          mvn clean verify sonar:sonar \
+            -Dsonar.projectKey=bau-platform \
+            -Dsonar.projectName="Bau Platform" \
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+            -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
+            -Dsonar.java.coveragePlugin=jacoco \
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
+            -Dsonar.javascript.lcov.reportPaths=../frontend/coverage/lcov.info \
+            -Dsonar.sources=src/main \
+            -Dsonar.tests=src/test \
+            -Dsonar.sourceEncoding=UTF-8 \
+            -Dsonar.exclusions=**/target/**,**/node_modules/**,**/*.spec.ts,**/*.test.ts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/bau_test
+          SPRING_DATASOURCE_USERNAME: bau_test_user
+          SPRING_DATASOURCE_PASSWORD: bau_test_password
+
   security-scan:
     name: Security Scan
     runs-on: ubuntu-latest
     needs: [backend-tests, frontend-tests]
+    permissions:
+      contents: read
+      security-events: write
 
     steps:
       - name: Checkout code
@@ -135,7 +230,7 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: [backend-tests, frontend-tests, security-scan]
+    needs: [backend-tests, frontend-tests, security-scan, sonarqube-scan]
     if: github.event_name == 'push'
 
     steps:
