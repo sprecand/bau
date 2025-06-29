@@ -75,20 +75,20 @@ jobs:
           
           NEW_VERSION="$MAJOR.$MINOR.$PATCH"
           echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
-          echo "📦 New version: $NEW_VERSION"
+          echo "New version: $NEW_VERSION"
 
       - name: Update backend version
         run: |
           VERSION="${{ steps.version.outputs.version }}"
           sed -i "s/<version>.*-SNAPSHOT<\/version>/<version>$VERSION<\/version>/" backend/pom.xml
-          echo "✅ Updated backend version to $VERSION"
+          echo "Updated backend version to $VERSION"
 
       - name: Update frontend version
         run: |
           VERSION="${{ steps.version.outputs.version }}"
           cd frontend
           npm version $VERSION --no-git-tag-version
-          echo "✅ Updated frontend version to $VERSION"
+          echo "Updated frontend version to $VERSION"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -107,7 +107,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           VERSION: ${{ steps.version.outputs.version }}
         run: |
-          echo "🏗️ Building backend image..."
+          echo "Building backend image..."
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:$VERSION ./backend
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:latest ./backend
           docker push $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:$VERSION
@@ -120,7 +120,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           VERSION: ${{ steps.version.outputs.version }}
         run: |
-          echo "🏗️ Building frontend image..."
+          echo "Building frontend image..."
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:$VERSION ./frontend
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:latest ./frontend
           docker push $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:$VERSION
@@ -146,13 +146,13 @@ jobs:
           tag_name: v${{ steps.version.outputs.version }}
           release_name: Release v${{ steps.version.outputs.version }}
           body: |
-            ## 🚀 Release v${{ steps.version.outputs.version }}
+            ## Release v${{ steps.version.outputs.version }}
             
-            ### 📦 Images
+            ### Images
             - Backend: `${{ steps.build-backend.outputs.image }}`
             - Frontend: `${{ steps.build-frontend.outputs.image }}`
             
-            ### 🔄 Deploy
+            ### Deploy
             To deploy this version:
             ```bash
             ./manage-app.sh deploy v${{ steps.version.outputs.version }}
@@ -197,7 +197,7 @@ jobs:
               version: "$VERSION"
           EOF
           
-          echo "📝 Updated deployment config to version $VERSION"
+          echo "Updated deployment config to version $VERSION"
 
       - name: Commit deployment config
         run: |

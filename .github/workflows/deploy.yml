@@ -56,28 +56,37 @@ jobs:
             BACKEND_IMAGE="$ECR_REGISTRY/${{ env.ECR_REPOSITORY_BACKEND }}:$VERSION"
             FRONTEND_IMAGE="$ECR_REGISTRY/${{ env.ECR_REPOSITORY_FRONTEND }}:$VERSION"
             
-            echo "🔧 Manual deployment of version $VERSION"
+            echo "Manual deployment of version $VERSION"
           else
             # Automatic deployment - read from config file
             if [[ ! -f "deploy/production.yaml" ]]; then
-              echo "❌ No deployment config found!"
+              echo "No deployment config found!"
               exit 1
             fi
             
-            # Parse YAML config (simple parsing for our structure)
-            VERSION=$(grep "version:" deploy/production.yaml | head -1 | cut -d '"' -f 2)
-            BACKEND_IMAGE=$(grep -A 10 "backend:" deploy/production.yaml | grep "image:" | cut -d '"' -f 2)
-            FRONTEND_IMAGE=$(grep -A 10 "frontend:" deploy/production.yaml | grep "image:" | cut -d '"' -f 2)
+            # Parse YAML config (improved parsing for the actual structure)
+            VERSION=$(sed -n '/metadata:/,/spec:/p' deploy/production.yaml | grep "version:" | cut -d '"' -f 2 | head -1)
+            BACKEND_IMAGE=$(sed -n '/backend:/,/frontend:/p' deploy/production.yaml | grep "image:" | cut -d '"' -f 2 | head -1)
+            FRONTEND_IMAGE=$(sed -n '/frontend:/,/environment:/p' deploy/production.yaml | grep "image:" | cut -d '"' -f 2 | head -1)
             
-            echo "🤖 Automatic deployment of version $VERSION"
+            echo "Automatic deployment of version $VERSION"
+          fi
+          
+          # Validate parsed values
+          if [[ -z "$VERSION" || -z "$BACKEND_IMAGE" || -z "$FRONTEND_IMAGE" ]]; then
+            echo "Failed to parse deployment config:"
+            echo "  Version: '$VERSION'"
+            echo "  Backend Image: '$BACKEND_IMAGE'"
+            echo "  Frontend Image: '$FRONTEND_IMAGE'"
+            exit 1
           fi
           
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "backend-image=$BACKEND_IMAGE" >> $GITHUB_OUTPUT
           echo "frontend-image=$FRONTEND_IMAGE" >> $GITHUB_OUTPUT
           
-          echo "📦 Backend: $BACKEND_IMAGE"
-          echo "📦 Frontend: $FRONTEND_IMAGE"
+          echo "Backend: $BACKEND_IMAGE"
+          echo "Frontend: $FRONTEND_IMAGE"
 
   deploy-infrastructure:
     name: Deploy Infrastructure
@@ -101,10 +110,10 @@ jobs:
         run: |
           if aws ecs describe-clusters --clusters $ECS_CLUSTER 2>/dev/null | grep -q "ACTIVE"; then
             echo "exists=true" >> $GITHUB_OUTPUT
-            echo "✅ Infrastructure already exists"
+            echo "Infrastructure already exists"
           else
             echo "exists=false" >> $GITHUB_OUTPUT
-            echo "🏗️ Infrastructure needs to be deployed"
+            echo "Infrastructure needs to be deployed"
           fi
 
       - name: Setup OpenTofu
@@ -119,12 +128,12 @@ jobs:
         env:
           ALERT_EMAIL: ${{ secrets.BILLING_ALERT_EMAIL }}
         run: |
-          echo "🚀 Deploying infrastructure..."
+          echo "Deploying infrastructure..."
           tofu init
           tofu validate
           tofu plan -var-file=tofu.tfvars -var="alert_email=$ALERT_EMAIL"
           tofu apply -var-file=tofu.tfvars -var="alert_email=$ALERT_EMAIL" -auto-approve
-          echo "✅ Infrastructure deployed successfully"
+          echo "Infrastructure deployed successfully"
 
   deploy-applications:
     name: Deploy Applications
@@ -147,24 +156,24 @@ jobs:
           BACKEND_IMAGE: ${{ needs.read-deployment-config.outputs.backend-image }}
           FRONTEND_IMAGE: ${{ needs.read-deployment-config.outputs.frontend-image }}
         run: |
-          echo "🔍 Verifying images exist..."
+          echo "Verifying images exist..."
           
           # Login to ECR
           aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com
           
           # Check if backend image exists
           if docker manifest inspect $BACKEND_IMAGE >/dev/null 2>&1; then
-            echo "✅ Backend image exists: $BACKEND_IMAGE"
+            echo "Backend image exists: $BACKEND_IMAGE"
           else
-            echo "❌ Backend image not found: $BACKEND_IMAGE"
+            echo "Backend image not found: $BACKEND_IMAGE"
             exit 1
           fi
           
           # Check if frontend image exists
           if docker manifest inspect $FRONTEND_IMAGE >/dev/null 2>&1; then
-            echo "✅ Frontend image exists: $FRONTEND_IMAGE"
+            echo "Frontend image exists: $FRONTEND_IMAGE"
           else
-            echo "❌ Frontend image not found: $FRONTEND_IMAGE"
+            echo "Frontend image not found: $FRONTEND_IMAGE"
             exit 1
           fi
 
@@ -173,7 +182,7 @@ jobs:
           BACKEND_IMAGE: ${{ needs.read-deployment-config.outputs.backend-image }}
           VERSION: ${{ needs.read-deployment-config.outputs.version }}
         run: |
-          echo "🚀 Deploying backend version $VERSION..."
+          echo "Deploying backend version $VERSION..."
           
           # Download current task definition and filter out metadata fields
           aws ecs describe-task-definition --task-definition $ECR_REPOSITORY_BACKEND \
@@ -196,14 +205,14 @@ jobs:
             --task-definition $ECR_REPOSITORY_BACKEND \
             --force-new-deployment
           
-          echo "✅ Backend deployment initiated"
+          echo "Backend deployment initiated"
 
       - name: Deploy frontend to ECS
         env:
           FRONTEND_IMAGE: ${{ needs.read-deployment-config.outputs.frontend-image }}
           VERSION: ${{ needs.read-deployment-config.outputs.version }}
         run: |
-          echo "🚀 Deploying frontend version $VERSION..."
+          echo "Deploying frontend version $VERSION..."
           
           # Download current task definition and filter out metadata fields
           aws ecs describe-task-definition --task-definition $ECR_REPOSITORY_FRONTEND \
@@ -226,11 +235,11 @@ jobs:
             --task-definition $ECR_REPOSITORY_FRONTEND \
             --force-new-deployment
           
-          echo "✅ Frontend deployment initiated"
+          echo "Frontend deployment initiated"
 
       - name: Wait for deployment completion
         run: |
-          echo "⏳ Waiting for deployments to complete..."
+          echo "Waiting for deployments to complete..."
           
           # Wait for backend deployment
           echo "Waiting for backend service to stabilize..."
@@ -244,13 +253,13 @@ jobs:
             --cluster $ECS_CLUSTER \
             --services $ECS_SERVICE_FRONTEND
           
-          echo "✅ All deployments completed successfully!"
+          echo "All deployments completed successfully!"
 
       - name: Health check
         env:
           VERSION: ${{ needs.read-deployment-config.outputs.version }}
         run: |
-          echo "🔍 Performing health checks for version $VERSION..."
+          echo "Performing health checks for version $VERSION..."
           
           # Wait a bit for services to fully start
           sleep 30
@@ -263,9 +272,9 @@ jobs:
           echo "Frontend status: $FRONTEND_STATUS"
           
           if [[ "$BACKEND_STATUS" == "PRIMARY" && "$FRONTEND_STATUS" == "PRIMARY" ]]; then
-            echo "✅ Health check passed - version $VERSION deployed successfully!"
+            echo "Health check passed - version $VERSION deployed successfully!"
           else
-            echo "❌ Health check failed - deployment may have issues"
+            echo "Health check failed - deployment may have issues"
             exit 1
           fi
 
@@ -281,7 +290,7 @@ jobs:
           VERSION: ${{ needs.read-deployment-config.outputs.version }}
           DEPLOYMENT_STATUS: ${{ needs.deploy-applications.result }}
         run: |
-          echo "📊 Deployment Summary:"
+          echo "Deployment Summary:"
           echo "- Version: $VERSION"
           echo "- Status: $DEPLOYMENT_STATUS"
           echo "- Timestamp: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
