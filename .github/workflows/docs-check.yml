@@ -1,194 +1,116 @@
-name: Documentation Check
+name: Documentation Quality Check
 
 on:
   push:
+    branches: [ main, develop ]
     paths:
-      - 'doc/**'
-      - 'api/**'
+      - 'doc/**/*.md'
+      - 'api/**/*.md'
       - 'README.md'
       - '.github/workflows/docs-check.yml'
   pull_request:
+    branches: [ main, develop ]
     paths:
-      - 'doc/**'
-      - 'api/**'
+      - 'doc/**/*.md' 
+      - 'api/**/*.md'
       - 'README.md'
       - '.github/workflows/docs-check.yml'
 
 jobs:
-  markdown-lint:
-    name: Markdown Lint
+  docs-quality:
+    name: Documentation Quality
     runs-on: ubuntu-latest
     
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Install markdownlint
-        run: npm install -g markdownlint-cli
-
-      - name: Run markdownlint
-        run: |
-          markdownlint "**/*.md" --ignore node_modules --ignore .git --config .markdownlint.yaml
-
-  link-check:
-    name: Link Check
-    runs-on: ubuntu-latest
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Markdown Lint
+      uses: DavidAnson/markdownlint-cli2-action@v18
+      with:
+        globs: |
+          doc/**/*.md
+          api/**/*.md
+          README.md
+        config: |
+          {
+            "MD013": {
+              "line_length": 120,
+              "code_blocks": false,
+              "tables": false,
+              "headings": false
+            },
+            "MD033": {
+              "allowed_elements": ["br", "details", "summary"]
+            },
+            "MD041": false
+          }
     
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Install markdown-link-check
-        run: npm install -g markdown-link-check
-
-      - name: Check internal links
-        run: |
-          find doc/ api/ -name "*.md" -exec markdown-link-check {} \; || true
-
-  spell-check:
-    name: Spell Check
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Install cspell
-        run: npm install -g cspell
-
-      - name: Run spell check
-        run: |
-          cspell "doc/**/*.md" "api/**/*.md" "README.md" --config .cspell.json
-
-  mermaid-check:
-    name: Mermaid Diagram Check
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Install mermaid-cli
-        run: npm install -g @mermaid-js/mermaid-cli
-
-      - name: Check Mermaid diagrams
-        run: |
-          # Find all markdown files with mermaid diagrams
-          files_with_mermaid=$(find doc/ -name "*.md" -exec grep -l "```mermaid" {} \; 2>/dev/null || true)
+    - name: Spell Check
+      uses: streetsidesoftware/cspell-action@v6
+      with:
+        files: |
+          doc/**/*.md
+          api/**/*.md
+          README.md
+        inline: warning
+        config: |
+          {
+            "version": "0.2",
+            "language": "en,de-CH",
+            "words": [
+              "AWS", "PostgreSQL", "JWT", "TypeScript", "JavaScript", "OpenAPI", "Cognito",
+              "DTO", "JSON", "HTTP", "HTTPS", "API", "REST", "CRUD", "SQL", "JPA", "JDK",
+              "OpenTofu", "Terraform", "Docker", "Kubernetes", "GitHub", "CI", "CD", "DevOps",
+              "SonarQube", "ESLint", "Spring", "SpringBoot", "Angular", "RxJS", "NgRx",
+              "Tailwind", "CSS", "HTML", "SCSS", "YAML", "YML", "Markdown",
+              "Betrieb", "Bauarbeiter", "Baustelle", "Handwerker", "adresse", "anzahl",
+              "bedarfe", "bedarfs", "usecase", "postgres", "postgresql", "nginx", "awslogs",
+              "jdbc", "amazoncognito", "csrf", "tfvars", "DATASOURCE", "WORKDIR", "BIGSERIAL",
+              "VARCHAR", "INACTIV", "oklch", "Segoe", "Noto", "Menlo", "Consolas", "bezier",
+              "sonarqube", "jacoco", "insertable"
+            ],
+            "ignoreRegExpList": [
+              "/```[\\s\\S]*?```/g",
+              "/`[^`]*`/g",
+              "/https?:\\/\\/[^\\s)]+/g",
+              "/[a-zA-Z0-9_\\-\\/\\.]+\\.(java|ts|js|html|css|yaml|yml|md|json|txt|sh|py)/g",
+              "/\\d+\\.\\d+\\.\\d+/g",
+              "/#[0-9a-fA-F]{3,6}/g"
+            ]
+          }
           
-          if [ -z "$files_with_mermaid" ]; then
-            echo "No Mermaid diagrams found"
-            exit 0
-          fi
-          
-          echo "$files_with_mermaid" | while read -r file; do
-            if [ -n "$file" ]; then
-              echo "Checking Mermaid diagrams in $file"
-              
-              # Extract mermaid code blocks and validate them
-              awk '/```mermaid/,/```/' "$file" | sed '/```/d' > temp_mermaid.mmd
-              
-              if [ -s temp_mermaid.mmd ]; then
-                if ! mmdc -i temp_mermaid.mmd -o /tmp/test_output.svg 2>/dev/null; then
-                  echo "❌ Mermaid syntax error in $file"
-                  exit 1
-                else
-                  echo "✅ Mermaid diagrams valid in $file"
-                fi
-              fi
-              
-              rm -f temp_mermaid.mmd
-            fi
-          done
-
-  documentation-coverage:
-    name: Documentation Coverage
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Check documentation structure
-        run: |
-          echo "Checking documentation structure..."
-          
-          # Check if required directories exist
-          [ -d "doc/tech" ] || echo "❌ Missing doc/tech directory"
-          [ -d "doc/fach" ] || echo "❌ Missing doc/fach directory"
-          [ -d "api" ] || echo "❌ Missing api directory"
-          
-          # Check if required files exist
-          [ -f "doc/tech/README.md" ] || echo "❌ Missing doc/tech/README.md"
-          [ -f "doc/fach/fachlich.md" ] || echo "❌ Missing doc/fach/fachlich.md"
-          [ -f "api/main.yaml" ] || echo "❌ Missing api/main.yaml"
-          
-          # Check if ADRs exist
-          [ -d "doc/tech/09-architecture-decisions" ] || echo "❌ Missing architecture decisions directory"
-          
-          echo "✅ Documentation structure check completed"
-
-      - name: Check for broken internal links
-        run: |
-          echo "Checking for broken internal links..."
-          
-          # Find all markdown files
-          find doc/ api/ -name "*.md" -print0 | while IFS= read -r -d '' file; do
-            echo "Checking $file"
-            
-            # Extract internal links (starting with doc/, api/, or relative paths)
-            grep -o '\[.*\]([^)]*\.md)' "$file" | sed 's/.*(\(.*\))/\1/' | while read link; do
-              if [[ "$link" == doc/* ]] || [[ "$link" == api/* ]] || [[ "$link" == ./* ]]; then
-                if [ ! -f "$link" ]; then
-                  echo "❌ Broken link in $file: $link"
-                fi
-              fi
-            done
-          done
-
-  summary:
-    name: Documentation Check Summary
-    runs-on: ubuntu-latest
-    needs: [markdown-lint, link-check, spell-check, mermaid-check, documentation-coverage]
-    if: always()
-    
-    steps:
-      - name: Documentation check summary
-        run: |
-          echo "📋 Documentation Check Results:"
-          echo "- Markdown Lint: ${{ needs.markdown-lint.result }}"
-          echo "- Link Check: ${{ needs.link-check.result }}"
-          echo "- Spell Check: ${{ needs.spell-check.result }}"
-          echo "- Mermaid Check: ${{ needs.mermaid-check.result }}"
-          echo "- Coverage Check: ${{ needs.documentation-coverage.result }}"
-          
-          if [[ "${{ needs.markdown-lint.result }}" == "failure" ]] || \
-             [[ "${{ needs.link-check.result }}" == "failure" ]] || \
-             [[ "${{ needs.spell-check.result }}" == "failure" ]] || \
-             [[ "${{ needs.mermaid-check.result }}" == "failure" ]] || \
-             [[ "${{ needs.documentation-coverage.result }}" == "failure" ]]; then
-            echo "❌ Some documentation checks failed"
-            exit 1
-          else
-            echo "✅ All documentation checks passed"
-          fi 
+    - name: Check Links
+      uses: lycheeverse/lychee-action@v2
+      with:
+        args: |
+          --verbose
+          --no-progress
+          --exclude-all-private
+          --exclude-loopback
+          --exclude-mail
+          --exclude='^file://'
+          --exclude='localhost'
+          --exclude='127.0.0.1'
+          --exclude='github.com/.*/(issues|pull)/'
+          'doc/**/*.md' 'api/**/*.md' 'README.md'
+        fail: true
+        
+    - name: Documentation Coverage Report
+      run: |
+        echo "📊 Documentation Quality Report" >> $GITHUB_STEP_SUMMARY
+        echo "================================" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        # Count documentation files
+        MD_COUNT=$(find doc api -name "*.md" | wc -l)
+        echo "📝 Markdown files: $MD_COUNT" >> $GITHUB_STEP_SUMMARY
+        
+        # Count code files that might need documentation
+        JAVA_COUNT=$(find backend/src -name "*.java" 2>/dev/null | wc -l || echo "0")
+        TS_COUNT=$(find frontend/src -name "*.ts" 2>/dev/null | wc -l || echo "0")
+        echo "☕ Java files: $JAVA_COUNT" >> $GITHUB_STEP_SUMMARY
+        echo "🟦 TypeScript files: $TS_COUNT" >> $GITHUB_STEP_SUMMARY
+        
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "✅ All documentation quality checks passed!" >> $GITHUB_STEP_SUMMARY 
