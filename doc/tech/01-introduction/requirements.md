@@ -34,7 +34,7 @@
 ## Constraints
 - **Budget**: Cost-effective for small to medium scale
 - **Team Size**: Single developer initially
-- **Timeline**: MVP till end of july 2025
+- **Timeline**: MVP till end of July 2025
 - **Compliance**: Swiss data protection laws
 
 ## Success Criteria

@@ -1,0 +1,40 @@
+# Markdown lint configuration for documentation
+# More lenient rules for technical documentation
+
+# Line length - increased for technical docs
+MD013:
+  line_length: 120
+  heading_line_length: 120
+  code_block_line_length: 120
+  tables: false
+
+# Allow HTML in markdown (useful for complex layouts)
+MD033: false
+
+# Allow bare URLs (common in API docs)
+MD034: false
+
+# Allow duplicate headings (common in structured docs)
+MD024: false
+
+# Allow missing blank lines around headers in some cases
+MD022:
+  lines_above: 1
+  lines_below: 0
+
+# Allow missing blank lines around lists in some cases  
+MD032: false
+
+# Allow trailing spaces (useful for line breaks)
+MD009:
+  br_spaces: 2
+  list_item_empty_lines: false
+
+# Allow fenced code blocks without language
+MD040: false
+
+# Don't require single trailing newline
+MD047: false
+
+# Allow link fragments (useful for internal links)
+MD051: false 

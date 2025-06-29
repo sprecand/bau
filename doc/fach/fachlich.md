@@ -1,4 +1,4 @@
-# Fachdoku
+# Fachdokumentation
 
 ## Geschäftsmodell
 Baufirmen haben kurzfristig Bedarf an Arbeitern. Andere Baufirmen haben kurzfristig Arbeiter die sie nicht beschäftigen können. Bedarf kann auf der Platform ausgeschrieben werden.
@@ -7,11 +7,11 @@ Baufirmen haben kurzfristig Bedarf an Arbeitern. Andere Baufirmen haben kurzfris
 **Ausschließlich Baufirmen/Zimmerei-Betriebe** - Diese Plattform ist eine B2B-Lösung für den Austausch von Arbeitskräften zwischen Bauunternehmen. Private Arbeiter können sich nicht direkt registrieren oder die Plattform nutzen.
 
 ## Bedarf
-Ein Bedarf ist weder ein Arbeitsbeschreib noch ein Personenbeschreib. Es sind eine oder mehr Fachkräfte die über einen klar abgegrenzten Zeitraum genutzt oder zur Verfügung gestellt werden können.
+Ein Bedarf ist weder eine Arbeitsbeschreibung noch eine Personenbeschreibung. Es sind eine oder mehr Fachkräfte die über einen klar abgegrenzten Zeitraum genutzt oder zur Verfügung gestellt werden können.
 
 Bedarf beinhaltet:
-- Anzahl Holzbau Mitarbeiter (textfeld nummer)
-- Anzahl Zimmermänner (textfeld nummer)
+- Anzahl Holzbau Mitarbeiter (textfeld Nummer)
+- Anzahl Zimmermänner (textfeld Nummer)
 - Datum von (textfeld datum)
 - Datum bis (textfeld datum)
 - Adresse (textfeld)
@@ -33,18 +33,18 @@ Das minimal viable product (MVP) bietet Betrieben einerseits die Möglichkeit ei
 - Eine Seite auf dem Bedarf erfasst werden kann
 - Eine Seite auf dem Bedarf+Kontaktdaten angezeigt wird
 - Eine Seite auf dem über das Produkt informiert wird
-- Wir fragen Firmen für Pilotphase an
+- Wir fragen Firmen für Testphase an
 - Wir erfassen die Firmen manuell mit Kontaktdaten und stellen ihnen ein Login bereit
 - Hinter dem Login ist die Bedarfsübersichtsseite und Erfassungsseite
 - Die Startseite mit Infos über das Vorhaben ist öffentlich zugänglich
 - Die Seite ist deutsch
 - Der Pilot ist gratis oder die Rechnung wird manuell abgewickelt
 
-#### Pilotbetrieb
+#### Testbetrieb
 - Kann sich anmelden
 - Kann Bedarf sehen
 - Kann Bedarf erfassen
-- Sieht Kontaktdaten zu Bedarf um sich auserhalb der App auf den Bedarf zu melden
+- Sieht Kontaktdaten zu Bedarf um sich ausserhalb der App auf den Bedarf zu melden
 
 ## Offene Fragen
 #### Fach

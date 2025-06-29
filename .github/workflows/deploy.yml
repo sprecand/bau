@@ -1,0 +1,297 @@
+name: Deploy
+
+on:
+  push:
+    paths:
+      - 'deploy/production.yaml'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to deploy (e.g., v1.2.3)'
+        required: true
+        type: string
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+
+permissions:
+  contents: read
+
+env:
+  AWS_REGION: eu-central-1
+  ECR_REPOSITORY_BACKEND: bau-backend
+  ECR_REPOSITORY_FRONTEND: bau-frontend
+  ECS_CLUSTER: bau-cluster
+  ECS_SERVICE_BACKEND: bau-backend
+  ECS_SERVICE_FRONTEND: bau-frontend
+
+jobs:
+  read-deployment-config:
+    name: Read Deployment Configuration
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.config.outputs.version }}
+      backend-image: ${{ steps.config.outputs.backend-image }}
+      frontend-image: ${{ steps.config.outputs.frontend-image }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Read deployment config
+        id: config
+        run: |
+          if [[ "${{ github.event.inputs.version }}" != "" ]]; then
+            # Manual deployment - use input version
+            VERSION="${{ github.event.inputs.version }}"
+            VERSION=${VERSION#v}  # Remove 'v' prefix if present
+            
+            # Get ECR registry
+            ECR_REGISTRY="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com"
+            BACKEND_IMAGE="$ECR_REGISTRY/${{ env.ECR_REPOSITORY_BACKEND }}:$VERSION"
+            FRONTEND_IMAGE="$ECR_REGISTRY/${{ env.ECR_REPOSITORY_FRONTEND }}:$VERSION"
+            
+            echo "🔧 Manual deployment of version $VERSION"
+          else
+            # Automatic deployment - read from config file
+            if [[ ! -f "deploy/production.yaml" ]]; then
+              echo "❌ No deployment config found!"
+              exit 1
+            fi
+            
+            # Parse YAML config (simple parsing for our structure)
+            VERSION=$(grep "version:" deploy/production.yaml | head -1 | cut -d '"' -f 2)
+            BACKEND_IMAGE=$(grep -A 10 "backend:" deploy/production.yaml | grep "image:" | cut -d '"' -f 2)
+            FRONTEND_IMAGE=$(grep -A 10 "frontend:" deploy/production.yaml | grep "image:" | cut -d '"' -f 2)
+            
+            echo "🤖 Automatic deployment of version $VERSION"
+          fi
+          
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "backend-image=$BACKEND_IMAGE" >> $GITHUB_OUTPUT
+          echo "frontend-image=$FRONTEND_IMAGE" >> $GITHUB_OUTPUT
+          
+          echo "📦 Backend: $BACKEND_IMAGE"
+          echo "📦 Frontend: $FRONTEND_IMAGE"
+
+  deploy-infrastructure:
+    name: Deploy Infrastructure
+    runs-on: ubuntu-latest
+    outputs:
+      infrastructure-exists: ${{ steps.check-infrastructure.outputs.exists }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Check if infrastructure exists
+        id: check-infrastructure
+        run: |
+          if aws ecs describe-clusters --clusters $ECS_CLUSTER 2>/dev/null | grep -q "ACTIVE"; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "✅ Infrastructure already exists"
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "🏗️ Infrastructure needs to be deployed"
+          fi
+
+      - name: Setup OpenTofu
+        if: steps.check-infrastructure.outputs.exists == 'false'
+        uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: 1.9.1
+
+      - name: Deploy infrastructure
+        if: steps.check-infrastructure.outputs.exists == 'false'
+        working-directory: infrastructure
+        env:
+          ALERT_EMAIL: ${{ secrets.BILLING_ALERT_EMAIL }}
+        run: |
+          echo "🚀 Deploying infrastructure..."
+          tofu init
+          tofu validate
+          tofu plan -var-file=terraform.tfvars -var="alert_email=$ALERT_EMAIL"
+          tofu apply -var-file=terraform.tfvars -var="alert_email=$ALERT_EMAIL" -auto-approve
+          echo "✅ Infrastructure deployed successfully"
+
+  deploy-applications:
+    name: Deploy Applications
+    runs-on: ubuntu-latest
+    needs: [read-deployment-config, deploy-infrastructure]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Verify images exist
+        env:
+          BACKEND_IMAGE: ${{ needs.read-deployment-config.outputs.backend-image }}
+          FRONTEND_IMAGE: ${{ needs.read-deployment-config.outputs.frontend-image }}
+        run: |
+          echo "🔍 Verifying images exist..."
+          
+          # Login to ECR
+          aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com
+          
+          # Check if backend image exists
+          if docker manifest inspect $BACKEND_IMAGE >/dev/null 2>&1; then
+            echo "✅ Backend image exists: $BACKEND_IMAGE"
+          else
+            echo "❌ Backend image not found: $BACKEND_IMAGE"
+            exit 1
+          fi
+          
+          # Check if frontend image exists
+          if docker manifest inspect $FRONTEND_IMAGE >/dev/null 2>&1; then
+            echo "✅ Frontend image exists: $FRONTEND_IMAGE"
+          else
+            echo "❌ Frontend image not found: $FRONTEND_IMAGE"
+            exit 1
+          fi
+
+      - name: Deploy backend to ECS
+        env:
+          BACKEND_IMAGE: ${{ needs.read-deployment-config.outputs.backend-image }}
+          VERSION: ${{ needs.read-deployment-config.outputs.version }}
+        run: |
+          echo "🚀 Deploying backend version $VERSION..."
+          
+          # Download current task definition and filter out metadata fields
+          aws ecs describe-task-definition --task-definition $ECR_REPOSITORY_BACKEND \
+            --query 'taskDefinition | {family, taskRoleArn, executionRoleArn, networkMode, containerDefinitions, volumes, placementConstraints, requiresCompatibilities, cpu, memory, tags, pidMode, ipcMode, proxyConfiguration, inferenceAccelerators, ephemeralStorage, runtimePlatform}' \
+            > task-definition-backend.json
+          
+          # Update image in task definition
+          jq --arg IMAGE "$BACKEND_IMAGE" \
+            '.containerDefinitions[0].image = $IMAGE' \
+            task-definition-backend.json > updated-task-definition-backend.json
+          
+          # Register new task definition
+          aws ecs register-task-definition \
+            --cli-input-json file://updated-task-definition-backend.json
+          
+          # Update service
+          aws ecs update-service \
+            --cluster $ECS_CLUSTER \
+            --service $ECS_SERVICE_BACKEND \
+            --task-definition $ECR_REPOSITORY_BACKEND \
+            --force-new-deployment
+          
+          echo "✅ Backend deployment initiated"
+
+      - name: Deploy frontend to ECS
+        env:
+          FRONTEND_IMAGE: ${{ needs.read-deployment-config.outputs.frontend-image }}
+          VERSION: ${{ needs.read-deployment-config.outputs.version }}
+        run: |
+          echo "🚀 Deploying frontend version $VERSION..."
+          
+          # Download current task definition and filter out metadata fields
+          aws ecs describe-task-definition --task-definition $ECR_REPOSITORY_FRONTEND \
+            --query 'taskDefinition | {family, taskRoleArn, executionRoleArn, networkMode, containerDefinitions, volumes, placementConstraints, requiresCompatibilities, cpu, memory, tags, pidMode, ipcMode, proxyConfiguration, inferenceAccelerators, ephemeralStorage, runtimePlatform}' \
+            > task-definition-frontend.json
+          
+          # Update image in task definition
+          jq --arg IMAGE "$FRONTEND_IMAGE" \
+            '.containerDefinitions[0].image = $IMAGE' \
+            task-definition-frontend.json > updated-task-definition-frontend.json
+          
+          # Register new task definition
+          aws ecs register-task-definition \
+            --cli-input-json file://updated-task-definition-frontend.json
+          
+          # Update service
+          aws ecs update-service \
+            --cluster $ECS_CLUSTER \
+            --service $ECS_SERVICE_FRONTEND \
+            --task-definition $ECR_REPOSITORY_FRONTEND \
+            --force-new-deployment
+          
+          echo "✅ Frontend deployment initiated"
+
+      - name: Wait for deployment completion
+        run: |
+          echo "⏳ Waiting for deployments to complete..."
+          
+          # Wait for backend deployment
+          echo "Waiting for backend service to stabilize..."
+          aws ecs wait services-stable \
+            --cluster $ECS_CLUSTER \
+            --services $ECS_SERVICE_BACKEND
+          
+          # Wait for frontend deployment
+          echo "Waiting for frontend service to stabilize..."
+          aws ecs wait services-stable \
+            --cluster $ECS_CLUSTER \
+            --services $ECS_SERVICE_FRONTEND
+          
+          echo "✅ All deployments completed successfully!"
+
+      - name: Health check
+        env:
+          VERSION: ${{ needs.read-deployment-config.outputs.version }}
+        run: |
+          echo "🔍 Performing health checks for version $VERSION..."
+          
+          # Wait a bit for services to fully start
+          sleep 30
+          
+          # Get service status
+          BACKEND_STATUS=$(aws ecs describe-services --cluster $ECS_CLUSTER --services $ECS_SERVICE_BACKEND --query 'services[0].deployments[0].status' --output text)
+          FRONTEND_STATUS=$(aws ecs describe-services --cluster $ECS_CLUSTER --services $ECS_SERVICE_FRONTEND --query 'services[0].deployments[0].status' --output text)
+          
+          echo "Backend status: $BACKEND_STATUS"
+          echo "Frontend status: $FRONTEND_STATUS"
+          
+          if [[ "$BACKEND_STATUS" == "PRIMARY" && "$FRONTEND_STATUS" == "PRIMARY" ]]; then
+            echo "✅ Health check passed - version $VERSION deployed successfully!"
+          else
+            echo "❌ Health check failed - deployment may have issues"
+            exit 1
+          fi
+
+  notify-deployment:
+    name: Notify Deployment Status
+    runs-on: ubuntu-latest
+    needs: [read-deployment-config, deploy-applications]
+    if: always()
+    
+    steps:
+      - name: Deployment notification
+        env:
+          VERSION: ${{ needs.read-deployment-config.outputs.version }}
+          DEPLOYMENT_STATUS: ${{ needs.deploy-applications.result }}
+        run: |
+          echo "📊 Deployment Summary:"
+          echo "- Version: $VERSION"
+          echo "- Status: $DEPLOYMENT_STATUS"
+          echo "- Timestamp: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          echo "- Environment: Production"
+          echo "- Repository: ${{ github.repository }}"
+          echo "- Commit: ${{ github.sha }}"
+          
+          if [[ "$DEPLOYMENT_STATUS" == "success" ]]; then
+            echo "🎉 Deployment SUCCESS: Version $VERSION is now live!"
+          else
+            echo "💥 Deployment FAILED: Version $VERSION deployment failed!"
+            exit 1
+          fi 

@@ -1,23 +1,71 @@
 #!/bin/bash
 
-# Bau App Management Script
-# Turn your AWS application on/off to save money
+# Bau Application Management Script
+# Controls AWS ECS services for cost optimization and deployment
 
 set -e
-
-# Configuration
-CLUSTER_NAME="bau-cluster"
-BACKEND_SERVICE="bau-backend"
-FRONTEND_SERVICE="bau-frontend"
-AWS_REGION="eu-central-1"
 
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
-PURPLE='\033[0;35m'
 NC='\033[0m' # No Color
+
+# Configuration
+CLUSTER_NAME="bau-cluster"
+BACKEND_SERVICE="bau-backend"
+FRONTEND_SERVICE="bau-frontend"
+REGION="eu-central-1"
+
+# Helper functions
+log_info() {
+    echo -e "${BLUE}ℹ️  $1${NC}"
+}
+
+log_success() {
+    echo -e "${GREEN}✅ $1${NC}"
+}
+
+log_warning() {
+    echo -e "${YELLOW}⚠️  $1${NC}"
+}
+
+log_error() {
+    echo -e "${RED}❌ $1${NC}"
+}
+
+check_aws_cli() {
+    if ! command -v aws &> /dev/null; then
+        log_error "AWS CLI not found. Please install and configure AWS CLI."
+        exit 1
+    fi
+}
+
+check_cluster_exists() {
+    if ! aws ecs describe-clusters --clusters "$CLUSTER_NAME" --region "$REGION" &> /dev/null; then
+        log_error "ECS cluster '$CLUSTER_NAME' not found. Deploy infrastructure first."
+        exit 1
+    fi
+}
+
+get_service_status() {
+    local service_name=$1
+    aws ecs describe-services \
+        --cluster "$CLUSTER_NAME" \
+        --services "$service_name" \
+        --region "$REGION" \
+        --query 'services[0].desiredCount' \
+        --output text 2>/dev/null || echo "0"
+}
+
+get_current_version() {
+    if [[ -f "deploy/production.yaml" ]]; then
+        grep "version:" deploy/production.yaml | head -1 | cut -d '"' -f 2
+    else
+        echo "unknown"
+    fi
+}
 
 # Functions
 print_header() {
@@ -30,8 +78,8 @@ print_status() {
     echo -e "${YELLOW}📊 Current Status:${NC}"
     
     # Get service info
-    BACKEND_INFO=$(aws ecs describe-services --cluster $CLUSTER_NAME --services $BACKEND_SERVICE --region $AWS_REGION --query 'services[0].[desiredCount,runningCount,status]' --output text 2>/dev/null || echo "0 0 INACTIVE")
-    FRONTEND_INFO=$(aws ecs describe-services --cluster $CLUSTER_NAME --services $FRONTEND_SERVICE --region $AWS_REGION --query 'services[0].[desiredCount,runningCount,status]' --output text 2>/dev/null || echo "0 0 INACTIVE")
+    BACKEND_INFO=$(aws ecs describe-services --cluster $CLUSTER_NAME --services $BACKEND_SERVICE --region $REGION --query 'services[0].[desiredCount,runningCount,status]' --output text 2>/dev/null || echo "0 0 INACTIVE")
+    FRONTEND_INFO=$(aws ecs describe-services --cluster $CLUSTER_NAME --services $FRONTEND_SERVICE --region $REGION --query 'services[0].[desiredCount,runningCount,status]' --output text 2>/dev/null || echo "0 0 INACTIVE")
     
     read -r BACKEND_DESIRED BACKEND_RUNNING BACKEND_STATUS <<< "$BACKEND_INFO"
     read -r FRONTEND_DESIRED FRONTEND_RUNNING FRONTEND_STATUS <<< "$FRONTEND_INFO"
@@ -64,147 +112,271 @@ print_status() {
 }
 
 start_app() {
-    echo -e "${GREEN}🚀 Starting Bau application...${NC}"
+    log_info "Starting Bau application..."
+    check_aws_cli
+    check_cluster_exists
     
-    echo "   Scaling backend to 1 instance..."
-    aws ecs update-service --cluster $CLUSTER_NAME --service $BACKEND_SERVICE --desired-count 1 --region $AWS_REGION > /dev/null
+    # Scale up services
+    aws ecs update-service \
+        --cluster "$CLUSTER_NAME" \
+        --service "$BACKEND_SERVICE" \
+        --desired-count 1 \
+        --region "$REGION" > /dev/null
     
-    echo "   Scaling frontend to 1 instance..."
-    aws ecs update-service --cluster $CLUSTER_NAME --service $FRONTEND_SERVICE --desired-count 1 --region $AWS_REGION > /dev/null
+    aws ecs update-service \
+        --cluster "$CLUSTER_NAME" \
+        --service "$FRONTEND_SERVICE" \
+        --desired-count 1 \
+        --region "$REGION" > /dev/null
     
-    echo -e "${GREEN}✅ App startup initiated!${NC}"
-    echo -e "${YELLOW}⏳ Services are starting up (this may take 2-3 minutes)${NC}"
-    echo
-    echo "💡 You can check progress with: $0 status"
-    echo
+    log_success "Application is starting up..."
+    log_info "It may take 2-3 minutes for services to be fully available."
 }
 
 stop_app() {
-    echo -e "${RED}🛑 Stopping Bau application...${NC}"
+    log_info "Stopping Bau application..."
+    check_aws_cli
+    check_cluster_exists
     
-    echo "   Scaling backend to 0 instances..."
-    aws ecs update-service --cluster $CLUSTER_NAME --service $BACKEND_SERVICE --desired-count 0 --region $AWS_REGION > /dev/null
+    # Scale down services
+    aws ecs update-service \
+        --cluster "$CLUSTER_NAME" \
+        --service "$BACKEND_SERVICE" \
+        --desired-count 0 \
+        --region "$REGION" > /dev/null
     
-    echo "   Scaling frontend to 0 instances..."
-    aws ecs update-service --cluster $CLUSTER_NAME --service $FRONTEND_SERVICE --desired-count 0 --region $AWS_REGION > /dev/null
+    aws ecs update-service \
+        --cluster "$CLUSTER_NAME" \
+        --service "$FRONTEND_SERVICE" \
+        --desired-count 0 \
+        --region "$REGION" > /dev/null
     
-    echo -e "${GREEN}✅ App shutdown initiated!${NC}"
-    echo -e "${GREEN}💰 Now saving ~\$8-10/month in compute costs${NC}"
-    echo
+    log_success "Application stopped. You're now saving money! 💰"
 }
 
-wait_for_services() {
-    echo -e "${YELLOW}⏳ Waiting for services to be ready...${NC}"
+show_status() {
+    log_info "Checking Bau application status..."
+    check_aws_cli
     
-    echo "   Waiting for backend service..."
-    aws ecs wait services-stable --cluster $CLUSTER_NAME --services $BACKEND_SERVICE --region $AWS_REGION
+    if ! check_cluster_exists &> /dev/null; then
+        log_warning "Infrastructure not deployed"
+        return
+    fi
     
-    echo "   Waiting for frontend service..."  
-    aws ecs wait services-stable --cluster $CLUSTER_NAME --services $FRONTEND_SERVICE --region $AWS_REGION
+    local backend_count=$(get_service_status "$BACKEND_SERVICE")
+    local frontend_count=$(get_service_status "$FRONTEND_SERVICE")
+    local current_version=$(get_current_version)
     
-    echo -e "${GREEN}✅ All services are stable!${NC}"
+    echo ""
+    echo "=== BAU APPLICATION STATUS ==="
+    echo "Current Version: $current_version"
+    echo "Backend Service: $backend_count replica(s)"
+    echo "Frontend Service: $frontend_count replica(s)"
+    echo ""
+    
+    if [[ "$backend_count" == "0" && "$frontend_count" == "0" ]]; then
+        echo "Status: 🔴 STOPPED (saving money)"
+        echo "Monthly cost: ~$0.30"
+    elif [[ "$backend_count" == "1" && "$frontend_count" == "1" ]]; then
+        echo "Status: 🟢 RUNNING"
+        echo "Monthly cost: ~$17"
+    else
+        echo "Status: 🟡 PARTIAL (mixed state)"
+        echo "Monthly cost: ~$8-17"
+    fi
+    echo ""
 }
 
-show_urls() {
-    echo -e "${BLUE}🌐 Application URLs:${NC}"
+deploy_version() {
+    local version=$1
     
-    # Get load balancer DNS (you'll need to add this to your terraform outputs)
-    echo "   Backend:  http://3.72.241.15:8080"
-    echo "   Frontend: http://18.184.228.177:8080"
-    echo
-    echo -e "${YELLOW}💡 Note: URLs will be accessible once services are fully started${NC}"
-    echo
+    if [[ -z "$version" ]]; then
+        log_error "Version required. Usage: $0 deploy <version>"
+        echo "Example: $0 deploy v1.2.3"
+        echo ""
+        log_info "🎯 GitOps Way: Edit deploy/production.yaml and commit the change"
+        exit 1
+    fi
+    
+    log_info "GitOps deployment for version $version..."
+    
+    # Check if version exists in ECR
+    log_info "Checking if version $version exists..."
+    
+    # Remove 'v' prefix if present
+    VERSION=${version#v}
+    
+    # Get ECR registry (you'll need to set AWS_ACCOUNT_ID)
+    ECR_REGISTRY="${AWS_ACCOUNT_ID:-123456789}.dkr.ecr.eu-central-1.amazonaws.com"
+    BACKEND_IMAGE="$ECR_REGISTRY/bau-backend:$VERSION"
+    FRONTEND_IMAGE="$ECR_REGISTRY/bau-frontend:$VERSION"
+    
+    # Update production.yaml file
+    log_info "Updating deploy/production.yaml..."
+    
+    cat > deploy/production.yaml << EOF
+apiVersion: v1
+kind: Config
+metadata:
+  name: bau-production
+  version: "$VERSION"
+  updated: "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+  description: "Production deployment configuration for Bau platform"
+spec:
+  backend:
+    image: "$BACKEND_IMAGE"
+    version: "$VERSION"
+    replicas: 1
+    resources:
+      cpu: "256"
+      memory: "512"
+  frontend:
+    image: "$FRONTEND_IMAGE"
+    version: "$VERSION"
+    replicas: 1
+    resources:
+      cpu: "256"
+      memory: "512"
+environment:
+  name: "production"
+  region: "eu-central-1"
+  cluster: "bau-cluster"
+EOF
+    
+    log_success "Updated deploy/production.yaml to version $VERSION"
+    echo ""
+    log_info "🔄 Next steps:"
+    echo "  1. Review the changes: git diff deploy/production.yaml"
+    echo "  2. Commit and push: git add deploy/production.yaml && git commit -m 'deploy: update to $version' && git push"
+    echo "  3. GitHub Actions will automatically deploy this version"
+    echo ""
+    log_warning "💡 Pure GitOps: The deployment happens when you push the config change to Git!"
 }
 
-show_help() {
-    echo -e "${BLUE}Usage:${NC}"
-    echo "   $0 start      - Start the application (costs ~\$8-10/month)"
-    echo "   $0 stop       - Stop the application (saves ~\$8-10/month)"
-    echo "   $0 status     - Show current status"
-    echo "   $0 wait       - Wait for services to be ready after start"
-    echo "   $0 urls       - Show application URLs"
-    echo "   $0 destroy    - Completely destroy infrastructure (saves ~95%)"
-    echo "   $0 help       - Show this help"
-    echo
+list_versions() {
+    log_info "Available versions..."
+    
+    if command -v gh &> /dev/null; then
+        echo ""
+        echo "=== RECENT RELEASES ==="
+        gh release list --limit 10
+        echo ""
+        echo "Use: $0 deploy <version> to deploy a specific version"
+    else
+        log_warning "GitHub CLI (gh) not found."
+        log_info "Check available releases at:"
+        log_info "https://github.com/YOUR_REPO/releases"
+    fi
+}
+
+create_release() {
+    local version_type=${1:-patch}
+    
+    log_info "Creating new release ($version_type)..."
+    
+    if command -v gh &> /dev/null; then
+        gh workflow run release.yml \
+            --ref main \
+            -f version_type="$version_type"
+        
+        log_success "Release workflow triggered ($version_type increment)"
+        log_info "Check progress at: https://github.com/$(gh repo view --json owner,name -q '.owner.login + "/" + .name')/actions"
+    else
+        log_warning "GitHub CLI (gh) not found."
+        log_info "Please manually trigger the 'Release' workflow at:"
+        log_info "https://github.com/YOUR_REPO/actions/workflows/release.yml"
+    fi
 }
 
 destroy_infrastructure() {
-    echo -e "${RED}💥 DESTROYING INFRASTRUCTURE${NC}"
-    echo -e "${YELLOW}⚠️  This will permanently delete:${NC}"
-    echo "   - ECS Cluster & Services"
-    echo "   - ECR Repositories (with all Docker images)"
-    echo "   - VPC & Networking"  
-    echo "   - Load Balancers"
-    echo "   - CloudWatch resources"
-    echo "   - All application data"
-    echo
-    read -p "Are you ABSOLUTELY sure? Type 'destroy' to confirm: " confirm
+    log_warning "This will COMPLETELY DESTROY all AWS infrastructure!"
+    log_warning "All data will be lost permanently."
+    echo ""
+    read -p "Are you absolutely sure? Type 'destroy' to confirm: " -r
+    echo ""
     
-    if [[ "$confirm" == "destroy" ]]; then
-        echo -e "${RED}🗑️  Destroying infrastructure...${NC}"
-        make destroy
-        echo -e "${GREEN}✅ Infrastructure destroyed! You're now saving ~\$10/month${NC}"
-    else
-        echo -e "${YELLOW}❌ Destruction cancelled${NC}"
-    fi
-}
-
-check_dependencies() {
-    if ! command -v aws &> /dev/null; then
-        echo -e "${RED}❌ AWS CLI not found. Please install it first.${NC}"
-        exit 1
-    fi
-    
-    if ! command -v bc &> /dev/null; then
-        echo -e "${YELLOW}⚠️  'bc' not found. Cost calculations will be disabled.${NC}"
-    fi
-    
-    # Check AWS credentials
-    if ! aws sts get-caller-identity &> /dev/null; then
-        echo -e "${RED}❌ AWS credentials not configured. Run: aws configure${NC}"
-        exit 1
-    fi
-}
-
-# Main script
-main() {
-    print_header
-    check_dependencies
-    
-    case "${1:-status}" in
-        "start"|"on"|"up")
-            print_status
-            start_app
-            ;;
-        "stop"|"off"|"down")
-            print_status
-            stop_app
-            ;;
-        "status"|"info"|"")
-            print_status
-            ;;
-        "wait")
-            wait_for_services
-            print_status
-            show_urls
-            ;;
-        "urls"|"url"|"links")
-            show_urls
-            ;;
-        "destroy"|"nuke")
-            destroy_infrastructure
-            ;;
-        "help"|"-h"|"--help")
-            show_help
-            ;;
-        *)
-            echo -e "${RED}❌ Unknown command: $1${NC}"
-            echo
-            show_help
+    if [[ $REPLY == "destroy" ]]; then
+        log_info "Destroying infrastructure..."
+        
+        cd infrastructure
+        if command -v tofu &> /dev/null; then
+            tofu destroy -auto-approve
+        else
+            log_error "OpenTofu not found. Please destroy manually via AWS console."
             exit 1
-            ;;
-    esac
+        fi
+        
+        log_success "Infrastructure destroyed. Monthly cost: $0"
+    else
+        log_info "Destruction cancelled."
+    fi
 }
 
-# Run main function with all arguments
-main "$@" 
+show_help() {
+    echo "Bau Application Management Script"
+    echo ""
+    echo "USAGE:"
+    echo "  $0 <command> [options]"
+    echo ""
+    echo "COMMANDS:"
+    echo "  start                Start the application (scale up)"
+    echo "  stop                 Stop the application (scale down, save money)"
+    echo "  status               Show current application status"
+    echo "  deploy <version>     Prepare deployment config (GitOps)"
+    echo "  versions             List available versions"
+    echo "  release [type]       Create new release (patch/minor/major)"
+    echo "  destroy              Completely destroy all infrastructure"
+    echo ""
+    echo "EXAMPLES:"
+    echo "  $0 start             # Start the app"
+    echo "  $0 stop              # Stop the app to save money"
+    echo "  $0 status            # Check current status"
+    echo "  $0 deploy v1.2.3     # Prepare GitOps deployment config"
+    echo "  $0 versions          # List available versions"
+    echo "  $0 release minor     # Create minor version release"
+    echo ""
+    echo "GITOPS DEPLOYMENT:"
+    echo "  1. $0 deploy v1.2.3         # Updates deploy/production.yaml"
+    echo "  2. git add deploy/production.yaml"
+    echo "  3. git commit -m 'deploy: v1.2.3'"
+    echo "  4. git push                 # Triggers automatic deployment"
+    echo ""
+    echo "COST SAVING:"
+    echo "  • Running: ~$17/month"
+    echo "  • Stopped: ~$0.30/month"
+    echo "  • Destroyed: $0/month"
+}
+
+# Main script logic
+case "${1:-}" in
+    "start")
+        start_app
+        ;;
+    "stop")
+        stop_app
+        ;;
+    "status")
+        show_status
+        ;;
+    "deploy")
+        deploy_version "$2"
+        ;;
+    "versions")
+        list_versions
+        ;;
+    "release")
+        create_release "$2"
+        ;;
+    "destroy")
+        destroy_infrastructure
+        ;;
+    "help"|"-h"|"--help")
+        show_help
+        ;;
+    *)
+        log_error "Unknown command: ${1:-}"
+        echo ""
+        show_help
+        exit 1
+        ;;
+esac 

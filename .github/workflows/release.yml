@@ -1,0 +1,209 @@
+name: Release
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - 'deploy/**'
+      - '*.md'
+      - 'doc/**'
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: 'Version increment type'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+permissions:
+  contents: write
+  packages: write
+
+env:
+  AWS_REGION: eu-central-1
+  ECR_REPOSITORY_BACKEND: bau-backend
+  ECR_REPOSITORY_FRONTEND: bau-frontend
+
+jobs:
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      backend-image: ${{ steps.build-backend.outputs.image }}
+      frontend-image: ${{ steps.build-frontend.outputs.image }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Calculate version
+        id: version
+        run: |
+          # Get current version from pom.xml
+          CURRENT_VERSION=$(grep -oP '(?<=<version>)[^<]+' backend/pom.xml | head -1)
+          CURRENT_VERSION=${CURRENT_VERSION%-SNAPSHOT}
+          
+          # Parse version parts
+          IFS='.' read -ra VERSION_PARTS <<< "$CURRENT_VERSION"
+          MAJOR=${VERSION_PARTS[0]}
+          MINOR=${VERSION_PARTS[1]}
+          PATCH=${VERSION_PARTS[2]}
+          
+          # Increment based on type
+          VERSION_TYPE="${{ github.event.inputs.version_type || 'patch' }}"
+          case $VERSION_TYPE in
+            major)
+              MAJOR=$((MAJOR + 1))
+              MINOR=0
+              PATCH=0
+              ;;
+            minor)
+              MINOR=$((MINOR + 1))
+              PATCH=0
+              ;;
+            patch)
+              PATCH=$((PATCH + 1))
+              ;;
+          esac
+          
+          NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "📦 New version: $NEW_VERSION"
+
+      - name: Update backend version
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          sed -i "s/<version>.*-SNAPSHOT<\/version>/<version>$VERSION<\/version>/" backend/pom.xml
+          echo "✅ Updated backend version to $VERSION"
+
+      - name: Update frontend version
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          cd frontend
+          npm version $VERSION --no-git-tag-version
+          echo "✅ Updated frontend version to $VERSION"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push backend image
+        id: build-backend
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          echo "🏗️ Building backend image..."
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:$VERSION ./backend
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:latest ./backend
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:$VERSION
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:latest
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Build and push frontend image
+        id: build-frontend
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          echo "🏗️ Building frontend image..."
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:$VERSION ./frontend
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:latest ./frontend
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:$VERSION
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:latest
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create Git tag
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add backend/pom.xml frontend/package.json
+          git commit -m "chore: bump version to $VERSION"
+          git tag -a "v$VERSION" -m "Release version $VERSION"
+          git push origin HEAD:main
+          git push origin "v$VERSION"
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          release_name: Release v${{ steps.version.outputs.version }}
+          body: |
+            ## 🚀 Release v${{ steps.version.outputs.version }}
+            
+            ### 📦 Images
+            - Backend: `${{ steps.build-backend.outputs.image }}`
+            - Frontend: `${{ steps.build-frontend.outputs.image }}`
+            
+            ### 🔄 Deploy
+            To deploy this version:
+            ```bash
+            ./manage-app.sh deploy v${{ steps.version.outputs.version }}
+            ```
+          draft: false
+          prerelease: false
+
+  update-deployment-config:
+    name: Update Deployment Configuration
+    runs-on: ubuntu-latest
+    needs: create-release
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update deployment config
+        run: |
+          VERSION="${{ needs.create-release.outputs.version }}"
+          BACKEND_IMAGE="${{ needs.create-release.outputs.backend-image }}"
+          FRONTEND_IMAGE="${{ needs.create-release.outputs.frontend-image }}"
+          
+          # Create deploy directory if it doesn't exist
+          mkdir -p deploy
+          
+          # Create/update production deployment config
+          cat > deploy/production.yaml << EOF
+          apiVersion: v1
+          kind: Config
+          metadata:
+            name: bau-deployment
+            version: "$VERSION"
+            updated: "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+          spec:
+            backend:
+              image: "$BACKEND_IMAGE"
+              version: "$VERSION"
+            frontend:
+              image: "$FRONTEND_IMAGE"
+              version: "$VERSION"
+          EOF
+          
+          echo "📝 Updated deployment config to version $VERSION"
+
+      - name: Commit deployment config
+        run: |
+          VERSION="${{ needs.create-release.outputs.version }}"
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add deploy/production.yaml
+          git commit -m "deploy: update to version $VERSION"
+          git push origin HEAD:main 
