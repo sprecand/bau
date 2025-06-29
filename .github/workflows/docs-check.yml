@@ -98,19 +98,19 @@ jobs:
         
     - name: Documentation Coverage Report
       run: |
-        echo "📊 Documentation Quality Report" >> $GITHUB_STEP_SUMMARY
+        echo "Documentation Quality Report" >> $GITHUB_STEP_SUMMARY
         echo "================================" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         
         # Count documentation files
         MD_COUNT=$(find doc api -name "*.md" | wc -l)
-        echo "📝 Markdown files: $MD_COUNT" >> $GITHUB_STEP_SUMMARY
+        echo "Markdown files: $MD_COUNT" >> $GITHUB_STEP_SUMMARY
         
         # Count code files that might need documentation
         JAVA_COUNT=$(find backend/src -name "*.java" 2>/dev/null | wc -l || echo "0")
         TS_COUNT=$(find frontend/src -name "*.ts" 2>/dev/null | wc -l || echo "0")
-        echo "☕ Java files: $JAVA_COUNT" >> $GITHUB_STEP_SUMMARY
-        echo "🟦 TypeScript files: $TS_COUNT" >> $GITHUB_STEP_SUMMARY
+        echo "Java files: $JAVA_COUNT" >> $GITHUB_STEP_SUMMARY
+        echo "TypeScript files: $TS_COUNT" >> $GITHUB_STEP_SUMMARY
         
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "✅ All documentation quality checks passed!" >> $GITHUB_STEP_SUMMARY 
+        echo "All documentation quality checks passed!" >> $GITHUB_STEP_SUMMARY 

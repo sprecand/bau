@@ -103,7 +103,7 @@ jobs:
       - name: Run linting
         run: |
           cd frontend
-          npm run lint || echo "⚠️ Linting issues found but continuing build..."
+          npm run lint || echo "Linting issues found but continuing build..."
         continue-on-error: true
 
       - name: Run tests with coverage
