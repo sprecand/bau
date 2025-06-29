@@ -68,36 +68,33 @@ graph TB
 - Security scanning with SARIF output
 - Parallel job execution
 
-#### 2. Staging Deployment (`cd-staging.yml`)
-**Triggers**: Push to `develop` branch
+#### 2. Release Workflow (`release.yml`)
+**Triggers**: Push to `main` branch or manual workflow dispatch
 
 **Jobs**:
-- **Build and Push**: Create Docker images and push to ECR
-- **Deploy Backend**: Update ECS service with new image
-- **Deploy Frontend**: Update ECS service with new image
-- **Notify**: Slack notification with deployment status
+- **Create Release**: Build and tag Docker images
+- **Update Config**: Update deployment configuration file
+- **Push Images**: Push versioned images to ECR
 
 **Features**:
-- Automatic deployment on develop branch
-- Docker image versioning with git SHA
-- ECS service stability checks
-- Slack notifications
+- Automatic semantic versioning
+- Docker image tagging with versions
+- GitHub release creation
+- Deployment config updates
 
-#### 3. Production Deployment (`cd-production.yml`)
-**Triggers**: Manual workflow dispatch
+#### 3. Deploy Workflow (`deploy.yml`)
+**Triggers**: Changes to `deploy/production.yaml` or manual workflow dispatch
 
 **Jobs**:
-- **Approval**: Manual approval step with required approvers
-- **Deploy Backend**: Production deployment after approval
-- **Deploy Frontend**: Production deployment after approval
-- **Health Check**: Post-deployment health verification
-- **Notify**: Slack notification with deployment status
+- **Deploy Infrastructure**: Setup AWS infrastructure if needed
+- **Deploy Applications**: Deploy backend and frontend to ECS
+- **Health Checks**: Verify deployment success
 
 **Features**:
-- Manual approval workflow
-- Version selection input
+- GitOps deployment approach
+- Infrastructure validation
 - Health checks after deployment
-- Slack notifications
+- Version-controlled deployments
 
 ### Required GitHub Secrets
 
@@ -106,19 +103,18 @@ graph TB
 AWS_ACCESS_KEY_ID=your_access_key
 AWS_SECRET_ACCESS_KEY=your_secret_key
 
-# Slack Notifications
-SLACK_WEBHOOK_URL=https://hooks.slack.com/services/...
+# Billing Alerts
+BILLING_ALERT_EMAIL=your_email@example.com
 
-# Production Approval
-APPROVAL_SECRET=your_approval_secret
-APPROVERS=username1,username2
+# SonarQube Analysis
+SONAR_TOKEN=your_sonar_token_here
 ```
 
 ## Prerequisites
 
 - **AWS CLI** configured
 - **Docker** installed
-- **Terraform** (for infrastructure)
+- **OpenTofu** (for infrastructure)
 - **Domain name** configured
 - **GitHub repository** with Actions enabled
 
@@ -130,14 +126,14 @@ APPROVERS=username1,username2
 git clone https://github.com/your-org/bau-infrastructure.git
 cd bau-infrastructure
 
-# Initialize Terraform
-terraform init
+# Initialize OpenTofu
+tofu init
 
-# Plan deployment
-terraform plan -var-file=environments/prod.tfvars
+# Plan deployment  
+tofu plan -var-file=tofu.tfvars
 
 # Apply infrastructure
-terraform apply -var-file=environments/prod.tfvars
+tofu apply -var-file=tofu.tfvars
 ```
 
 ### 2. Environment Variables

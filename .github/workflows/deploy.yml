@@ -122,8 +122,8 @@ jobs:
           echo "🚀 Deploying infrastructure..."
           tofu init
           tofu validate
-          tofu plan -var-file=terraform.tfvars -var="alert_email=$ALERT_EMAIL"
-          tofu apply -var-file=terraform.tfvars -var="alert_email=$ALERT_EMAIL" -auto-approve
+          tofu plan -var-file=tofu.tfvars -var="alert_email=$ALERT_EMAIL"
+          tofu apply -var-file=tofu.tfvars -var="alert_email=$ALERT_EMAIL" -auto-approve
           echo "✅ Infrastructure deployed successfully"
 
   deploy-applications:

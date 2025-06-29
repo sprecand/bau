@@ -98,7 +98,7 @@ npm start
 - **Production Deployment**: Manual approval workflow with version selection
 - **Container Registry**: AWS ECR
 - **Orchestration**: AWS ECS
-- **Notifications**: Slack integration
+- **Notifications**: GitHub Actions notifications
 
 ## Development Guidelines
 
@@ -119,7 +119,7 @@ npm start
 1. **Development**: Push to `develop` → automatic staging deployment
 2. **Testing**: Automated tests, security scans, build verification
 3. **Production**: Manual approval → production deployment with health checks
-4. **Monitoring**: Slack notifications, health monitoring, rollback procedures
+4. **Monitoring**: GitHub Actions status, health monitoring, rollback procedures
 
 ## Related Documentation
 - [Business Requirements](../fach/fachlich.md) - Domain model and business rules

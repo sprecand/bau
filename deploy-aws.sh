@@ -78,7 +78,7 @@ deploy_infrastructure() {
     
     # Plan deployment
     print_step "Planning deployment..."
-    tofu plan -var-file=terraform.tfvars -var="alert_email=$ALERT_EMAIL"
+    tofu plan -var-file=tofu.tfvars -var="alert_email=$ALERT_EMAIL"
     
     # Ask for confirmation
     echo
@@ -91,7 +91,7 @@ deploy_infrastructure() {
     
     # Apply changes
     print_step "Applying changes..."
-    tofu apply -var-file=terraform.tfvars -var="alert_email=$ALERT_EMAIL" -auto-approve
+    tofu apply -var-file=tofu.tfvars -var="alert_email=$ALERT_EMAIL" -auto-approve
     
     # Show outputs
     print_step "Deployment completed! Here are the outputs:"

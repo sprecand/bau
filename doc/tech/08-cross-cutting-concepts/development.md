@@ -32,16 +32,25 @@ aws cognito-idp create-user-pool-client \
 ```
 
 ### 3. Environment Variables
+Copy the environment template and customize:
+```bash
+cp env.template .env
+# Edit .env with your values
+```
+
+Example `.env` configuration:
 ```env
-# Backend (.env)
+# Database (matches docker-compose.yml)
 SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/bau_dev
 SPRING_DATASOURCE_USERNAME=bau_user
 SPRING_DATASOURCE_PASSWORD=bau_password
+
+# AWS Cognito
 AWS_COGNITO_USER_POOL_ID=eu-central-1_xxxxxxxxx
 AWS_COGNITO_REGION=eu-central-1
 AWS_COGNITO_CLIENT_ID=xxxxxxxxxxxxxxxxxxxxxxxxxx
 
-# Frontend (.env)
+# Frontend
 AWS_COGNITO_USER_POOL_ID=eu-central-1_xxxxxxxxx
 AWS_COGNITO_CLIENT_ID=xxxxxxxxxxxxxxxxxxxxxxxxxx
 AWS_COGNITO_DOMAIN=bau-dev.auth.eu-central-1.amazoncognito.com

@@ -3,7 +3,7 @@
 
 # Variables
 TF_CMD = tofu
-TF_VAR_FILE = terraform.tfvars
+TF_VAR_FILE = tofu.tfvars
 
 help: ## Show this help message
 	@echo "Available commands:"

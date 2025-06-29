@@ -30,13 +30,22 @@ Thumbs.db
 .dockerignore
 docker-compose.override.yml
 
-# Terraform
+# Terraform/OpenTofu
 *.tfstate
 *.tfstate.*
 .terraform/
+.tofu/
 .terraform.lock.hcl
+.tofu.lock.hcl
 terraform.tfvars
+tofu.tfvars
 *.tfvars.json
+
+# Environment files
+.env
+.env.local
+.env.production
+.env.staging
 
 # AWS
 .aws/

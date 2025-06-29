@@ -30,7 +30,7 @@
 - [x] Docker image building and ECR push
 - [x] ECS deployment automation
 - [x] Manual approval for production
-- [x] Slack notifications
+- [x] GitHub Actions workflows
 
 ### Deployment
 - [x] Production deployment guide

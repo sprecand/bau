@@ -44,13 +44,16 @@ The application uses different profiles for different environments:
 
 #### Local Development (No Authentication)
 
-For local development, use the `local` profile which disables authentication and uses an H2 in-memory database:
+For local development, use the `local` profile which disables authentication and connects to PostgreSQL via Docker Compose:
 
 ```bash
-# Option 1: Using Maven with profile
+# First, start the database
+docker-compose up -d postgres
+
+# Then run the application
 mvn spring-boot:run -Dspring-boot.run.profiles=local
 
-# Option 2: Using environment variable
+# Or with environment variable
 export SPRING_PROFILES_ACTIVE=local
 mvn spring-boot:run
 ```
@@ -72,22 +75,22 @@ mvn spring-boot:run
 When running locally:
 
 - **Application:** http://localhost:8080/api/v1
-- **H2 Database Console:** http://localhost:8080/api/v1/h2-console
-  - JDBC URL: `jdbc:h2:mem:testdb`
-  - Username: `sa`
-  - Password: (empty)
 - **Swagger UI:** http://localhost:8080/api/v1/swagger-ui/index.html
 - **OpenAPI JSON:** http://localhost:8080/api/v1/v3/api-docs
+- **Database:** PostgreSQL on localhost:5432 (via Docker Compose)
+  - Database: `bau_dev`
+  - Username: `bau_user`
+  - Password: `bau_password`
 
 ### Local Profile Features
 
 The `local` profile provides:
 
 - **No Authentication:** All endpoints are accessible without JWT tokens (security is disabled)
-- **H2 In-Memory Database:** No external database required
-- **H2 Console:** Web-based database browser
+- **PostgreSQL Database:** Connects to Docker Compose PostgreSQL instance
 - **Debug Logging:** Enhanced logging for development
-- **Auto Schema Creation:** Database schema created automatically
+- **Flyway Migration:** Database schema managed via migrations
+- **Development Data:** Can be seeded with test data for development
 
 ## API Endpoints
 

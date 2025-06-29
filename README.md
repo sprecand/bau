@@ -19,6 +19,10 @@
 git clone <repository-url>
 cd bau
 
+# Set up environment
+cp env.template .env
+# Edit .env with your configuration
+
 # Start database
 docker-compose up -d postgres
 
@@ -26,7 +30,7 @@ docker-compose up -d postgres
 cd backend
 mvn spring-boot:run
 
-# Frontend (Angular)
+# Frontend (Angular)  
 cd frontend
 npm install
 npm start

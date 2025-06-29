@@ -38,7 +38,7 @@ make output        # Show outputs
 
 ## Configuration
 
-Edit `terraform.tfvars` to customize:
+Edit `tofu.tfvars` to customize:
 ```hcl
 project_name = "bau"
 aws_region   = "eu-central-1"
@@ -55,7 +55,7 @@ After deployment, you'll get:
 
 ## GitHub Actions Integration
 
-The infrastructure outputs are designed to work with the GitHub Actions workflow (`.github/workflows/cd-main.yml`).
+The infrastructure outputs are designed to work with the GitHub Actions workflows (`deploy.yml` and `release.yml`).
 
 Required GitHub Secrets:
 - `AWS_ACCESS_KEY_ID`
