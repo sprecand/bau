@@ -15,19 +15,36 @@ This directory contains the OpenTofu configuration for deploying the Bau platfor
 ## Quick Start
 
 ### Prerequisites
+
 - [OpenTofu](https://opentofu.org/docs/intro/install/) installed
 - [AWS CLI](https://aws.amazon.com/cli/) configured
 - Docker (for building and pushing images)
 
 ### Deploy Everything
+
 ```bash
-# From project root
+
+## From project root
+
 ./deploy-aws.sh
 ```
 
+## From project root
+
+./deploy-aws.sh
+
+```
+
 ### Manual Deployment
+
 ```bash
-# From infrastructure directory
+
+### Manual Deployment
+
+```bash
+
+## From infrastructure directory
+
 make help          # Show all available commands
 make deploy        # Full deployment
 make plan          # Preview changes
@@ -36,14 +53,77 @@ make destroy       # Destroy infrastructure
 make output        # Show outputs
 ```
 
+## From infrastructure directory
+
+make help          # Show all available commands
+make deploy        # Full deployment
+make plan          # Preview changes
+make apply         # Apply changes
+make destroy       # Destroy infrastructure
+make output        # Show outputs
+
+```
+
 ## Configuration
 
 Edit `tofu.tfvars` to customize:
+```hcl
+
+## Configuration
+
+Edit `tofu.tfvars` to customize:
+
 ```hcl
 project_name = "bau"
 aws_region   = "eu-central-1"
 environment  = "main"
 ```
+
+project_name = "bau"
+aws_region   = "eu-central-1"
+environment  = "main"
+
+```
+
+## Outputs
+
+After deployment, you'll get:
+- ECR repository URLs
+- ECS cluster and service names
+- VPC and subnet information
+- All values needed for GitHub Actions
+
+## GitHub Actions Integration
+
+The infrastructure outputs are designed to work with the GitHub Actions workflows (`deploy.yml` and `release.yml`).
+
+Required GitHub Secrets:
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
+
+## Cost Optimization
+
+- **ECS Fargate**: Pay only when containers are running
+- **ECR**: Free tier includes 500MB storage
+- **CloudWatch**: 7-day log retention to minimize costs
+- **VPC**: Only public subnets (no NAT Gateway costs)
+
+## Security
+
+- Non-root containers
+- Security groups with minimal required access
+- IAM roles with least privilege
+- VPC isolation
+
+## Monitoring
+
+- CloudWatch logs: `/ecs/bau-backend` and `/ecs/bau-frontend`
+- ECS service health checks
+- Container insights enabled
+
+## Cleanup
+
+```bash
 
 ## Outputs
 
@@ -87,4 +167,10 @@ Required GitHub Secrets:
 make destroy  # Remove all infrastructure
 ```
 
-⚠️ **Warning**: This will permanently delete all resources including data! 
+make destroy  # Remove all infrastructure
+
+```
+
+⚠️ **Warning**: This will permanently delete all resources including data!
+
+⚠️ **Warning**: This will permanently delete all resources including data!
