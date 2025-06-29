@@ -26,6 +26,7 @@ backend/src/main/java/com/bau/
 │   ├── usecase/              # Use case implementations
 │   └── port/                 # Port interfaces
 └── shared/                   # Shared utilities and configuration
+
 ```
 
 backend/src/main/java/com/bau/

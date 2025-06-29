@@ -20,6 +20,7 @@ api/
 │   ├── users.yaml        # User schemas
 │   └── common.yaml       # Shared/common schemas
 └── README.md             # This file
+
 ```
 
 api/
@@ -275,6 +276,7 @@ swagger-cli validate api/main.yaml
 ## Using openapi-validator
 
 openapi-validator api/main.yaml
+
 ```
 
 ## Using swagger-cli
@@ -348,6 +350,7 @@ curl -X POST "http://localhost:8080/api/v1/bedarf" \
   -d '{
 
 ```
+
 "holzbauAnzahl": 2,
 "zimmermannAnzahl": 1,
 "datumVon": "2024-02-01",
@@ -355,9 +358,11 @@ curl -X POST "http://localhost:8080/api/v1/bedarf" \
 "adresse": "Dorfstrasse 1234, 9472 Grabs",
 "mitWerkzeug": true,
 "mitFahrzeug": false
+
 ```
 
   }'
+
 ```
 
 curl -X POST "http://localhost:8080/api/v1/bedarf" \
@@ -366,6 +371,7 @@ curl -X POST "http://localhost:8080/api/v1/bedarf" \
   -d '{
 
 ```
+
 "holzbauAnzahl": 2,
 "zimmermannAnzahl": 1,
 "datumVon": "2024-02-01",
@@ -373,6 +379,7 @@ curl -X POST "http://localhost:8080/api/v1/bedarf" \
 "adresse": "Dorfstrasse 1234, 9472 Grabs",
 "mitWerkzeug": true,
 "mitFahrzeug": false
+
 ```
 
   }'
@@ -386,8 +393,10 @@ curl -X POST "http://localhost:8080/api/v1/bedarf" \
 ### Getting User Profile
 
 ```bash
+
 curl -X GET "http://localhost:8080/api/v1/auth/profile" \
   -H "Authorization: Bearer YOUR_JWT_TOKEN"
+
 ```
 
 curl -X GET "http://localhost:8080/api/v1/auth/profile" \

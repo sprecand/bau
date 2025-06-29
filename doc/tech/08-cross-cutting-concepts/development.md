@@ -14,6 +14,7 @@
 
 ```bash
 docker-compose up -d postgres
+
 ```
 
 docker-compose up -d postgres
@@ -31,39 +32,41 @@ docker-compose up -d postgres
 ## Create user pool
 
 aws cognito-idp create-user-pool \
-  --pool-name bau-dev-users \
-  --policies '{"PasswordPolicy":{"MinimumLength":8,"RequireUppercase":true,"RequireLowercase":true,"RequireNumbers":true,"RequireSymbols":true}}' \
-  --auto-verified-attributes email
+--pool-name bau-dev-users \
+--policies '{"PasswordPolicy":{"MinimumLength":8,"RequireUppercase":true,"RequireLowercase":true,"RequireNumbers":true,"RequireSymbols":true}}' \
+--auto-verified-attributes email
 
 ## Create user pool client
 
 aws cognito-idp create-user-pool-client \
-  --user-pool-id YOUR_USER_POOL_ID \
-  --client-name bau-dev-client \
-  --no-generate-secret \
-  --explicit-auth-flows ALLOW_USER_PASSWORD_AUTH ALLOW_REFRESH_TOKEN_AUTH
+--user-pool-id YOUR_USER_POOL_ID \
+--client-name bau-dev-client \
+--no-generate-secret \
+--explicit-auth-flows ALLOW_USER_PASSWORD_AUTH ALLOW_REFRESH_TOKEN_AUTH
+
 ```
 
 ## Create user pool
 
 aws cognito-idp create-user-pool \
-  --pool-name bau-dev-users \
-  --policies '{"PasswordPolicy":{"MinimumLength":8,"RequireUppercase":true,"RequireLowercase":true,"RequireNumbers":true,"RequireSymbols":true}}' \
-  --auto-verified-attributes email
+--pool-name bau-dev-users \
+--policies '{"PasswordPolicy":{"MinimumLength":8,"RequireUppercase":true,"RequireLowercase":true,"RequireNumbers":true,"RequireSymbols":true}}' \
+--auto-verified-attributes email
 
 ## Create user pool client
 
 aws cognito-idp create-user-pool-client \
-  --user-pool-id YOUR_USER_POOL_ID \
-  --client-name bau-dev-client \
-  --no-generate-secret \
-  --explicit-auth-flows ALLOW_USER_PASSWORD_AUTH ALLOW_REFRESH_TOKEN_AUTH
+--user-pool-id YOUR_USER_POOL_ID \
+--client-name bau-dev-client \
+--no-generate-secret \
+--explicit-auth-flows ALLOW_USER_PASSWORD_AUTH ALLOW_REFRESH_TOKEN_AUTH
 
 ```
 
 ### 3. Environment Variables
 
 Copy the environment template and customize:
+
 ```bash
 
 ### 3. Environment Variables
@@ -71,6 +74,7 @@ Copy the environment template and customize:
 Copy the environment template and customize:
 
 ```bash
+
 cp env.template .env
 
 ## Edit .env with your values
@@ -84,6 +88,7 @@ cp env.template .env
 ```
 
 Example `.env` configuration:
+
 ```env
 
 Example `.env` configuration:
@@ -107,6 +112,7 @@ AWS_COGNITO_CLIENT_ID=xxxxxxxxxxxxxxxxxxxxxxxxxx
 AWS_COGNITO_USER_POOL_ID=eu-central-1_xxxxxxxxx
 AWS_COGNITO_CLIENT_ID=xxxxxxxxxxxxxxxxxxxxxxxxxx
 AWS_COGNITO_DOMAIN=bau-dev.auth.eu-central-1.amazoncognito.com
+
 ```
 
 ## Database (matches docker-compose.yml)
@@ -147,6 +153,7 @@ mvn spring-boot:run
 cd frontend
 npm install
 npm start
+
 ```
 
 ## Backend
@@ -169,6 +176,7 @@ npm start
 ## Project Structure
 
 ```
+
 backend/src/main/java/com/bau/
 ├── adapter/
 │   ├── in/                # Driving adapters
@@ -184,6 +192,7 @@ backend/src/main/java/com/bau/
 │   ├── usecase/         # Use case implementations
 │   └── port/            # Port interfaces
 └── shared/              # Shared utilities and configuration
+
 ```
 
 backend/src/main/java/com/bau/
@@ -215,12 +224,14 @@ backend/src/main/java/com/bau/
 ### 1. Feature Development
 
 ```bash
+
 git checkout -b feature/new-feature
 
 ## Make changes
 
 git commit -m "feat: add new feature"
 git push origin feature/new-feature
+
 ```
 
 git checkout -b feature/new-feature
@@ -251,6 +262,7 @@ npm test
 ## Integration tests
 
 mvn verify
+
 ```
 
 ## Backend tests
@@ -284,6 +296,7 @@ mvn checkstyle:check
 
 npm run lint
 npm run format
+
 ```
 
 ## Backend
@@ -329,6 +342,7 @@ mvn flyway:migrate
 ## Generate OpenAPI client
 
 mvn openapi-generator:generate
+
 ```
 
 ## Run application
@@ -380,6 +394,7 @@ npm test
 ## Lint code
 
 npm run lint
+
 ```
 
 ## Install dependencies
@@ -439,46 +454,52 @@ npm run lint
 @Slf4j
 public class BedarfApiController implements BedarfApi {
 
-
 ```
+
 private final BedarfUseCase bedarfUseCase;
 private final BedarfWebMapper bedarfWebMapper;
-```
-
 
 ```
+
+```
+
 @Override
 public ResponseEntity<BedarfResponseDto> createBedarf(BedarfCreateRequestDto request) {
     log.debug("Creating bedarf: {}", request);
-```
-
 
 ```
+
+```
+
 Optional<Bedarf> bedarfOpt = bedarfUseCase.createBedarf(request);
-```
-
 
 ```
+
+```
+
 if (bedarfOpt.isEmpty()) {
     log.warn("Bedarf creation failed");
     return ResponseEntity.badRequest().build();
 }
-```
-
 
 ```
+
+```
+
 BedarfResponseDto response = bedarfWebMapper.toResponseDto(bedarfOpt.get());
 log.info("Successfully created bedarf with id: {}", bedarfOpt.get().getId());
-```
-
 
 ```
+
+```
+
 return ResponseEntity.status(HttpStatus.CREATED).body(response);
 }
-```
-
 
 ```
+
+```
+
 @Override
 public ResponseEntity<List<BedarfResponseDto>> getAllBedarfe(/*pagination params*/) {
     List<Bedarf> bedarfe = bedarfUseCase.getAllBedarfe();
@@ -487,11 +508,13 @@ public ResponseEntity<List<BedarfResponseDto>> getAllBedarfe(/*pagination params
         .toList();
     return ResponseEntity.ok(response);
 }
-```
-
 
 ```
+
+```
+
 // ... other CRUD operations from BedarfApi interface
+
 ```
 
 }
@@ -502,13 +525,14 @@ public ResponseEntity<List<BedarfResponseDto>> getAllBedarfe(/*pagination params
 @Slf4j
 public class BedarfService implements BedarfUseCase {
 
-
 ```
+
 private final BedarfRepository bedarfRepository;
-```
-
 
 ```
+
+```
+
 @Override
 public Optional<Bedarf> createBedarf(BedarfCreateRequestDto request) {
     Bedarf bedarf = Bedarf.builder()
@@ -522,26 +546,30 @@ public Optional<Bedarf> createBedarf(BedarfCreateRequestDto request) {
         .mitFahrzeug(request.getMitFahrzeug())
         .status(BedarfStatus.INACTIV)
         .build();
-```
-
 
 ```
+
+```
+
 if (!bedarf.isValidDateRange()) {
     log.warn("Invalid date range for bedarf");
     return Optional.empty();
 }
-```
-
 
 ```
+
+```
+
 Bedarf savedBedarf = bedarfRepository.save(bedarf);
 log.info("Successfully created bedarf with id: {}", savedBedarf.getId());
-```
-
 
 ```
+
+```
+
 return Optional.of(savedBedarf);
 }
+
 ```
 
 }
@@ -550,14 +578,17 @@ return Optional.of(savedBedarf);
 public interface BedarfRepository {
 
 ```
+
 Bedarf save(Bedarf bedarf);
 Optional<Bedarf> findById(UUID id);
 List<Bedarf> findByBetriebId(UUID betriebId);
 List<Bedarf> findAll();
 void deleteById(UUID id);
+
 ```
 
 }
+
 ```
 
 // 1. API Controller (implements generated interface)
@@ -566,46 +597,52 @@ void deleteById(UUID id);
 @Slf4j
 public class BedarfApiController implements BedarfApi {
 
-
 ```
+
 private final BedarfUseCase bedarfUseCase;
 private final BedarfWebMapper bedarfWebMapper;
-```
-
 
 ```
+
+```
+
 @Override
 public ResponseEntity<BedarfResponseDto> createBedarf(BedarfCreateRequestDto request) {
     log.debug("Creating bedarf: {}", request);
-```
-
 
 ```
+
+```
+
 Optional<Bedarf> bedarfOpt = bedarfUseCase.createBedarf(request);
-```
-
 
 ```
+
+```
+
 if (bedarfOpt.isEmpty()) {
     log.warn("Bedarf creation failed");
     return ResponseEntity.badRequest().build();
 }
-```
-
 
 ```
+
+```
+
 BedarfResponseDto response = bedarfWebMapper.toResponseDto(bedarfOpt.get());
 log.info("Successfully created bedarf with id: {}", bedarfOpt.get().getId());
-```
-
 
 ```
+
+```
+
 return ResponseEntity.status(HttpStatus.CREATED).body(response);
 }
-```
-
 
 ```
+
+```
+
 @Override
 public ResponseEntity<List<BedarfResponseDto>> getAllBedarfe(/*pagination params*/) {
     List<Bedarf> bedarfe = bedarfUseCase.getAllBedarfe();
@@ -614,11 +651,13 @@ public ResponseEntity<List<BedarfResponseDto>> getAllBedarfe(/*pagination params
         .toList();
     return ResponseEntity.ok(response);
 }
-```
-
 
 ```
+
+```
+
 // ... other CRUD operations from BedarfApi interface
+
 ```
 
 }
@@ -629,13 +668,14 @@ public ResponseEntity<List<BedarfResponseDto>> getAllBedarfe(/*pagination params
 @Slf4j
 public class BedarfService implements BedarfUseCase {
 
-
 ```
+
 private final BedarfRepository bedarfRepository;
-```
-
 
 ```
+
+```
+
 @Override
 public Optional<Bedarf> createBedarf(BedarfCreateRequestDto request) {
     Bedarf bedarf = Bedarf.builder()
@@ -649,26 +689,30 @@ public Optional<Bedarf> createBedarf(BedarfCreateRequestDto request) {
         .mitFahrzeug(request.getMitFahrzeug())
         .status(BedarfStatus.INACTIV)
         .build();
-```
-
 
 ```
+
+```
+
 if (!bedarf.isValidDateRange()) {
     log.warn("Invalid date range for bedarf");
     return Optional.empty();
 }
-```
-
 
 ```
+
+```
+
 Bedarf savedBedarf = bedarfRepository.save(bedarf);
 log.info("Successfully created bedarf with id: {}", savedBedarf.getId());
-```
-
 
 ```
+
+```
+
 return Optional.of(savedBedarf);
 }
+
 ```
 
 }
@@ -677,11 +721,13 @@ return Optional.of(savedBedarf);
 public interface BedarfRepository {
 
 ```
+
 Bedarf save(Bedarf bedarf);
 Optional<Bedarf> findById(UUID id);
 List<Bedarf> findByBetriebId(UUID betriebId);
 List<Bedarf> findAll();
 void deleteById(UUID id);
+
 ```
 
 }
@@ -715,6 +761,7 @@ void deleteById(UUID id);
 CREATE TABLE bedarf (
 
 ```
+
 id BIGSERIAL PRIMARY KEY,
 betrieb_id BIGINT NOT NULL,
 holzbau_anzahl INTEGER NOT NULL,
@@ -727,18 +774,21 @@ mit_fahrzeug BOOLEAN DEFAULT false,
 status VARCHAR(20) DEFAULT 'INACTIV',
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
 ```
 
 );
 
 CREATE INDEX idx_bedarf_betrieb_id ON bedarf(betrieb_id);
 CREATE INDEX idx_bedarf_status ON bedarf(status);
+
 ```
 
 -- V1__Create_bedarf_table.sql
 CREATE TABLE bedarf (
 
 ```
+
 id BIGSERIAL PRIMARY KEY,
 betrieb_id BIGINT NOT NULL,
 holzbau_anzahl INTEGER NOT NULL,
@@ -751,6 +801,7 @@ mit_fahrzeug BOOLEAN DEFAULT false,
 status VARCHAR(20) DEFAULT 'INACTIV',
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
 ```
 
 );
@@ -771,17 +822,19 @@ CREATE INDEX idx_bedarf_status ON bedarf(status);
 ### Backend Testing
 
 ```java
+
 @SpringBootTest
 class BedarfApiControllerTest {
 
-
 ```
+
 @Autowired
 private TestRestTemplate restTemplate;
-```
-
 
 ```
+
+```
+
 @Test
 void shouldCreateBedarf() {
     // Given
@@ -795,38 +848,43 @@ void shouldCreateBedarf() {
         .mitWerkzeug(true)
         .mitFahrzeug(false)
         .build();
-```
-
 
 ```
+
+```
+
 // When
 ResponseEntity<BedarfResponseDto> response = restTemplate.postForEntity(
     "/api/v1/bedarfe", request, BedarfResponseDto.class);
-```
-
 
 ```
+
+```
+
 // Then
 assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 assertThat(response.getBody().getHolzbauAnzahl()).isEqualTo(2);
 assertThat(response.getBody().getStatus()).isEqualTo(BedarfStatus.INACTIV);
 }
+
 ```
 
 }
+
 ```
 
 @SpringBootTest
 class BedarfApiControllerTest {
 
-
 ```
+
 @Autowired
 private TestRestTemplate restTemplate;
-```
-
 
 ```
+
+```
+
 @Test
 void shouldCreateBedarf() {
     // Given
@@ -840,22 +898,25 @@ void shouldCreateBedarf() {
         .mitWerkzeug(true)
         .mitFahrzeug(false)
         .build();
-```
-
 
 ```
+
+```
+
 // When
 ResponseEntity<BedarfResponseDto> response = restTemplate.postForEntity(
     "/api/v1/bedarfe", request, BedarfResponseDto.class);
-```
-
 
 ```
+
+```
+
 // Then
 assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 assertThat(response.getBody().getHolzbauAnzahl()).isEqualTo(2);
 assertThat(response.getBody().getStatus()).isEqualTo(BedarfStatus.INACTIV);
 }
+
 ```
 
 }
@@ -869,10 +930,12 @@ assertThat(response.getBody().getStatus()).isEqualTo(BedarfStatus.INACTIV);
 ### Frontend Testing
 
 ```typescript
+
 describe('BedarfService', () => {
   it('should create bedarf', async () => {
 
 ```
+
 const bedarf = await bedarfService.createBedarf({
   holzbauAnzahl: 2,
   zimmermannAnzahl: 1,
@@ -880,21 +943,25 @@ const bedarf = await bedarfService.createBedarf({
   datumBis: '2024-02-15',
   adresse: 'Test Address'
 });
-```
-
 
 ```
+
+```
+
 expect(bedarf.holzbauAnzahl).toBe(2);
+
 ```
 
   });
 });
+
 ```
 
 describe('BedarfService', () => {
   it('should create bedarf', async () => {
 
 ```
+
 const bedarf = await bedarfService.createBedarf({
   holzbauAnzahl: 2,
   zimmermannAnzahl: 1,
@@ -902,11 +969,13 @@ const bedarf = await bedarfService.createBedarf({
   datumBis: '2024-02-15',
   adresse: 'Test Address'
 });
-```
-
 
 ```
+
+```
+
 expect(bedarf.holzbauAnzahl).toBe(2);
+
 ```
 
   });
@@ -926,20 +995,21 @@ expect(bedarf.holzbauAnzahl).toBe(2);
 
 1.**Database Connection**```bash
 
-# Check if PostgreSQL is running
+## Check if PostgreSQL is running
 
    docker ps
 
-# Check logs
+## Check logs
 
    docker logs bau-postgres
+
    ```
 
-# Check if PostgreSQL is running
+## Check if PostgreSQL is running
 
    docker ps
 
-# Check logs
+## Check logs
 
    docker logs bau-postgres
 
@@ -949,12 +1019,13 @@ expect(bedarf.holzbauAnzahl).toBe(2);
 
 2.**AWS Cognito Issues**```bash
 
-# Verify configuration
+## Verify configuration
 
    aws cognito-idp describe-user-pool --user-pool-id YOUR_POOL_ID
+
    ```
 
-# Verify configuration
+## Verify configuration
 
    aws cognito-idp describe-user-pool --user-pool-id YOUR_POOL_ID
 
@@ -966,20 +1037,21 @@ expect(bedarf.holzbauAnzahl).toBe(2);
 
    ```bash
 
-# Check what's using port 8080
+## Check what's using port 8080
 
    lsof -i :8080
 
-# Kill process
+## Kill process
 
    kill -9 PID
+
    ```
 
-# Check what's using port 8080
+## Check what's using port 8080
 
    lsof -i :8080
 
-# Kill process
+## Kill process
 
    kill -9 PID
 

@@ -84,6 +84,7 @@ mvn spring-boot:run
 cd frontend
 npm install
 npm start
+
 ```
 
 ## Clone repository

@@ -28,30 +28,6 @@ This document defines all coding standards, patterns, and best practices for the
 ### Package Structure
 
 ```
-backend/src/main/java/com/bau/
-├── adapter/
-│   ├── in/                    # Driving adapters
-│   │   ├── web/              # REST controllers + DTOs
-│   │   └── event/            # Event listeners
-│   └── out/                  # Driven adapters
-│       ├── persistence/      # Database repositories + entities
-│       ├── external/         # External API clients
-│       └── messaging/        # Message brokers
-├── application/
-│   ├── domain/              # Domain entities + business logic
-│   ├── usecase/             # Use case implementations
-│   └── port/                # Port interfaces
-│       ├── in/              # Input ports (use case interfaces)
-│       └── out/             # Output ports (repository interfaces)
-└── shared/
-
-```
-├── config/              # Configuration classes
-├── util/                # Utility classes
-└── exception/           # Custom exceptions
-```
-
-```
 
 backend/src/main/java/com/bau/
 ├── adapter/
@@ -71,11 +47,39 @@ backend/src/main/java/com/bau/
 └── shared/
 
 ```
+
 ├── config/              # Configuration classes
 ├── util/                # Utility classes
 └── exception/           # Custom exceptions
+
 ```
 
+```
+
+backend/src/main/java/com/bau/
+├── adapter/
+│   ├── in/                    # Driving adapters
+│   │   ├── web/              # REST controllers + DTOs
+│   │   └── event/            # Event listeners
+│   └── out/                  # Driven adapters
+│       ├── persistence/      # Database repositories + entities
+│       ├── external/         # External API clients
+│       └── messaging/        # Message brokers
+├── application/
+│   ├── domain/              # Domain entities + business logic
+│   ├── usecase/             # Use case implementations
+│   └── port/                # Port interfaces
+│       ├── in/              # Input ports (use case interfaces)
+│       └── out/             # Output ports (repository interfaces)
+└── shared/
+
+```
+
+├── config/              # Configuration classes
+├── util/                # Utility classes
+└── exception/           # Custom exceptions
+
+```
 
 ```
 
@@ -90,51 +94,61 @@ backend/src/main/java/com/bau/
 #### Domain Entity Template
 
 ```java
-public class {EntityName} {
-
-```
-private UUID id;
-private UUID betriebId;
-// other fields
-```
-
-
-```
-// Business logic methods
-public boolean isValid{BusinessRule}() {
-    // validation logic
-}
-```
-
-
-```
-// No getters/setters in domain entities
-// Use constructor or builder pattern
-```
-
-}
-```
 
 public class {EntityName} {
 
 ```
+
 private UUID id;
 private UUID betriebId;
 // other fields
-```
-
 
 ```
+
+```
+
 // Business logic methods
 public boolean isValid{BusinessRule}() {
     // validation logic
 }
-```
-
 
 ```
+
+```
+
 // No getters/setters in domain entities
 // Use constructor or builder pattern
+
+```
+
+}
+
+```
+
+public class {EntityName} {
+
+```
+
+private UUID id;
+private UUID betriebId;
+// other fields
+
+```
+
+```
+
+// Business logic methods
+public boolean isValid{BusinessRule}() {
+    // validation logic
+}
+
+```
+
+```
+
+// No getters/setters in domain entities
+// Use constructor or builder pattern
+
 ```
 
 }
@@ -148,99 +162,117 @@ public boolean isValid{BusinessRule}() {
 #### Use Case Template
 
 ```java
-@Service
-@Slf4j
-public class {Action}{EntityName}UseCase {
-
-```
-private static final Logger log = LoggerFactory.getLogger({Action}{EntityName}UseCase.class);
-```
-
-
-```
-private final {EntityName}Repository {entityName}Repository;
-private final {EntityName}Mapper {entityName}Mapper;
-```
-
-
-```
-public Optional<{EntityName}> execute({Action}{EntityName}Request request) {
-    log.debug("Processing {action} for {entityName}: {}", request.getId());
-```
-
-
-```
-{EntityName} {entityName} = {entityName}Mapper.toDomain(request);
-```
-
-
-```
-// Business validation
-if (!{entityName}.isValid{BusinessRule}()) {
-    log.warn("Invalid {businessRule} for {entityName}: {}", request.getId());
-    return Optional.empty();
-}
-```
-
-
-```
-{EntityName} saved{EntityName} = {entityName}Repository.save({entityName});
-log.info("Successfully {action} {entityName} with id: {}", saved{EntityName}.getId());
-```
-
-
-```
-return Optional.of(saved{EntityName});
-}
-```
-
-}
-```
 
 @Service
 @Slf4j
 public class {Action}{EntityName}UseCase {
 
 ```
+
 private static final Logger log = LoggerFactory.getLogger({Action}{EntityName}UseCase.class);
-```
-
 
 ```
+
+```
+
 private final {EntityName}Repository {entityName}Repository;
 private final {EntityName}Mapper {entityName}Mapper;
-```
-
 
 ```
+
+```
+
 public Optional<{EntityName}> execute({Action}{EntityName}Request request) {
     log.debug("Processing {action} for {entityName}: {}", request.getId());
-```
-
 
 ```
+
+```
+
 {EntityName} {entityName} = {entityName}Mapper.toDomain(request);
-```
-
 
 ```
+
+```
+
 // Business validation
 if (!{entityName}.isValid{BusinessRule}()) {
     log.warn("Invalid {businessRule} for {entityName}: {}", request.getId());
     return Optional.empty();
 }
-```
-
 
 ```
+
+```
+
 {EntityName} saved{EntityName} = {entityName}Repository.save({entityName});
 log.info("Successfully {action} {entityName} with id: {}", saved{EntityName}.getId());
-```
-
 
 ```
+
+```
+
 return Optional.of(saved{EntityName});
 }
+
+```
+
+}
+
+```
+
+@Service
+@Slf4j
+public class {Action}{EntityName}UseCase {
+
+```
+
+private static final Logger log = LoggerFactory.getLogger({Action}{EntityName}UseCase.class);
+
+```
+
+```
+
+private final {EntityName}Repository {entityName}Repository;
+private final {EntityName}Mapper {entityName}Mapper;
+
+```
+
+```
+
+public Optional<{EntityName}> execute({Action}{EntityName}Request request) {
+    log.debug("Processing {action} for {entityName}: {}", request.getId());
+
+```
+
+```
+
+{EntityName} {entityName} = {entityName}Mapper.toDomain(request);
+
+```
+
+```
+
+// Business validation
+if (!{entityName}.isValid{BusinessRule}()) {
+    log.warn("Invalid {businessRule} for {entityName}: {}", request.getId());
+    return Optional.empty();
+}
+
+```
+
+```
+
+{EntityName} saved{EntityName} = {entityName}Repository.save({entityName});
+log.info("Successfully {action} {entityName} with id: {}", saved{EntityName}.getId());
+
+```
+
+```
+
+return Optional.of(saved{EntityName});
+}
+
 ```
 
 }
@@ -254,51 +286,58 @@ return Optional.of(saved{EntityName});
 #### Controller Template
 
 ```java
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
 public class {EntityName}ApiController implements {EntityName}Api {
 
-
 ```
+
 private final {EntityName}UseCase {entityName}UseCase;
 private final {EntityName}WebMapper {entityName}WebMapper;
-```
-
 
 ```
+
+```
+
 @Override
 public ResponseEntity<{EntityName}ResponseDto> create{EntityName}({EntityName}CreateRequestDto request) {
     log.debug("Creating {entityName}: {}", request);
-```
-
 
 ```
+
+```
+
 Optional<{EntityName}> {entityName}Opt = {entityName}UseCase.create{EntityName}(request);
-```
-
 
 ```
+
+```
+
 if ({entityName}Opt.isEmpty()) {
     log.warn("{EntityName} creation failed");
     return ResponseEntity.badRequest().build();
 }
-```
-
 
 ```
+
+```
+
 {EntityName}ResponseDto response = {entityName}WebMapper.toResponseDto({entityName}Opt.get());
 log.info("Successfully created {entityName} with id: {}", {entityName}Opt.get().getId());
-```
-
 
 ```
+
+```
+
 return ResponseEntity.status(HttpStatus.CREATED).body(response);
 }
-```
-
 
 ```
+
+```
+
 @Override
 public ResponseEntity<List<{EntityName}ResponseDto>> getAll{EntityName}s(/*pagination params*/) {
     List<{EntityName}> {entityName}s = {entityName}UseCase.getAll{EntityName}s();
@@ -307,14 +346,17 @@ public ResponseEntity<List<{EntityName}ResponseDto>> getAll{EntityName}s(/*pagin
         .toList();
     return ResponseEntity.ok(response);
 }
-```
-
 
 ```
+
+```
+
 // ... other CRUD operations from generated {EntityName}Api interface
+
 ```
 
 }
+
 ```
 
 @RestController
@@ -322,46 +364,52 @@ public ResponseEntity<List<{EntityName}ResponseDto>> getAll{EntityName}s(/*pagin
 @Slf4j
 public class {EntityName}ApiController implements {EntityName}Api {
 
-
 ```
+
 private final {EntityName}UseCase {entityName}UseCase;
 private final {EntityName}WebMapper {entityName}WebMapper;
-```
-
 
 ```
+
+```
+
 @Override
 public ResponseEntity<{EntityName}ResponseDto> create{EntityName}({EntityName}CreateRequestDto request) {
     log.debug("Creating {entityName}: {}", request);
-```
-
 
 ```
+
+```
+
 Optional<{EntityName}> {entityName}Opt = {entityName}UseCase.create{EntityName}(request);
-```
-
 
 ```
+
+```
+
 if ({entityName}Opt.isEmpty()) {
     log.warn("{EntityName} creation failed");
     return ResponseEntity.badRequest().build();
 }
-```
-
 
 ```
+
+```
+
 {EntityName}ResponseDto response = {entityName}WebMapper.toResponseDto({entityName}Opt.get());
 log.info("Successfully created {entityName} with id: {}", {entityName}Opt.get().getId());
-```
-
 
 ```
+
+```
+
 return ResponseEntity.status(HttpStatus.CREATED).body(response);
 }
-```
-
 
 ```
+
+```
+
 @Override
 public ResponseEntity<List<{EntityName}ResponseDto>> getAll{EntityName}s(/*pagination params*/) {
     List<{EntityName}> {entityName}s = {entityName}UseCase.getAll{EntityName}s();
@@ -370,11 +418,13 @@ public ResponseEntity<List<{EntityName}ResponseDto>> getAll{EntityName}s(/*pagin
         .toList();
     return ResponseEntity.ok(response);
 }
-```
-
 
 ```
+
+```
+
 // ... other CRUD operations from generated {EntityName}Api interface
+
 ```
 
 }
@@ -388,25 +438,31 @@ public ResponseEntity<List<{EntityName}ResponseDto>> getAll{EntityName}s(/*pagin
 #### Repository Interface Template
 
 ```java
+
 public interface {EntityName}Repository {
 
 ```
+
 {EntityName} save({EntityName} {entityName});
 Optional<{EntityName}> findById(UUID id);
 List<{EntityName}> findByBetriebId(UUID betriebId);
 // other query methods
+
 ```
 
 }
+
 ```
 
 public interface {EntityName}Repository {
 
 ```
+
 {EntityName} save({EntityName} {entityName});
 Optional<{EntityName}> findById(UUID id);
 List<{EntityName}> findByBetriebId(UUID betriebId);
 // other query methods
+
 ```
 
 }
@@ -420,42 +476,50 @@ List<{EntityName}> findByBetriebId(UUID betriebId);
 #### JPA Entity Template
 
 ```java
+
 @Entity
 @Table(name = "{tableName}")
 public class {EntityName}Entity {
 
 ```
+
 @Id
 @GeneratedValue(strategy = GenerationType.UUID)
 private UUID id;
-```
-
 
 ```
+
+```
+
 @Column(name = "betrieb_id")
 private UUID betriebId;
-```
-
 
 ```
+
+```
+
 // other fields with proper column mappings
-```
-
 
 ```
+
+```
+
 @CreatedDate
 @Column(name = "created_at")
 private LocalDateTime createdAt;
-```
-
 
 ```
+
+```
+
 @LastModifiedDate
 @Column(name = "updated_at")
 private LocalDateTime updatedAt;
+
 ```
 
 }
+
 ```
 
 @Entity
@@ -463,34 +527,40 @@ private LocalDateTime updatedAt;
 public class {EntityName}Entity {
 
 ```
+
 @Id
 @GeneratedValue(strategy = GenerationType.UUID)
 private UUID id;
-```
-
 
 ```
+
+```
+
 @Column(name = "betrieb_id")
 private UUID betriebId;
-```
-
 
 ```
+
+```
+
 // other fields with proper column mappings
-```
-
 
 ```
+
+```
+
 @CreatedDate
 @Column(name = "created_at")
 private LocalDateTime createdAt;
-```
-
 
 ```
+
+```
+
 @LastModifiedDate
 @Column(name = "updated_at")
 private LocalDateTime updatedAt;
+
 ```
 
 }
@@ -504,20 +574,23 @@ private LocalDateTime updatedAt;
 #### Mapper Template
 
 ```java
+
 @Component
 public class {EntityName}Mapper {
 
 ```
+
 public {EntityName} toDomain(Create{EntityName}Request request) {
     {EntityName} {entityName} = new {EntityName}();
     {entityName}.setBetriebId(request.getBetriebId());
     // map other fields
     return {entityName};
 }
-```
-
 
 ```
+
+```
+
 public {EntityName}Response toResponse({EntityName} {entityName}) {
     {EntityName}Response response = new {EntityName}Response();
     response.setId({entityName}.getId());
@@ -525,25 +598,29 @@ public {EntityName}Response toResponse({EntityName} {entityName}) {
     // map other fields
     return response;
 }
+
 ```
 
 }
+
 ```
 
 @Component
 public class {EntityName}Mapper {
 
 ```
+
 public {EntityName} toDomain(Create{EntityName}Request request) {
     {EntityName} {entityName} = new {EntityName}();
     {entityName}.setBetriebId(request.getBetriebId());
     // map other fields
     return {entityName};
 }
-```
-
 
 ```
+
+```
+
 public {EntityName}Response toResponse({EntityName} {entityName}) {
     {EntityName}Response response = new {EntityName}Response();
     response.setId({entityName}.getId());
@@ -551,6 +628,7 @@ public {EntityName}Response toResponse({EntityName} {entityName}) {
     // map other fields
     return response;
 }
+
 ```
 
 }
@@ -605,17 +683,20 @@ import org.slf4j.LoggerFactory;
 public class ExampleService {
 
 ```
+
 private static final Logger log = LoggerFactory.getLogger(ExampleService.class);
-```
-
 
 ```
+
+```
+
 public void processData(String data) {
     log.debug("Processing data: {}", data);
-```
-
 
 ```
+
+```
+
 try {
     // processing logic
     log.info("Successfully processed data: {}", data);
@@ -624,9 +705,11 @@ try {
     throw e;
 }
 }
+
 ```
 
 }
+
 ```
 
 import org.slf4j.Logger;
@@ -636,17 +719,20 @@ import org.slf4j.LoggerFactory;
 public class ExampleService {
 
 ```
+
 private static final Logger log = LoggerFactory.getLogger(ExampleService.class);
-```
-
 
 ```
+
+```
+
 public void processData(String data) {
     log.debug("Processing data: {}", data);
-```
-
 
 ```
+
+```
+
 try {
     // processing logic
     log.info("Successfully processed data: {}", data);
@@ -655,6 +741,7 @@ try {
     throw e;
 }
 }
+
 ```
 
 }
@@ -844,10 +931,12 @@ try {
   imports: [
 
 ```
+
 CommonModule,
 MatCardModule,
 MatButtonModule,
 // other Material modules
+
 ```
 
   ],
@@ -855,23 +944,26 @@ MatButtonModule,
   template: `
 
 ```
+
 <mat-card class="p-6 bg-white shadow-lg rounded-lg">
   <mat-card-header class="mb-4">
     <mat-card-title class="text-2xl font-bold text-gray-800">
       {{ title }}
     </mat-card-title>
   </mat-card-header>
-```
-
 
 ```
+
+```
+
 <mat-card-content class="space-y-4">
   <!-- content -->
 </mat-card-content>
-```
-
 
 ```
+
+```
+
 <mat-card-actions class="flex justify-end space-x-2">
   <button mat-button class="px-4 py-2 text-gray-600 hover:text-gray-800">
     Cancel
@@ -881,6 +973,7 @@ MatButtonModule,
   </button>
 </mat-card-actions>
 mat-card>
+
 ```
 
   `
@@ -896,7 +989,9 @@ export class {ComponentName}Component {
   constructor() {
 
 ```
+
 this.load{Data}();
+
 ```
 
   }
@@ -904,12 +999,14 @@ this.load{Data}();
   private async load{Data}(): Promise<void> {
 
 ```
+
 this.loading.set(true);
 this.error.set(null);
-```
-
 
 ```
+
+```
+
 try {
   const result = await this.{serviceName}.get{Data}();
   this.{data}.set(result);
@@ -919,10 +1016,12 @@ try {
 } finally {
   this.loading.set(false);
 }
+
 ```
 
   }
 }
+
 ```
 
 @Component({
@@ -931,10 +1030,12 @@ try {
   imports: [
 
 ```
+
 CommonModule,
 MatCardModule,
 MatButtonModule,
 // other Material modules
+
 ```
 
   ],
@@ -942,23 +1043,26 @@ MatButtonModule,
   template: `
 
 ```
+
 <mat-card class="p-6 bg-white shadow-lg rounded-lg">
   <mat-card-header class="mb-4">
     <mat-card-title class="text-2xl font-bold text-gray-800">
       {{ title }}
     </mat-card-title>
   </mat-card-header>
-```
-
 
 ```
+
+```
+
 <mat-card-content class="space-y-4">
   <!-- content -->
 </mat-card-content>
-```
-
 
 ```
+
+```
+
 <mat-card-actions class="flex justify-end space-x-2">
   <button mat-button class="px-4 py-2 text-gray-600 hover:text-gray-800">
     Cancel
@@ -968,6 +1072,7 @@ MatButtonModule,
   </button>
 </mat-card-actions>
 mat-card>
+
 ```
 
   `
@@ -983,7 +1088,9 @@ export class {ComponentName}Component {
   constructor() {
 
 ```
+
 this.load{Data}();
+
 ```
 
   }
@@ -991,12 +1098,14 @@ this.load{Data}();
   private async load{Data}(): Promise<void> {
 
 ```
+
 this.loading.set(true);
 this.error.set(null);
-```
-
 
 ```
+
+```
+
 try {
   const result = await this.{serviceName}.get{Data}();
   this.{data}.set(result);
@@ -1006,6 +1115,7 @@ try {
 } finally {
   this.loading.set(false);
 }
+
 ```
 
   }
@@ -1020,6 +1130,7 @@ try {
 #### Service Template
 
 ```typescript
+
 @Injectable({ providedIn: 'root' })
 export class {EntityName}Service {
   private readonly http = inject(HttpClient);
@@ -1030,15 +1141,18 @@ export class {EntityName}Service {
   async get{EntityName}s(): Promise<{EntityName}[]> {
 
 ```
+
 const token = await this.authService.getIdToken();
 const headers = { Authorization: `Bearer ${token}` };
-```
-
 
 ```
+
+```
+
 return firstValueFrom(
   this.http.get<{EntityName}[]>(this.apiUrl, { headers })
 );
+
 ```
 
   }
@@ -1046,15 +1160,18 @@ return firstValueFrom(
   async create{EntityName}(request: Create{EntityName}Request): Promise<{EntityName}> {
 
 ```
+
 const token = await this.authService.getIdToken();
 const headers = { Authorization: `Bearer ${token}` };
-```
-
 
 ```
+
+```
+
 return firstValueFrom(
   this.http.post<{EntityName}>(this.apiUrl, request, { headers })
 );
+
 ```
 
   }
@@ -1062,19 +1179,23 @@ return firstValueFrom(
   async get{EntityName}ById(id: string): Promise<{EntityName}> {
 
 ```
+
 const token = await this.authService.getIdToken();
 const headers = { Authorization: `Bearer ${token}` };
-```
-
 
 ```
+
+```
+
 return firstValueFrom(
   this.http.get<{EntityName}>(`${this.apiUrl}/${id}`, { headers })
 );
+
 ```
 
   }
 }
+
 ```
 
 @Injectable({ providedIn: 'root' })
@@ -1087,15 +1208,18 @@ export class {EntityName}Service {
   async get{EntityName}s(): Promise<{EntityName}[]> {
 
 ```
+
 const token = await this.authService.getIdToken();
 const headers = { Authorization: `Bearer ${token}` };
-```
-
 
 ```
+
+```
+
 return firstValueFrom(
   this.http.get<{EntityName}[]>(this.apiUrl, { headers })
 );
+
 ```
 
   }
@@ -1103,15 +1227,18 @@ return firstValueFrom(
   async create{EntityName}(request: Create{EntityName}Request): Promise<{EntityName}> {
 
 ```
+
 const token = await this.authService.getIdToken();
 const headers = { Authorization: `Bearer ${token}` };
-```
-
 
 ```
+
+```
+
 return firstValueFrom(
   this.http.post<{EntityName}>(this.apiUrl, request, { headers })
 );
+
 ```
 
   }
@@ -1119,15 +1246,18 @@ return firstValueFrom(
   async get{EntityName}ById(id: string): Promise<{EntityName}> {
 
 ```
+
 const token = await this.authService.getIdToken();
 const headers = { Authorization: `Bearer ${token}` };
-```
-
 
 ```
+
+```
+
 return firstValueFrom(
   this.http.get<{EntityName}>(`${this.apiUrl}/${id}`, { headers })
 );
+
 ```
 
   }
@@ -1142,18 +1272,21 @@ return firstValueFrom(
 #### Form Component Template
 
 ```typescript
+
 @Component({
   selector: 'app-{entity-name}-form',
   standalone: true,
   imports: [
 
 ```
+
 CommonModule,
 ReactiveFormsModule,
 MatFormFieldModule,
 MatInputModule,
 MatButtonModule,
 MatCardModule,
+
 ```
 
   ],
@@ -1161,16 +1294,18 @@ MatCardModule,
   template: `
 
 ```
+
 <mat-card class="p-6 bg-white shadow-lg rounded-lg">
   <mat-card-header class="mb-4">
     <mat-card-title class="text-2xl font-bold text-gray-800">
       {{ isEditMode ? 'Edit' : 'Create' }} {EntityName}
     </mat-card-title>
   </mat-card-header>
-```
-
 
 ```
+
+```
+
 <mat-card-content>
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
     <mat-form-field class="w-full">
@@ -1180,15 +1315,17 @@ MatCardModule,
         Name is required
       </mat-error>
     </mat-form-field>
-```
-
 
 ```
+
+```
+
 <!-- other form fields -->
-```
-
 
 ```
+
+```
+
 <div class="flex justify-end space-x-2">
   <button type="button" mat-button
           class="px-4 py-2 text-gray-600 hover:text-gray-800"
@@ -1204,6 +1341,7 @@ MatCardModule,
 form>
 t-card-content>
 card>
+
 ```
 
   `
@@ -1216,8 +1354,10 @@ export class {EntityName}FormComponent {
   protected readonly form = new FormGroup({
 
 ```
+
 name: new FormControl('', [Validators.required]),
 // other form controls
+
 ```
 
   });
@@ -1228,7 +1368,9 @@ name: new FormControl('', [Validators.required]),
   constructor() {
 
 ```
+
 this.initializeForm();
+
 ```
 
   }
@@ -1236,11 +1378,13 @@ this.initializeForm();
   private initializeForm(): void {
 
 ```
+
 const id = this.route.snapshot.paramMap.get('id');
 if (id) {
   this.isEditMode.set(true);
   this.load{EntityName}(id);
 }
+
 ```
 
   }
@@ -1248,12 +1392,14 @@ if (id) {
   private async load{EntityName}(id: string): Promise<void> {
 
 ```
+
 try {
   const {entityName} = await this.{serviceName}.get{EntityName}ById(id);
   this.form.patchValue({entityName});
 } catch (err) {
   console.error('Error loading {entityName}:', err);
 }
+
 ```
 
   }
@@ -1261,38 +1407,44 @@ try {
   protected async onSubmit(): Promise<void> {
 
 ```
+
 if (this.form.invalid) return;
-```
-
 
 ```
+
+```
+
 this.loading.set(true);
-```
-
 
 ```
+
+```
+
 try {
   const request = this.form.value as Create{EntityName}Request;
-```
-
 
 ```
+
+```
+
 if (this.isEditMode()) {
   const id = this.route.snapshot.paramMap.get('id')!;
   await this.{serviceName}.update{EntityName}(id, request);
 } else {
   await this.{serviceName}.create{EntityName}(request);
 }
-```
-
 
 ```
+
+```
+
 this.router.navigate(['/{entityName}s']);
 catch (err) {
 console.error('Error saving {entityName}:', err);
 finally {
 this.loading.set(false);
 }
+
 ```
 
   }
@@ -1300,11 +1452,14 @@ this.loading.set(false);
   protected onCancel(): void {
 
 ```
+
 this.router.navigate(['/{entityName}s']);
+
 ```
 
   }
 }
+
 ```
 
 @Component({
@@ -1313,12 +1468,14 @@ this.router.navigate(['/{entityName}s']);
   imports: [
 
 ```
+
 CommonModule,
 ReactiveFormsModule,
 MatFormFieldModule,
 MatInputModule,
 MatButtonModule,
 MatCardModule,
+
 ```
 
   ],
@@ -1326,16 +1483,18 @@ MatCardModule,
   template: `
 
 ```
+
 <mat-card class="p-6 bg-white shadow-lg rounded-lg">
   <mat-card-header class="mb-4">
     <mat-card-title class="text-2xl font-bold text-gray-800">
       {{ isEditMode ? 'Edit' : 'Create' }} {EntityName}
     </mat-card-title>
   </mat-card-header>
-```
-
 
 ```
+
+```
+
 <mat-card-content>
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
     <mat-form-field class="w-full">
@@ -1345,15 +1504,17 @@ MatCardModule,
         Name is required
       </mat-error>
     </mat-form-field>
-```
-
 
 ```
+
+```
+
 <!-- other form fields -->
-```
-
 
 ```
+
+```
+
 <div class="flex justify-end space-x-2">
   <button type="button" mat-button
           class="px-4 py-2 text-gray-600 hover:text-gray-800"
@@ -1369,6 +1530,7 @@ MatCardModule,
 form>
 t-card-content>
 card>
+
 ```
 
   `
@@ -1381,8 +1543,10 @@ export class {EntityName}FormComponent {
   protected readonly form = new FormGroup({
 
 ```
+
 name: new FormControl('', [Validators.required]),
 // other form controls
+
 ```
 
   });
@@ -1393,7 +1557,9 @@ name: new FormControl('', [Validators.required]),
   constructor() {
 
 ```
+
 this.initializeForm();
+
 ```
 
   }
@@ -1401,11 +1567,13 @@ this.initializeForm();
   private initializeForm(): void {
 
 ```
+
 const id = this.route.snapshot.paramMap.get('id');
 if (id) {
   this.isEditMode.set(true);
   this.load{EntityName}(id);
 }
+
 ```
 
   }
@@ -1413,12 +1581,14 @@ if (id) {
   private async load{EntityName}(id: string): Promise<void> {
 
 ```
+
 try {
   const {entityName} = await this.{serviceName}.get{EntityName}ById(id);
   this.form.patchValue({entityName});
 } catch (err) {
   console.error('Error loading {entityName}:', err);
 }
+
 ```
 
   }
@@ -1426,38 +1596,44 @@ try {
   protected async onSubmit(): Promise<void> {
 
 ```
+
 if (this.form.invalid) return;
-```
-
 
 ```
+
+```
+
 this.loading.set(true);
-```
-
 
 ```
+
+```
+
 try {
   const request = this.form.value as Create{EntityName}Request;
-```
-
 
 ```
+
+```
+
 if (this.isEditMode()) {
   const id = this.route.snapshot.paramMap.get('id')!;
   await this.{serviceName}.update{EntityName}(id, request);
 } else {
   await this.{serviceName}.create{EntityName}(request);
 }
-```
-
 
 ```
+
+```
+
 this.router.navigate(['/{entityName}s']);
 catch (err) {
 console.error('Error saving {entityName}:', err);
 finally {
 this.loading.set(false);
 }
+
 ```
 
   }
@@ -1465,7 +1641,9 @@ this.loading.set(false);
   protected onCancel(): void {
 
 ```
+
 this.router.navigate(['/{entityName}s']);
+
 ```
 
   }
@@ -1582,110 +1760,113 @@ We use a modern OKLCH-based color system that provides:
 ```css
 :root {
   /*Core Colors*/
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.1450 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.1450 0 0);
+--background: oklch(1 0 0);
+--foreground: oklch(0.1450 0 0);
+--card: oklch(1 0 0);
+--card-foreground: oklch(0.1450 0 0);
 
   /*Brand Colors*/
-  --primary: oklch(0.6324 0.1363 157.8607);
-  --primary-foreground: oklch(0.9850 0 0);
-  --secondary: oklch(0.9700 0 0);
-  --secondary-foreground: oklch(0.2050 0 0);
+--primary: oklch(0.6324 0.1363 157.8607);
+--primary-foreground: oklch(0.9850 0 0);
+--secondary: oklch(0.9700 0 0);
+--secondary-foreground: oklch(0.2050 0 0);
 
   /*State Colors*/
-  --destructive: oklch(0.5770 0.2450 27.3250);
-  --destructive-foreground: oklch(1 0 0);
-  --muted: oklch(0.9700 0 0);
-  --muted-foreground: oklch(0.5560 0 0);
+--destructive: oklch(0.5770 0.2450 27.3250);
+--destructive-foreground: oklch(1 0 0);
+--muted: oklch(0.9700 0 0);
+--muted-foreground: oklch(0.5560 0 0);
 
   /*UI Elements*/
-  --border: oklch(0.9220 0 0);
-  --input: oklch(0.9220 0 0);
-  --ring: oklch(0.7080 0 0);
+--border: oklch(0.9220 0 0);
+--input: oklch(0.9220 0 0);
+--ring: oklch(0.7080 0 0);
 
   /*Sidebar*/
-  --sidebar: oklch(0.9850 0 0);
-  --sidebar-foreground: oklch(0.1450 0 0);
-  --sidebar-primary: oklch(0.2050 0 0);
-  --sidebar-primary-foreground: oklch(0.9850 0 0);
+--sidebar: oklch(0.9850 0 0);
+--sidebar-foreground: oklch(0.1450 0 0);
+--sidebar-primary: oklch(0.2050 0 0);
+--sidebar-primary-foreground: oklch(0.9850 0 0);
 
   /*Typography*/
-  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
-  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+--font-sans:
+    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+--font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+--font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
   /*Spacing & Borders*/
-  --radius: 0.625rem;
+--radius: 0.625rem;
 
   /*Shadows*/
-  --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
-  --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
-  --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
+--shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+--shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
+--shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
 }
 
 .dark {
-  --background: oklch(0.1450 0 0);
-  --foreground: oklch(0.9850 0 0);
-  --card: oklch(0.2050 0 0);
-  --card-foreground: oklch(0.9850 0 0);
-  --primary: oklch(0.6324 0.1363 157.8607);
-  --primary-foreground: oklch(0.2535 0.0341 296.6556);
+--background: oklch(0.1450 0 0);
+--foreground: oklch(0.9850 0 0);
+--card: oklch(0.2050 0 0);
+--card-foreground: oklch(0.9850 0 0);
+--primary: oklch(0.6324 0.1363 157.8607);
+--primary-foreground: oklch(0.2535 0.0341 296.6556);
   /*... other dark mode colors*/
 }
+
 ```
 
 :root {
   /*Core Colors*/
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.1450 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.1450 0 0);
+--background: oklch(1 0 0);
+--foreground: oklch(0.1450 0 0);
+--card: oklch(1 0 0);
+--card-foreground: oklch(0.1450 0 0);
 
   /*Brand Colors*/
-  --primary: oklch(0.6324 0.1363 157.8607);
-  --primary-foreground: oklch(0.9850 0 0);
-  --secondary: oklch(0.9700 0 0);
-  --secondary-foreground: oklch(0.2050 0 0);
+--primary: oklch(0.6324 0.1363 157.8607);
+--primary-foreground: oklch(0.9850 0 0);
+--secondary: oklch(0.9700 0 0);
+--secondary-foreground: oklch(0.2050 0 0);
 
   /*State Colors*/
-  --destructive: oklch(0.5770 0.2450 27.3250);
-  --destructive-foreground: oklch(1 0 0);
-  --muted: oklch(0.9700 0 0);
-  --muted-foreground: oklch(0.5560 0 0);
+--destructive: oklch(0.5770 0.2450 27.3250);
+--destructive-foreground: oklch(1 0 0);
+--muted: oklch(0.9700 0 0);
+--muted-foreground: oklch(0.5560 0 0);
 
   /*UI Elements*/
-  --border: oklch(0.9220 0 0);
-  --input: oklch(0.9220 0 0);
-  --ring: oklch(0.7080 0 0);
+--border: oklch(0.9220 0 0);
+--input: oklch(0.9220 0 0);
+--ring: oklch(0.7080 0 0);
 
   /*Sidebar*/
-  --sidebar: oklch(0.9850 0 0);
-  --sidebar-foreground: oklch(0.1450 0 0);
-  --sidebar-primary: oklch(0.2050 0 0);
-  --sidebar-primary-foreground: oklch(0.9850 0 0);
+--sidebar: oklch(0.9850 0 0);
+--sidebar-foreground: oklch(0.1450 0 0);
+--sidebar-primary: oklch(0.2050 0 0);
+--sidebar-primary-foreground: oklch(0.9850 0 0);
 
   /*Typography*/
-  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
-  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+--font-sans:
+    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+--font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+--font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
   /*Spacing & Borders*/
-  --radius: 0.625rem;
+--radius: 0.625rem;
 
   /*Shadows*/
-  --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
-  --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
-  --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
+--shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+--shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
+--shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
 }
 
 .dark {
-  --background: oklch(0.1450 0 0);
-  --foreground: oklch(0.9850 0 0);
-  --card: oklch(0.2050 0 0);
-  --card-foreground: oklch(0.9850 0 0);
-  --primary: oklch(0.6324 0.1363 157.8607);
-  --primary-foreground: oklch(0.2535 0.0341 296.6556);
+--background: oklch(0.1450 0 0);
+--foreground: oklch(0.9850 0 0);
+--card: oklch(0.2050 0 0);
+--card-foreground: oklch(0.9850 0 0);
+--primary: oklch(0.6324 0.1363 157.8607);
+--primary-foreground: oklch(0.2535 0.0341 296.6556);
   /*... other dark mode colors*/
 }
 
@@ -1698,6 +1879,7 @@ We use a modern OKLCH-based color system that provides:
 #### Tailwind Integration
 
 ```javascript
+
 // tailwind.config.js
 module.exports = {
   content: ['./src/**/*.{html,ts}'],
@@ -1705,6 +1887,7 @@ module.exports = {
   theme: {
 
 ```
+
 extend: {
   colors: {
     background: 'oklch(var(--background) / <alpha-value>)',
@@ -1758,11 +1941,13 @@ extend: {
     lg: 'var(--shadow-lg)'
   }
 }
+
 ```
 
   },
   plugins: []
 }
+
 ```
 
 // tailwind.config.js
@@ -1772,6 +1957,7 @@ module.exports = {
   theme: {
 
 ```
+
 extend: {
   colors: {
     background: 'oklch(var(--background) / <alpha-value>)',
@@ -1825,6 +2011,7 @@ extend: {
     lg: 'var(--shadow-lg)'
   }
 }
+
 ```
 
   },
@@ -1840,6 +2027,7 @@ extend: {
 #### Angular Material Theme Integration
 
 ```scss
+
 // styles/material-theme.scss
 @use '@angular/material' as mat;
 
@@ -1862,6 +2050,7 @@ $custom-primary: mat.define-palette((
   contrast: (
 
 ```
+
 50: oklch(var(--primary-foreground)),
 100: oklch(var(--primary-foreground)),
 200: oklch(var(--primary-foreground)),
@@ -1876,6 +2065,7 @@ A100: oklch(var(--primary-foreground)),
 A200: oklch(var(--primary-foreground)),
 A400: oklch(var(--primary-foreground)),
 A700: oklch(var(--primary-foreground))
+
 ```
 
   )
@@ -1885,9 +2075,11 @@ $theme: mat.define-light-theme((
   color: (
 
 ```
+
 primary: $custom-primary,
 accent: $custom-primary,
 warn: mat.define-palette(mat.$red-palette)
+
 ```
 
   ),
@@ -1896,6 +2088,7 @@ warn: mat.define-palette(mat.$red-palette)
 ));
 
 @include mat.all-component-themes($theme);
+
 ```
 
 // styles/material-theme.scss
@@ -1920,6 +2113,7 @@ $custom-primary: mat.define-palette((
   contrast: (
 
 ```
+
 50: oklch(var(--primary-foreground)),
 100: oklch(var(--primary-foreground)),
 200: oklch(var(--primary-foreground)),
@@ -1934,6 +2128,7 @@ A100: oklch(var(--primary-foreground)),
 A200: oklch(var(--primary-foreground)),
 A400: oklch(var(--primary-foreground)),
 A700: oklch(var(--primary-foreground))
+
 ```
 
   )
@@ -1943,9 +2138,11 @@ $theme: mat.define-light-theme((
   color: (
 
 ```
+
 primary: $custom-primary,
 accent: $custom-primary,
 warn: mat.define-palette(mat.$red-palette)
+
 ```
 
   ),
@@ -2001,12 +2198,14 @@ warn: mat.define-palette(mat.$red-palette)
   <mat-card-header class="mb-4">
 
 ```
+
 <mat-card-title class="text-2xl font-bold text-card-foreground">
   {{ title }}
 </mat-card-title>
 <mat-card-subtitle class="text-muted-foreground">
   {{ subtitle }}
 </mat-card-subtitle>
+
 ```
 
   </mat-card-header>
@@ -2017,8 +2216,10 @@ warn: mat.define-palette(mat.$red-palette)
   <mat-form-field class="w-full">
 
 ```
+
 <mat-label>Field</mat-label>
 <input matInput class="text-lg bg-input border-border">
+
 ```
 
   </mat-form-field>
@@ -2029,14 +2230,17 @@ warn: mat.define-palette(mat.$red-palette)
   <button mat-raised-button
 
 ```
+
 class="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-2 rounded-md transition-colors">
 y Action
+
 ```
 
   </button>
   <button mat-button
 
 ```
+
 class="text-muted-foreground hover:text-foreground px-4 py-2 rounded-md transition-colors">
 
 ```
@@ -2045,6 +2249,7 @@ class="text-muted-foreground hover:text-foreground px-4 py-2 rounded-md transiti
   <button mat-raised-button
 
 ```
+
 class="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 py-2 rounded-md transition-colors">
 
 ```
@@ -2057,6 +2262,7 @@ class="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 p
   <nav class="p-4 space-y-2">
 
 ```
+
 <a class="flex items-center px-3 py-2 rounded-md bg-sidebar-accent text-sidebar-accent-foreground hover:bg-sidebar-accent/80">
   <mat-icon class="mr-3">dashboard</mat-icon>
   Dashboard
@@ -2065,10 +2271,12 @@ class="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 p
   <mat-icon class="mr-3">business</mat-icon>
   Bedarfs
 </a>
+
 ```
 
   </nav>
 </aside>
+
 ```
 
 <!-- Card with Design System tokens -->
@@ -2076,12 +2284,14 @@ class="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 p
   <mat-card-header class="mb-4">
 
 ```
+
 <mat-card-title class="text-2xl font-bold text-card-foreground">
   {{ title }}
 </mat-card-title>
 <mat-card-subtitle class="text-muted-foreground">
   {{ subtitle }}
 </mat-card-subtitle>
+
 ```
 
   </mat-card-header>
@@ -2092,8 +2302,10 @@ class="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 p
   <mat-form-field class="w-full">
 
 ```
+
 <mat-label>Field</mat-label>
 <input matInput class="text-lg bg-input border-border">
+
 ```
 
   </mat-form-field>
@@ -2104,14 +2316,17 @@ class="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 p
   <button mat-raised-button
 
 ```
+
 class="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-2 rounded-md transition-colors">
 y Action
+
 ```
 
   </button>
   <button mat-button
 
 ```
+
 class="text-muted-foreground hover:text-foreground px-4 py-2 rounded-md transition-colors">
 
 ```
@@ -2120,6 +2335,7 @@ class="text-muted-foreground hover:text-foreground px-4 py-2 rounded-md transiti
   <button mat-raised-button
 
 ```
+
 class="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 py-2 rounded-md transition-colors">
 
 ```
@@ -2132,6 +2348,7 @@ class="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 p
   <nav class="p-4 space-y-2">
 
 ```
+
 <a class="flex items-center px-3 py-2 rounded-md bg-sidebar-accent text-sidebar-accent-foreground hover:bg-sidebar-accent/80">
   <mat-icon class="mr-3">dashboard</mat-icon>
   Dashboard
@@ -2140,6 +2357,7 @@ class="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 p
   <mat-icon class="mr-3">business</mat-icon>
   Bedarfs
 </a>
+
 ```
 
   </nav>
@@ -2154,12 +2372,15 @@ class="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 p
 ### Responsive Design Patterns
 
 ```html
+
 <!-- Mobile-first responsive layout -->
 <div class="container mx-auto px-4 py-6">
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 
 ```
+
 <!-- Cards -->
+
 ```
 
   </div>
@@ -2170,24 +2391,27 @@ class="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 p
   <div class="max-w-7xl mx-auto px-4">
 
 ```
+
 <div class="flex justify-between h-16">
   <div class="flex items-center">
     <span class="text-xl font-bold text-gray-800">Bau</span>
   </div>
-```
-
 
 ```
+
+```
+
 <!-- Mobile menu button -->
 <div class="md:hidden flex items-center">
   <button mat-icon-button (click)="toggleMobileMenu()">
     <mat-icon>menu</mat-icon>
   </button>
 </div>
-```
-
 
 ```
+
+```
+
 <!-- Desktop menu -->
 <div class="hidden md:flex items-center space-x-4">
   <a mat-button routerLink="/bedarf" class="text-gray-700 hover:text-gray-900">
@@ -2198,10 +2422,12 @@ class="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 p
   </a>
 </div>
 div>
+
 ```
 
   </div>
 </nav>
+
 ```
 
 <!-- Mobile-first responsive layout -->
@@ -2209,7 +2435,9 @@ div>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 
 ```
+
 <!-- Cards -->
+
 ```
 
   </div>
@@ -2220,24 +2448,27 @@ div>
   <div class="max-w-7xl mx-auto px-4">
 
 ```
+
 <div class="flex justify-between h-16">
   <div class="flex items-center">
     <span class="text-xl font-bold text-gray-800">Bau</span>
   </div>
-```
-
 
 ```
+
+```
+
 <!-- Mobile menu button -->
 <div class="md:hidden flex items-center">
   <button mat-icon-button (click)="toggleMobileMenu()">
     <mat-icon>menu</mat-icon>
   </button>
 </div>
-```
-
 
 ```
+
+```
+
 <!-- Desktop menu -->
 <div class="hidden md:flex items-center space-x-4">
   <a mat-button routerLink="/bedarf" class="text-gray-700 hover:text-gray-900">
@@ -2248,6 +2479,7 @@ div>
   </a>
 </div>
 div>
+
 ```
 
   </div>
@@ -2284,30 +2516,6 @@ div>
 ### Package Structure
 
 ```
-backend/src/main/java/com/bau/
-├── adapter/
-│   ├── in/                    # Driving adapters
-│   │   ├── web/              # REST controllers + DTOs
-│   │   └── event/            # Event listeners
-│   └── out/                  # Driven adapters
-│       ├── persistence/      # Database repositories + entities
-│       ├── external/         # External API clients
-│       └── messaging/        # Message brokers
-├── application/
-│   ├── domain/              # Domain entities + business logic
-│   ├── usecase/             # Use case implementations
-│   └── port/                # Port interfaces
-│       ├── in/              # Input ports (use case interfaces)
-│       └── out/             # Output ports (repository interfaces)
-└── shared/
-
-```
-├── config/              # Configuration classes
-├── util/                # Utility classes
-└── exception/           # Custom exceptions
-```
-
-```
 
 backend/src/main/java/com/bau/
 ├── adapter/
@@ -2327,11 +2535,39 @@ backend/src/main/java/com/bau/
 └── shared/
 
 ```
+
 ├── config/              # Configuration classes
 ├── util/                # Utility classes
 └── exception/           # Custom exceptions
+
 ```
 
+```
+
+backend/src/main/java/com/bau/
+├── adapter/
+│   ├── in/                    # Driving adapters
+│   │   ├── web/              # REST controllers + DTOs
+│   │   └── event/            # Event listeners
+│   └── out/                  # Driven adapters
+│       ├── persistence/      # Database repositories + entities
+│       ├── external/         # External API clients
+│       └── messaging/        # Message brokers
+├── application/
+│   ├── domain/              # Domain entities + business logic
+│   ├── usecase/             # Use case implementations
+│   └── port/                # Port interfaces
+│       ├── in/              # Input ports (use case interfaces)
+│       └── out/             # Output ports (repository interfaces)
+└── shared/
+
+```
+
+├── config/              # Configuration classes
+├── util/                # Utility classes
+└── exception/           # Custom exceptions
+
+```
 
 ```
 
@@ -2387,130 +2623,149 @@ backend/src/main/java/com/bau/
 @ExtendWith(MockitoExtension.class)
 class {Action}{EntityName}UseCaseTest {
 
-
 ```
+
 @Mock
 private {EntityName}Repository {entityName}Repository;
-```
-
 
 ```
+
+```
+
 @Mock
 private {EntityName}Mapper {entityName}Mapper;
-```
-
 
 ```
+
+```
+
 @InjectMocks
 private {Action}{EntityName}UseCase useCase;
-```
-
 
 ```
+
+```
+
 @Test
 void should{Action}{EntityName}_whenValidRequest() {
     // Given
     Create{EntityName}Request request = new Create{EntityName}Request();
     // setup request
-```
-
 
 ```
+
+```
+
 {EntityName} {entityName} = new {EntityName}();
 // setup domain object
-```
-
 
 ```
+
+```
+
 {EntityName} saved{EntityName} = new {EntityName}();
 saved{EntityName}.setId(UUID.randomUUID());
-```
-
 
 ```
+
+```
+
 when({entityName}Mapper.toDomain(request)).thenReturn({entityName});
 when({entityName}Repository.save({entityName})).thenReturn(saved{EntityName});
-```
-
 
 ```
+
+```
+
 // When
 Optional<{EntityName}> result = useCase.execute(request);
-```
-
 
 ```
+
+```
+
 // Then
 assertThat(result).isPresent();
 assertThat(result.get().getId()).isEqualTo(saved{EntityName}.getId());
 verify({entityName}Repository).save({entityName});
 }
+
 ```
 
 }
+
 ```
 
 @ExtendWith(MockitoExtension.class)
 class {Action}{EntityName}UseCaseTest {
 
-
 ```
+
 @Mock
 private {EntityName}Repository {entityName}Repository;
-```
-
 
 ```
+
+```
+
 @Mock
 private {EntityName}Mapper {entityName}Mapper;
-```
-
 
 ```
+
+```
+
 @InjectMocks
 private {Action}{EntityName}UseCase useCase;
-```
-
 
 ```
+
+```
+
 @Test
 void should{Action}{EntityName}_whenValidRequest() {
     // Given
     Create{EntityName}Request request = new Create{EntityName}Request();
     // setup request
-```
-
 
 ```
+
+```
+
 {EntityName} {entityName} = new {EntityName}();
 // setup domain object
-```
-
 
 ```
+
+```
+
 {EntityName} saved{EntityName} = new {EntityName}();
 saved{EntityName}.setId(UUID.randomUUID());
-```
-
 
 ```
+
+```
+
 when({entityName}Mapper.toDomain(request)).thenReturn({entityName});
 when({entityName}Repository.save({entityName})).thenReturn(saved{EntityName});
-```
-
 
 ```
+
+```
+
 // When
 Optional<{EntityName}> result = useCase.execute(request);
-```
-
 
 ```
+
+```
+
 // Then
 assertThat(result).isPresent();
 assertThat(result.get().getId()).isEqualTo(saved{EntityName}.getId());
 verify({entityName}Repository).save({entityName});
 }
+
 ```
 
 }
@@ -2554,24 +2809,28 @@ describe('{ComponentName}Component', () => {
   beforeEach(async () => {
 
 ```
+
 const spy = jasmine.createSpyObj('{ServiceName}', ['get{Data}']);
-```
-
 
 ```
+
+```
+
 await TestBed.configureTestingModule({
   imports: [{ComponentName}Component],
   providers: [
     { provide: {ServiceName}, useValue: spy }
   ]
 }).compileComponents();
-```
-
 
 ```
+
+```
+
 fixture = TestBed.createComponent({ComponentName}Component);
 component = fixture.componentInstance;
 {serviceName} = TestBed.inject({ServiceName}) as jasmine.SpyObj<{ServiceName}>;
+
 ```
 
   });
@@ -2579,7 +2838,9 @@ component = fixture.componentInstance;
   it('should create', () => {
 
 ```
+
 expect(component).toBeTruthy();
+
 ```
 
   });
@@ -2587,27 +2848,32 @@ expect(component).toBeTruthy();
   it('should load data on init', async () => {
 
 ```
+
 // Given
 const mockData = [{ id: '1', name: 'Test' }];
 {serviceName}.get{Data}.and.returnValue(Promise.resolve(mockData));
-```
-
 
 ```
+
+```
+
 // When
 fixture.detectChanges();
 await fixture.whenStable();
-```
-
 
 ```
+
+```
+
 // Then
 expect({serviceName}.get{Data}).toHaveBeenCalled();
 expect(component.{data}()).toEqual(mockData);
+
 ```
 
   });
 });
+
 ```
 
 describe('{ComponentName}Component', () => {
@@ -2618,24 +2884,28 @@ describe('{ComponentName}Component', () => {
   beforeEach(async () => {
 
 ```
+
 const spy = jasmine.createSpyObj('{ServiceName}', ['get{Data}']);
-```
-
 
 ```
+
+```
+
 await TestBed.configureTestingModule({
   imports: [{ComponentName}Component],
   providers: [
     { provide: {ServiceName}, useValue: spy }
   ]
 }).compileComponents();
-```
-
 
 ```
+
+```
+
 fixture = TestBed.createComponent({ComponentName}Component);
 component = fixture.componentInstance;
 {serviceName} = TestBed.inject({ServiceName}) as jasmine.SpyObj<{ServiceName}>;
+
 ```
 
   });
@@ -2643,7 +2913,9 @@ component = fixture.componentInstance;
   it('should create', () => {
 
 ```
+
 expect(component).toBeTruthy();
+
 ```
 
   });
@@ -2651,23 +2923,27 @@ expect(component).toBeTruthy();
   it('should load data on init', async () => {
 
 ```
+
 // Given
 const mockData = [{ id: '1', name: 'Test' }];
 {serviceName}.get{Data}.and.returnValue(Promise.resolve(mockData));
-```
-
 
 ```
+
+```
+
 // When
 fixture.detectChanges();
 await fixture.whenStable();
-```
-
 
 ```
+
+```
+
 // Then
 expect({serviceName}.get{Data}).toHaveBeenCalled();
 expect(component.{data}()).toEqual(mockData);
+
 ```
 
   });

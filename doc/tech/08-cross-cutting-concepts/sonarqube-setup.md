@@ -79,6 +79,7 @@ Add these secrets to your GitHub repository settings:
 
 1. **Start SonarQube with Docker:**```bash
    docker run -d --name sonarqube -p 9000:9000 sonarqube:latest
+
    ```
 
    docker run -d --name sonarqube -p 9000:9000 sonarqube:latest
@@ -86,54 +87,57 @@ Add these secrets to your GitHub repository settings:
    ```
 
 2.**Access SonarQube:**- URL: http://localhost:9000
-   - Default credentials: admin/admin
+- Default credentials: admin/admin
 
 3.**Create a project and get token:**- Create a new project manually
-   - Generate a user token
-   - Note the project key
+- Generate a user token
+- Note the project key
 
 4.**Run analysis:**```bash
 
 2.**Access SonarQube:**- URL: http://localhost:9000
-   - Default credentials: admin/admin
+- Default credentials: admin/admin
 
 3.**Create a project and get token:**- Create a new project manually
-   - Generate a user token
-   - Note the project key
+- Generate a user token
+- Note the project key
 
 4.**Run analysis:**```bash
 
-# Backend analysis
+## Backend analysis
 
    cd backend
    mvn clean verify sonar:sonar \
 
 ```
+
 -Dsonar.projectKey=your-project-key \
 -Dsonar.host.url=http://localhost:9000 \
 -Dsonar.token=your-token
+
 ```
 
-
-# Frontend coverage (run first)
+## Frontend coverage (run first)
 
    cd frontend
    npm run test:ci
+
    ```
 
-# Backend analysis
+## Backend analysis
 
    cd backend
    mvn clean verify sonar:sonar \
 
 ```
+
 -Dsonar.projectKey=your-project-key \
 -Dsonar.host.url=http://localhost:9000 \
 -Dsonar.token=your-token
+
 ```
 
-
-# Frontend coverage (run first)
+## Frontend coverage (run first)
 
    cd frontend
    npm run test:ci
@@ -187,6 +191,7 @@ sonar.coverage.exclusions=\**/target/generated-sources/**,\
   **/*Application.java,\
   **/*Config.java,\
   **/*Configuration.java
+
 ```
 
 sonar.coverage.exclusions=\
@@ -218,18 +223,18 @@ The project is configured with quality gates that must pass:
 ### Common Issues
 
 1. **Missing coverage reports:**- Ensure tests run before SonarQube analysis
-   - Check coverage report paths in configuration
+- Check coverage report paths in configuration
 
 2.**Authentication errors:**- Verify SONAR_TOKEN is valid and has project permissions
-   - Check SONAR_HOST_URL format
+- Check SONAR_HOST_URL format
 
 3.**Analysis fails:**- Check SonarQube server connectivity
-   - Verify project key exists
-   - Check logs for specific error messages
+- Verify project key exists
+- Check logs for specific error messages
 
 4.**Unexpected low coverage:**- Verify exclusions are working properly
-   - Check that generated code is being excluded
-   - Review which packages are included in analysis
+- Check that generated code is being excluded
+- Review which packages are included in analysis
 
 ### Debug Commands
 
@@ -254,19 +259,19 @@ The project is configured with quality gates that must pass:
 ### Common Issues
 
 1. **Missing coverage reports:**- Ensure tests run before SonarQube analysis
-   - Check coverage report paths in configuration
+- Check coverage report paths in configuration
 
 2.**Authentication errors:**- Verify SONAR_TOKEN is valid and has project permissions
-   - Check SONAR_HOST_URL format
+- Check SONAR_HOST_URL format
 
 3.**Analysis fails:**- Check SonarQube server connectivity
-   - Verify project key exists
-   - Check logs for specific error messages
+- Verify project key exists
+- Check logs for specific error messages
 
 4.**Unexpected low coverage:**
-   - Verify exclusions are working properly
-   - Check that generated code is being excluded
-   - Review which packages are included in analysis
+- Verify exclusions are working properly
+- Check that generated code is being excluded
+- Review which packages are included in analysis
 
 ### Debug Commands
 
@@ -287,6 +292,7 @@ mvn sonar:sonar -X -Dsonar.verbose=true
 ## Check JaCoCo exclusions
 
 mvn clean test jacoco:report
+
 ```
 
 ## Test SonarQube connectivity

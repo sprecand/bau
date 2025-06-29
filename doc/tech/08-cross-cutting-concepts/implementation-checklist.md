@@ -57,10 +57,10 @@
 
 - [x] Created Flyway migration scripts
 - [x] Defined table structures for:
-  - [x] `betrieb` (companies)
-  - [x] `bedarf` (demands)
-  - [x] `users` (user accounts)
-  - [x] Audit fields (created_at, updated_at)
+- [x] `betrieb` (companies)
+- [x] `bedarf` (demands)
+- [x] `users` (user accounts)
+- [x] Audit fields (created_at, updated_at)
 - [x] Proper indexing and constraints
 
 ### Backend Implementation
@@ -173,52 +173,52 @@
 ### For Developer (Frontend Almost Complete!)
 
 1. **Finish Frontend**- Implement Betrieb management components (copy pattern from Bedarfe)
-   - Add user profile components
-   - Connect authentication between frontend and backend
+- Add user profile components
+- Connect authentication between frontend and backend
 
 2.**Add Testing**- Frontend component tests
-   - E2E tests for critical user flows
-   - Test coverage reporting
+- E2E tests for critical user flows
+- Test coverage reporting
 
 ### For Business Owner
 
 1.**Application Testing**- Test backend API endpoints via Swagger UI
-   - Test frontend Bedarf management interface
-   - Validate business rules and user experience
-   - Provide feedback on functionality and design
+- Test frontend Bedarf management interface
+- Validate business rules and user experience
+- Provide feedback on functionality and design
 
 2.**Production Planning**- Define deployment requirements
-   - Identify priority features for MVP launch
-   - Plan user onboarding and training
+- Identify priority features for MVP launch
+- Plan user onboarding and training
 
 ## 🎯 Next Steps for MVP
 
 ### Phase 1: Complete Frontend (Week 1)
 
 1.**Betrieb Management**- Create Betrieb components following Bedarf pattern
-   - Implement CRUD operations with mobile-first design
-   - Add form validation and user feedback
+- Implement CRUD operations with mobile-first design
+- Add form validation and user feedback
 
 2.**User Profile**- Create user profile components
-   - Implement profile editing functionality
-   - Add password change functionality
+- Implement profile editing functionality
+- Add password change functionality
 
 ### Phase 2: Production Deployment (Week 2)
 
 1.**AWS Infrastructure**- Set up AWS Cognito user pool
-   - Configure RDS PostgreSQL instance
-   - Deploy to ECS with CI/CD pipeline
+- Configure RDS PostgreSQL instance
+- Deploy to ECS with CI/CD pipeline
 
 2.**Testing & Polish**- Add comprehensive frontend tests
-   - Performance optimization
-   - Security review and penetration testing
+- Performance optimization
+- Security review and penetration testing
 
 ### Phase 3: Launch (Week 3)
 
 1.**Go Live**
-   - Production deployment
-   - User onboarding
-   - Monitoring and support setup
+- Production deployment
+- User onboarding
+- Monitoring and support setup
 
 ## 🏆 Achievement Summary
 

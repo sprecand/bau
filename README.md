@@ -42,6 +42,7 @@ mvn spring-boot:run
 cd frontend
 npm install
 npm start
+
 ```
 
 ## Clone repository
@@ -83,6 +84,7 @@ npm start
 ## Test containers before deployment
 
 ./test-docker-build.sh
+
 ```
 
 ## Test containers before deployment
@@ -107,6 +109,7 @@ npm start
 
 cd infrastructure
 make deploy  # Initialize, plan, and apply
+
 ```
 
 ## One-time infrastructure setup with OpenTofu
@@ -173,6 +176,7 @@ git push origin main
 ## Completely destroy infrastructure (saves ~$17/month)
 
 ./manage-app.sh destroy
+
 ```
 
 ## Turn app ON (costs ~$17/month)

@@ -20,27 +20,28 @@ The Bau Platform uses a modern, comprehensive design system built on OKLCH color
 ```css
 :root {
   /*Backgrounds*/
-  --background: oklch(1 0 0);                    /*Pure white*/
-  --foreground: oklch(0.1450 0 0);              /*Near black text*/
+--background: oklch(1 0 0);                    /*Pure white*/
+--foreground: oklch(0.1450 0 0);              /*Near black text*/
 
   /*Cards & Surfaces*/
-  --card: oklch(1 0 0);                         /*White cards*/
-  --card-foreground: oklch(0.1450 0 0);         /*Dark text on cards*/
-  --popover: oklch(1 0 0);                      /*White popovers*/
-  --popover-foreground: oklch(0.1450 0 0);      /*Dark text in popovers*/
+--card: oklch(1 0 0);                         /*White cards*/
+--card-foreground: oklch(0.1450 0 0);         /*Dark text on cards*/
+--popover: oklch(1 0 0);                      /*White popovers*/
+--popover-foreground: oklch(0.1450 0 0);      /*Dark text in popovers*/
 }
+
 ```
 
 :root {
   /*Backgrounds*/
-  --background: oklch(1 0 0);                    /*Pure white*/
-  --foreground: oklch(0.1450 0 0);              /*Near black text*/
+--background: oklch(1 0 0);                    /*Pure white*/
+--foreground: oklch(0.1450 0 0);              /*Near black text*/
 
   /*Cards & Surfaces*/
-  --card: oklch(1 0 0);                         /*White cards*/
-  --card-foreground: oklch(0.1450 0 0);         /*Dark text on cards*/
-  --popover: oklch(1 0 0);                      /*White popovers*/
-  --popover-foreground: oklch(0.1450 0 0);      /*Dark text in popovers*/
+--card: oklch(1 0 0);                         /*White cards*/
+--card-foreground: oklch(0.1450 0 0);         /*Dark text on cards*/
+--popover: oklch(1 0 0);                      /*White popovers*/
+--popover-foreground: oklch(0.1450 0 0);      /*Dark text in popovers*/
 }
 
 ```
@@ -52,33 +53,35 @@ The Bau Platform uses a modern, comprehensive design system built on OKLCH color
 #### Brand Colors
 
 ```css
+
 :root {
   /*Primary Brand*/
-  --primary: oklch(0.6324 0.1363 157.8607);     /*Professional green*/
-  --primary-foreground: oklch(0.9850 0 0);      /*White text on primary*/
+--primary: oklch(0.6324 0.1363 157.8607);     /*Professional green*/
+--primary-foreground: oklch(0.9850 0 0);      /*White text on primary*/
 
   /*Secondary*/
-  --secondary: oklch(0.9700 0 0);               /*Light gray*/
-  --secondary-foreground: oklch(0.2050 0 0);    /*Dark text on secondary*/
+--secondary: oklch(0.9700 0 0);               /*Light gray*/
+--secondary-foreground: oklch(0.2050 0 0);    /*Dark text on secondary*/
 
   /*Accent*/
-  --accent: oklch(0.9700 0 0);                  /*Light gray accent*/
-  --accent-foreground: oklch(0.2050 0 0);       /*Dark text on accent*/
+--accent: oklch(0.9700 0 0);                  /*Light gray accent*/
+--accent-foreground: oklch(0.2050 0 0);       /*Dark text on accent*/
 }
+
 ```
 
 :root {
   /*Primary Brand*/
-  --primary: oklch(0.6324 0.1363 157.8607);     /*Professional green*/
-  --primary-foreground: oklch(0.9850 0 0);      /*White text on primary*/
+--primary: oklch(0.6324 0.1363 157.8607);     /*Professional green*/
+--primary-foreground: oklch(0.9850 0 0);      /*White text on primary*/
 
   /*Secondary*/
-  --secondary: oklch(0.9700 0 0);               /*Light gray*/
-  --secondary-foreground: oklch(0.2050 0 0);    /*Dark text on secondary*/
+--secondary: oklch(0.9700 0 0);               /*Light gray*/
+--secondary-foreground: oklch(0.2050 0 0);    /*Dark text on secondary*/
 
   /*Accent*/
-  --accent: oklch(0.9700 0 0);                  /*Light gray accent*/
-  --accent-foreground: oklch(0.2050 0 0);       /*Dark text on accent*/
+--accent: oklch(0.9700 0 0);                  /*Light gray accent*/
+--accent-foreground: oklch(0.2050 0 0);       /*Dark text on accent*/
 }
 
 ```
@@ -90,25 +93,27 @@ The Bau Platform uses a modern, comprehensive design system built on OKLCH color
 #### State Colors
 
 ```css
+
 :root {
   /*Destructive Actions*/
-  --destructive: oklch(0.5770 0.2450 27.3250);     /*Red for delete/error*/
-  --destructive-foreground: oklch(1 0 0);           /*White text on red*/
+--destructive: oklch(0.5770 0.2450 27.3250);     /*Red for delete/error*/
+--destructive-foreground: oklch(1 0 0);           /*White text on red*/
 
   /*Muted Elements*/
-  --muted: oklch(0.9700 0 0);                       /*Subtle background*/
-  --muted-foreground: oklch(0.5560 0 0);            /*Muted text*/
+--muted: oklch(0.9700 0 0);                       /*Subtle background*/
+--muted-foreground: oklch(0.5560 0 0);            /*Muted text*/
 }
+
 ```
 
 :root {
   /*Destructive Actions*/
-  --destructive: oklch(0.5770 0.2450 27.3250);     /*Red for delete/error*/
-  --destructive-foreground: oklch(1 0 0);           /*White text on red*/
+--destructive: oklch(0.5770 0.2450 27.3250);     /*Red for delete/error*/
+--destructive-foreground: oklch(1 0 0);           /*White text on red*/
 
   /*Muted Elements*/
-  --muted: oklch(0.9700 0 0);                       /*Subtle background*/
-  --muted-foreground: oklch(0.5560 0 0);            /*Muted text*/
+--muted: oklch(0.9700 0 0);                       /*Subtle background*/
+--muted-foreground: oklch(0.5560 0 0);            /*Muted text*/
 }
 
 ```
@@ -120,19 +125,21 @@ The Bau Platform uses a modern, comprehensive design system built on OKLCH color
 #### UI Elements
 
 ```css
+
 :root {
   /*Borders & Inputs*/
-  --border: oklch(0.9220 0 0);                      /*Subtle borders*/
-  --input: oklch(0.9220 0 0);                       /*Input backgrounds*/
-  --ring: oklch(0.7080 0 0);                        /*Focus rings*/
+--border: oklch(0.9220 0 0);                      /*Subtle borders*/
+--input: oklch(0.9220 0 0);                       /*Input backgrounds*/
+--ring: oklch(0.7080 0 0);                        /*Focus rings*/
 }
+
 ```
 
 :root {
   /*Borders & Inputs*/
-  --border: oklch(0.9220 0 0);                      /*Subtle borders*/
-  --input: oklch(0.9220 0 0);                       /*Input backgrounds*/
-  --ring: oklch(0.7080 0 0);                        /*Focus rings*/
+--border: oklch(0.9220 0 0);                      /*Subtle borders*/
+--input: oklch(0.9220 0 0);                       /*Input backgrounds*/
+--ring: oklch(0.7080 0 0);                        /*Focus rings*/
 }
 
 ```
@@ -144,29 +151,31 @@ The Bau Platform uses a modern, comprehensive design system built on OKLCH color
 #### Sidebar
 
 ```css
+
 :root {
   /*Sidebar Navigation*/
-  --sidebar: oklch(0.9850 0 0);                     /*Sidebar background*/
-  --sidebar-foreground: oklch(0.1450 0 0);          /*Sidebar text*/
-  --sidebar-primary: oklch(0.2050 0 0);             /*Active nav items*/
-  --sidebar-primary-foreground: oklch(0.9850 0 0);  /*Text on active items*/
-  --sidebar-accent: oklch(0.9700 0 0);              /*Hover states*/
-  --sidebar-accent-foreground: oklch(0.2050 0 0);   /*Text on hover*/
-  --sidebar-border: oklch(0.9220 0 0);              /*Sidebar borders*/
-  --sidebar-ring: oklch(0.7080 0 0);                /*Focus in sidebar*/
+--sidebar: oklch(0.9850 0 0);                     /*Sidebar background*/
+--sidebar-foreground: oklch(0.1450 0 0);          /*Sidebar text*/
+--sidebar-primary: oklch(0.2050 0 0);             /*Active nav items*/
+--sidebar-primary-foreground: oklch(0.9850 0 0);  /*Text on active items*/
+--sidebar-accent: oklch(0.9700 0 0);              /*Hover states*/
+--sidebar-accent-foreground: oklch(0.2050 0 0);   /*Text on hover*/
+--sidebar-border: oklch(0.9220 0 0);              /*Sidebar borders*/
+--sidebar-ring: oklch(0.7080 0 0);                /*Focus in sidebar*/
 }
+
 ```
 
 :root {
   /*Sidebar Navigation*/
-  --sidebar: oklch(0.9850 0 0);                     /*Sidebar background*/
-  --sidebar-foreground: oklch(0.1450 0 0);          /*Sidebar text*/
-  --sidebar-primary: oklch(0.2050 0 0);             /*Active nav items*/
-  --sidebar-primary-foreground: oklch(0.9850 0 0);  /*Text on active items*/
-  --sidebar-accent: oklch(0.9700 0 0);              /*Hover states*/
-  --sidebar-accent-foreground: oklch(0.2050 0 0);   /*Text on hover*/
-  --sidebar-border: oklch(0.9220 0 0);              /*Sidebar borders*/
-  --sidebar-ring: oklch(0.7080 0 0);                /*Focus in sidebar*/
+--sidebar: oklch(0.9850 0 0);                     /*Sidebar background*/
+--sidebar-foreground: oklch(0.1450 0 0);          /*Sidebar text*/
+--sidebar-primary: oklch(0.2050 0 0);             /*Active nav items*/
+--sidebar-primary-foreground: oklch(0.9850 0 0);  /*Text on active items*/
+--sidebar-accent: oklch(0.9700 0 0);              /*Hover states*/
+--sidebar-accent-foreground: oklch(0.2050 0 0);   /*Text on hover*/
+--sidebar-border: oklch(0.9220 0 0);              /*Sidebar borders*/
+--sidebar-ring: oklch(0.7080 0 0);                /*Focus in sidebar*/
 }
 
 ```
@@ -178,81 +187,83 @@ The Bau Platform uses a modern, comprehensive design system built on OKLCH color
 ### Dark Mode
 
 ```css
+
 .dark {
-  --background: oklch(0.1450 0 0);                  /*Dark background*/
-  --foreground: oklch(0.9850 0 0);                  /*Light text*/
-  --card: oklch(0.2050 0 0);                        /*Dark cards*/
-  --card-foreground: oklch(0.9850 0 0);             /*Light text on cards*/
-  --popover: oklch(0.2690 0 0);                     /*Dark popovers*/
-  --popover-foreground: oklch(0.9850 0 0);          /*Light text in popovers*/
+--background: oklch(0.1450 0 0);                  /*Dark background*/
+--foreground: oklch(0.9850 0 0);                  /*Light text*/
+--card: oklch(0.2050 0 0);                        /*Dark cards*/
+--card-foreground: oklch(0.9850 0 0);             /*Light text on cards*/
+--popover: oklch(0.2690 0 0);                     /*Dark popovers*/
+--popover-foreground: oklch(0.9850 0 0);          /*Light text in popovers*/
 
-  --primary: oklch(0.6324 0.1363 157.8607);         /*Same green (works in dark)*/
-  --primary-foreground: oklch(0.2535 0.0341 296.6556); /*Dark text on green*/
+--primary: oklch(0.6324 0.1363 157.8607);         /*Same green (works in dark)*/
+--primary-foreground: oklch(0.2535 0.0341 296.6556); /*Dark text on green*/
 
-  --secondary: oklch(0.2535 0.0341 296.6556);       /*Dark secondary*/
-  --secondary-foreground: oklch(1.0000 0 0);        /*White text*/
+--secondary: oklch(0.2535 0.0341 296.6556);       /*Dark secondary*/
+--secondary-foreground: oklch(1.0000 0 0);        /*White text*/
 
-  --muted: oklch(0.2690 0 0);                       /*Dark muted*/
-  --muted-foreground: oklch(0.7080 0 0);            /*Light muted text*/
+--muted: oklch(0.2690 0 0);                       /*Dark muted*/
+--muted-foreground: oklch(0.7080 0 0);            /*Light muted text*/
 
-  --accent: oklch(0.3710 0 0);                      /*Dark accent*/
-  --accent-foreground: oklch(0.9850 0 0);           /*Light text on accent*/
+--accent: oklch(0.3710 0 0);                      /*Dark accent*/
+--accent-foreground: oklch(0.9850 0 0);           /*Light text on accent*/
 
-  --destructive: oklch(0.7040 0.1910 22.2160);      /*Lighter red for dark mode*/
-  --destructive-foreground: oklch(0.9850 0 0);      /*Light text on red*/
+--destructive: oklch(0.7040 0.1910 22.2160);      /*Lighter red for dark mode*/
+--destructive-foreground: oklch(0.9850 0 0);      /*Light text on red*/
 
-  --border: oklch(0.2750 0 0);                      /*Dark borders*/
-  --input: oklch(0.3250 0 0);                       /*Dark input backgrounds*/
-  --ring: oklch(0.5560 0 0);                        /*Dark focus rings*/
+--border: oklch(0.2750 0 0);                      /*Dark borders*/
+--input: oklch(0.3250 0 0);                       /*Dark input backgrounds*/
+--ring: oklch(0.5560 0 0);                        /*Dark focus rings*/
 
   /*Dark Sidebar*/
-  --sidebar: oklch(0.2050 0 0);                     /*Dark sidebar*/
-  --sidebar-foreground: oklch(0.9850 0 0);          /*Light sidebar text*/
-  --sidebar-primary: oklch(0.4880 0.2430 264.3760); /*Purple active items*/
-  --sidebar-primary-foreground: oklch(0.9850 0 0);  /*Light text on active*/
-  --sidebar-accent: oklch(0.2690 0 0);              /*Dark hover states*/
-  --sidebar-accent-foreground: oklch(0.9850 0 0);   /*Light text on hover*/
-  --sidebar-border: oklch(0.2750 0 0);              /*Dark sidebar borders*/
-  --sidebar-ring: oklch(0.4390 0 0);                /*Dark focus in sidebar*/
+--sidebar: oklch(0.2050 0 0);                     /*Dark sidebar*/
+--sidebar-foreground: oklch(0.9850 0 0);          /*Light sidebar text*/
+--sidebar-primary: oklch(0.4880 0.2430 264.3760); /*Purple active items*/
+--sidebar-primary-foreground: oklch(0.9850 0 0);  /*Light text on active*/
+--sidebar-accent: oklch(0.2690 0 0);              /*Dark hover states*/
+--sidebar-accent-foreground: oklch(0.9850 0 0);   /*Light text on hover*/
+--sidebar-border: oklch(0.2750 0 0);              /*Dark sidebar borders*/
+--sidebar-ring: oklch(0.4390 0 0);                /*Dark focus in sidebar*/
 }
+
 ```
 
 .dark {
-  --background: oklch(0.1450 0 0);                  /*Dark background*/
-  --foreground: oklch(0.9850 0 0);                  /*Light text*/
-  --card: oklch(0.2050 0 0);                        /*Dark cards*/
-  --card-foreground: oklch(0.9850 0 0);             /*Light text on cards*/
-  --popover: oklch(0.2690 0 0);                     /*Dark popovers*/
-  --popover-foreground: oklch(0.9850 0 0);          /*Light text in popovers*/
+--background: oklch(0.1450 0 0);                  /*Dark background*/
+--foreground: oklch(0.9850 0 0);                  /*Light text*/
+--card: oklch(0.2050 0 0);                        /*Dark cards*/
+--card-foreground: oklch(0.9850 0 0);             /*Light text on cards*/
+--popover: oklch(0.2690 0 0);                     /*Dark popovers*/
+--popover-foreground: oklch(0.9850 0 0);          /*Light text in popovers*/
 
-  --primary: oklch(0.6324 0.1363 157.8607);         /*Same green (works in dark)*/
-  --primary-foreground: oklch(0.2535 0.0341 296.6556); /*Dark text on green*/
+--primary: oklch(0.6324 0.1363 157.8607);         /*Same green (works in dark)*/
+--primary-foreground: oklch(0.2535 0.0341 296.6556); /*Dark text on green*/
 
-  --secondary: oklch(0.2535 0.0341 296.6556);       /*Dark secondary*/
-  --secondary-foreground: oklch(1.0000 0 0);        /*White text*/
+--secondary: oklch(0.2535 0.0341 296.6556);       /*Dark secondary*/
+--secondary-foreground: oklch(1.0000 0 0);        /*White text*/
 
-  --muted: oklch(0.2690 0 0);                       /*Dark muted*/
-  --muted-foreground: oklch(0.7080 0 0);            /*Light muted text*/
+--muted: oklch(0.2690 0 0);                       /*Dark muted*/
+--muted-foreground: oklch(0.7080 0 0);            /*Light muted text*/
 
-  --accent: oklch(0.3710 0 0);                      /*Dark accent*/
-  --accent-foreground: oklch(0.9850 0 0);           /*Light text on accent*/
+--accent: oklch(0.3710 0 0);                      /*Dark accent*/
+--accent-foreground: oklch(0.9850 0 0);           /*Light text on accent*/
 
-  --destructive: oklch(0.7040 0.1910 22.2160);      /*Lighter red for dark mode*/
-  --destructive-foreground: oklch(0.9850 0 0);      /*Light text on red*/
+--destructive: oklch(0.7040 0.1910 22.2160);      /*Lighter red for dark mode*/
+--destructive-foreground: oklch(0.9850 0 0);      /*Light text on red*/
 
-  --border: oklch(0.2750 0 0);                      /*Dark borders*/
-  --input: oklch(0.3250 0 0);                       /*Dark input backgrounds*/
-  --ring: oklch(0.5560 0 0);                        /*Dark focus rings*/
+--border: oklch(0.2750 0 0);                      /*Dark borders*/
+--input: oklch(0.3250 0 0);                       /*Dark input backgrounds*/
+--ring: oklch(0.5560 0 0);                        /*Dark focus rings*/
 
   /*Dark Sidebar*/
-  --sidebar: oklch(0.2050 0 0);                     /*Dark sidebar*/
-  --sidebar-foreground: oklch(0.9850 0 0);          /*Light sidebar text*/
-  --sidebar-primary: oklch(0.4880 0.2430 264.3760); /*Purple active items*/
-  --sidebar-primary-foreground: oklch(0.9850 0 0);  /*Light text on active*/
-  --sidebar-accent: oklch(0.2690 0 0);              /*Dark hover states*/
-  --sidebar-accent-foreground: oklch(0.9850 0 0);   /*Light text on hover*/
-  --sidebar-border: oklch(0.2750 0 0);              /*Dark sidebar borders*/
-  --sidebar-ring: oklch(0.4390 0 0);                /*Dark focus in sidebar*/
+--sidebar: oklch(0.2050 0 0);                     /*Dark sidebar*/
+--sidebar-foreground: oklch(0.9850 0 0);          /*Light sidebar text*/
+--sidebar-primary: oklch(0.4880 0.2430 264.3760); /*Purple active items*/
+--sidebar-primary-foreground: oklch(0.9850 0 0);  /*Light text on active*/
+--sidebar-accent: oklch(0.2690 0 0);              /*Dark hover states*/
+--sidebar-accent-foreground: oklch(0.9850 0 0);   /*Light text on hover*/
+--sidebar-border: oklch(0.2750 0 0);              /*Dark sidebar borders*/
+--sidebar-ring: oklch(0.4390 0 0);                /*Dark focus in sidebar*/
 }
 
 ```
@@ -268,39 +279,49 @@ The Bau Platform uses a modern, comprehensive design system built on OKLCH color
 ### Font Stack
 
 ```css
+
 :root {
-  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+--font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
 
 ```
+
 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
 sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
 'Segoe UI Symbol', 'Noto Color Emoji';
-```
-
-  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
 
 ```
+
+--font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+--font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+
+```
+
 "Liberation Mono", "Courier New", monospace;
+
 ```
 
 }
+
 ```
 
 :root {
-  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+--font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
 
 ```
+
 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
 sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
 'Segoe UI Symbol', 'Noto Color Emoji';
-```
-
-  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
 
 ```
+
+--font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+--font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+
+```
+
 "Liberation Mono", "Courier New", monospace;
+
 ```
 
 }
@@ -314,6 +335,7 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
 ### Typography Scale
 
 ```css
+
 /*Headings*/
 .text-4xl { font-size: 2.25rem; line-height: 2.5rem; }    /*36px*/
 .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }  /*30px*/
@@ -325,6 +347,7 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
 .text-base { font-size: 1rem; line-height: 1.5rem; }      /*16px*/
 .text-sm { font-size: 0.875rem; line-height: 1.25rem; }   /*14px*/
 .text-xs { font-size: 0.75rem; line-height: 1rem; }       /*12px*/
+
 ```
 
 /*Headings*/
@@ -352,8 +375,9 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
 ### Border Radius
 
 ```css
+
 :root {
-  --radius: 0.625rem;  /*10px base radius*/
+--radius: 0.625rem;  /*10px base radius*/
 }
 
 /*Tailwind classes*/
@@ -361,10 +385,11 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
 .rounded-md { border-radius: calc(var(--radius) - 2px); }  /*8px*/
 .rounded-lg { border-radius: var(--radius); }              /*10px*/
 .rounded-xl { border-radius: calc(var(--radius) + 4px); }  /*14px*/
+
 ```
 
 :root {
-  --radius: 0.625rem;  /*10px base radius*/
+--radius: 0.625rem;  /*10px base radius*/
 }
 
 /*Tailwind classes*/
@@ -382,19 +407,21 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
 ### Shadows
 
 ```css
+
 :root {
-  --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
-  --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
-  --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
-  --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
+--shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+--shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
+--shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
+--shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
 }
+
 ```
 
 :root {
-  --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
-  --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
-  --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
-  --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
+--shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+--shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
+--shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
+--shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
 }
 
 ```
@@ -470,12 +497,14 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
   <mat-card-header class="border-b border-border pb-4">
 
 ```
+
 <mat-card-title class="text-card-foreground text-xl font-semibold">
   Card Title
 </mat-card-title>
 <mat-card-subtitle class="text-muted-foreground">
   Card subtitle
 </mat-card-subtitle>
+
 ```
 
   </mat-card-header>
@@ -483,7 +512,9 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
   <mat-card-content class="pt-4">
 
 ```
+
 <p class="text-card-foreground">Card content goes here.</p>
+
 ```
 
   </mat-card-content>
@@ -491,28 +522,33 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
   <mat-card-actions class="border-t border-border pt-4">
 
 ```
+
 <button mat-raised-button class="bg-primary text-primary-foreground">
   Primary Action
 </button>
 <button mat-button class="text-muted-foreground">
   Secondary Action
 </button>
+
 ```
 
   </mat-card-actions>
 </mat-card>
+
 ```
 
 <mat-card class="bg-card border border-border shadow-md rounded-lg">
   <mat-card-header class="border-b border-border pb-4">
 
 ```
+
 <mat-card-title class="text-card-foreground text-xl font-semibold">
   Card Title
 </mat-card-title>
 <mat-card-subtitle class="text-muted-foreground">
   Card subtitle
 </mat-card-subtitle>
+
 ```
 
   </mat-card-header>
@@ -520,7 +556,9 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
   <mat-card-content class="pt-4">
 
 ```
+
 <p class="text-card-foreground">Card content goes here.</p>
+
 ```
 
   </mat-card-content>
@@ -528,12 +566,14 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
   <mat-card-actions class="border-t border-border pt-4">
 
 ```
+
 <button mat-raised-button class="bg-primary text-primary-foreground">
   Primary Action
 </button>
 <button mat-button class="text-muted-foreground">
   Secondary Action
 </button>
+
 ```
 
   </mat-card-actions>
@@ -548,20 +588,23 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
 #### Forms
 
 ```html
+
 <form class="space-y-6 bg-card p-6 rounded-lg border border-border">
   <div class="space-y-4">
 
 ```
+
 <mat-form-field class="w-full">
   <mat-label class="text-muted-foreground">Company Name</mat-label>
   <input matInput
          class="bg-input border-border text-foreground"
          placeholder="Enter company name">
 </mat-form-field>
-```
-
 
 ```
+
+```
+
 <mat-form-field class="w-full">
   <mat-label class="text-muted-foreground">Email</mat-label>
   <input matInput
@@ -569,6 +612,7 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
          class="bg-input border-border text-foreground"
          placeholder="Enter email address">
 </mat-form-field>
+
 ```
 
   </div>
@@ -576,6 +620,7 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
   <div class="flex justify-end space-x-3">
 
 ```
+
 <button type="button"
         mat-button
         class="text-muted-foreground hover:text-foreground">
@@ -586,26 +631,30 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         class="bg-primary text-primary-foreground hover:bg-primary/90">
   Save Company
 </button>
+
 ```
 
   </div>
 </form>
+
 ```
 
 <form class="space-y-6 bg-card p-6 rounded-lg border border-border">
   <div class="space-y-4">
 
 ```
+
 <mat-form-field class="w-full">
   <mat-label class="text-muted-foreground">Company Name</mat-label>
   <input matInput
          class="bg-input border-border text-foreground"
          placeholder="Enter company name">
 </mat-form-field>
-```
-
 
 ```
+
+```
+
 <mat-form-field class="w-full">
   <mat-label class="text-muted-foreground">Email</mat-label>
   <input matInput
@@ -613,6 +662,7 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
          class="bg-input border-border text-foreground"
          placeholder="Enter email address">
 </mat-form-field>
+
 ```
 
   </div>
@@ -620,6 +670,7 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
   <div class="flex justify-end space-x-3">
 
 ```
+
 <button type="button"
         mat-button
         class="text-muted-foreground hover:text-foreground">
@@ -630,6 +681,7 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         class="bg-primary text-primary-foreground hover:bg-primary/90">
   Save Company
 </button>
+
 ```
 
   </div>
@@ -644,17 +696,20 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
 #### Navigation
 
 ```html
+
 <nav class="bg-sidebar border-r border-sidebar-border h-full">
   <div class="p-4">
 
 ```
+
 <h2 class="text-sidebar-foreground text-lg font-semibold mb-4">
   Bau Platform
 </h2>
-```
-
 
 ```
+
+```
+
 <ul class="space-y-2">
   <li>
     <a href="/dashboard"
@@ -678,23 +733,27 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
     </a>
   </li>
 </ul>
+
 ```
 
   </div>
 </nav>
+
 ```
 
 <nav class="bg-sidebar border-r border-sidebar-border h-full">
   <div class="p-4">
 
 ```
+
 <h2 class="text-sidebar-foreground text-lg font-semibold mb-4">
   Bau Platform
 </h2>
-```
-
 
 ```
+
+```
+
 <ul class="space-y-2">
   <li>
     <a href="/dashboard"
@@ -718,6 +777,7 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
     </a>
   </li>
 </ul>
+
 ```
 
   </div>
@@ -759,6 +819,7 @@ button:focus-visible {
   ring: 2px oklch(var(--ring));
   ring-offset: 2px;
 }
+
 ```
 
 /*Focus styles using design tokens*/
@@ -818,6 +879,7 @@ body {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
+
 ```
 
 /*globals.css*/
@@ -874,6 +936,7 @@ See [Coding Standards - Tailwind Integration](./coding-standards.md#tailwind-int
   "colors": {
 
 ```
+
 "primary": {
   "value": "oklch(0.6324 0.1363 157.8607)",
   "type": "color"
@@ -882,16 +945,19 @@ See [Coding Standards - Tailwind Integration](./coding-standards.md#tailwind-int
   "value": "oklch(1 0 0)",
   "type": "color"
 }
+
 ```
 
   }
 }
+
 ```
 
 {
   "colors": {
 
 ```
+
 "primary": {
   "value": "oklch(0.6324 0.1363 157.8607)",
   "type": "color"
@@ -900,6 +966,7 @@ See [Coding Standards - Tailwind Integration](./coding-standards.md#tailwind-int
   "value": "oklch(1 0 0)",
   "type": "color"
 }
+
 ```
 
   }
@@ -914,54 +981,68 @@ See [Coding Standards - Tailwind Integration](./coding-standards.md#tailwind-int
 ### For Developers
 
 ```typescript
+
 export const designTokens = {
   colors: {
 
 ```
+
 primary: 'oklch(0.6324 0.1363 157.8607)',
 background: 'oklch(1 0 0)',
 // ... other tokens
+
 ```
 
   },
   spacing: {
 
 ```
+
 radius: '0.625rem'
+
 ```
 
   },
   typography: {
 
 ```
+
 fontSans: 'var(--font-sans)'
+
 ```
 
   }
 } as const;
+
 ```
 
 export const designTokens = {
   colors: {
 
 ```
+
 primary: 'oklch(0.6324 0.1363 157.8607)',
 background: 'oklch(1 0 0)',
 // ... other tokens
+
 ```
 
   },
   spacing: {
 
 ```
+
 radius: '0.625rem'
+
 ```
 
   },
   typography: {
 
 ```
+
 fontSans: 'var(--font-sans)'
+
 ```
 
   }

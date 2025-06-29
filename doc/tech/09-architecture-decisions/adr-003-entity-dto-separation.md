@@ -59,8 +59,10 @@ Use three distinct object types with clear responsibilities:
 ### Mapping Flow
 
 ```
+
 HTTP Request → DTO → Mapper → Business Object → Mapper → Entity → Database
 Database → Entity → Mapper → Business Object → Mapper → DTO → HTTP Response
+
 ```
 
 HTTP Request → DTO → Mapper → Business Object → Mapper → Entity → Database
@@ -75,10 +77,12 @@ Database → Entity → Mapper → Business Object → Mapper → DTO → HTTP R
 ### Example Implementation
 
 ```java
+
 // DTO (API Contract)
 public class CreateBedarfRequest {
 
 ```
+
 private Integer holzbauAnzahl;
 private Integer zimmermannAnzahl;
 private LocalDate datumVon;
@@ -86,6 +90,7 @@ private LocalDate datumBis;
 private String adresse;
 private Boolean mitWerkzeug;
 private Boolean mitFahrzeug;
+
 ```
 
 }
@@ -94,6 +99,7 @@ private Boolean mitFahrzeug;
 public class Bedarf {
 
 ```
+
 private Long id;
 private Long betriebId;
 private Integer holzbauAnzahl;
@@ -104,21 +110,24 @@ private String adresse;
 private Boolean mitWerkzeug;
 private Boolean mitFahrzeug;
 private BedarfStatus status;
-```
-
 
 ```
+
+```
+
 // Business logic methods
 public boolean isValidDateRange() {
     return datumVon.isBefore(datumBis);
 }
-```
-
 
 ```
+
+```
+
 public boolean requiresTools() {
     return mitWerkzeug && (holzbauAnzahl > 0 || zimmermannAnzahl > 0);
 }
+
 ```
 
 }
@@ -129,80 +138,94 @@ public boolean requiresTools() {
 public class BedarfEntity {
 
 ```
+
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long id;
-```
-
 
 ```
+
+```
+
 @Column(name = "betrieb_id")
 private Long betriebId;
-```
-
 
 ```
+
+```
+
 @Column(name = "holzbau_anzahl")
 private Integer holzbauAnzahl;
-```
-
 
 ```
+
+```
+
 @Column(name = "zimmermann_anzahl")
 private Integer zimmermannAnzahl;
-```
-
 
 ```
+
+```
+
 @Column(name = "datum_von")
 private LocalDate datumVon;
-```
-
 
 ```
+
+```
+
 @Column(name = "datum_bis")
 private LocalDate datumBis;
-```
-
 
 ```
+
+```
+
 @Column(name = "adresse")
 private String adresse;
-```
-
 
 ```
+
+```
+
 @Column(name = "mit_werkzeug")
 private Boolean mitWerkzeug;
-```
-
 
 ```
+
+```
+
 @Column(name = "mit_fahrzeug")
 private Boolean mitFahrzeug;
-```
-
 
 ```
+
+```
+
 @Enumerated(EnumType.STRING)
 @Column(name = "status")
 private BedarfStatus status;
-```
-
 
 ```
+
+```
+
 @ManyToOne(fetch = FetchType.LAZY)
 @JoinColumn(name = "betrieb_id", insertable = false, updatable = false)
 private BetriebEntity betrieb;
+
 ```
 
 }
+
 ```
 
 // DTO (API Contract)
 public class CreateBedarfRequest {
 
 ```
+
 private Integer holzbauAnzahl;
 private Integer zimmermannAnzahl;
 private LocalDate datumVon;
@@ -210,6 +233,7 @@ private LocalDate datumBis;
 private String adresse;
 private Boolean mitWerkzeug;
 private Boolean mitFahrzeug;
+
 ```
 
 }
@@ -218,6 +242,7 @@ private Boolean mitFahrzeug;
 public class Bedarf {
 
 ```
+
 private Long id;
 private Long betriebId;
 private Integer holzbauAnzahl;
@@ -228,21 +253,24 @@ private String adresse;
 private Boolean mitWerkzeug;
 private Boolean mitFahrzeug;
 private BedarfStatus status;
-```
-
 
 ```
+
+```
+
 // Business logic methods
 public boolean isValidDateRange() {
     return datumVon.isBefore(datumBis);
 }
-```
-
 
 ```
+
+```
+
 public boolean requiresTools() {
     return mitWerkzeug && (holzbauAnzahl > 0 || zimmermannAnzahl > 0);
 }
+
 ```
 
 }
@@ -253,71 +281,83 @@ public boolean requiresTools() {
 public class BedarfEntity {
 
 ```
+
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long id;
-```
-
 
 ```
+
+```
+
 @Column(name = "betrieb_id")
 private Long betriebId;
-```
-
 
 ```
+
+```
+
 @Column(name = "holzbau_anzahl")
 private Integer holzbauAnzahl;
-```
-
 
 ```
+
+```
+
 @Column(name = "zimmermann_anzahl")
 private Integer zimmermannAnzahl;
-```
-
 
 ```
+
+```
+
 @Column(name = "datum_von")
 private LocalDate datumVon;
-```
-
 
 ```
+
+```
+
 @Column(name = "datum_bis")
 private LocalDate datumBis;
-```
-
 
 ```
+
+```
+
 @Column(name = "adresse")
 private String adresse;
-```
-
 
 ```
+
+```
+
 @Column(name = "mit_werkzeug")
 private Boolean mitWerkzeug;
-```
-
 
 ```
+
+```
+
 @Column(name = "mit_fahrzeug")
 private Boolean mitFahrzeug;
-```
-
 
 ```
+
+```
+
 @Enumerated(EnumType.STRING)
 @Column(name = "status")
 private BedarfStatus status;
-```
-
 
 ```
+
+```
+
 @ManyToOne(fetch = FetchType.LAZY)
 @JoinColumn(name = "betrieb_id", insertable = false, updatable = false)
 private BetriebEntity betrieb;
+
 ```
 
 }

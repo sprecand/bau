@@ -27,6 +27,7 @@ This directory contains the OpenTofu configuration for deploying the Bau platfor
 ## From project root
 
 ./deploy-aws.sh
+
 ```
 
 ## From project root
@@ -51,6 +52,7 @@ make plan          # Preview changes
 make apply         # Apply changes
 make destroy       # Destroy infrastructure
 make output        # Show outputs
+
 ```
 
 ## From infrastructure directory
@@ -67,6 +69,7 @@ make output        # Show outputs
 ## Configuration
 
 Edit `tofu.tfvars` to customize:
+
 ```hcl
 
 ## Configuration
@@ -74,9 +77,11 @@ Edit `tofu.tfvars` to customize:
 Edit `tofu.tfvars` to customize:
 
 ```hcl
+
 project_name = "bau"
 aws_region   = "eu-central-1"
 environment  = "main"
+
 ```
 
 project_name = "bau"
@@ -165,6 +170,7 @@ Required GitHub Secrets:
 
 ```bash
 make destroy  # Remove all infrastructure
+
 ```
 
 make destroy  # Remove all infrastructure

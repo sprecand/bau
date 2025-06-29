@@ -29,6 +29,7 @@ com.bau/
 │   │   └── out/              # Outbound ports (repositories)
 │   └── usecase/              # Use case implementations
 └── shared/                   # Shared configuration and utilities
+
 ```
 
 com.bau/
@@ -91,6 +92,7 @@ mvn spring-boot:run -Dspring-boot.run.profiles=local
 
 export SPRING_PROFILES_ACTIVE=local
 mvn spring-boot:run
+
 ```
 
 ## First, start the database
@@ -127,6 +129,7 @@ export AWS_COGNITO_JWK_SET_URI="https://cognito-idp.<region>.amazonaws.com/<user
 ## Run the application
 
 mvn spring-boot:run
+
 ```
 
 ## Set required environment variables
@@ -304,6 +307,7 @@ mvn test
 ## Run tests with coverage
 
 mvn test jacoco:report
+
 ```
 
 ## Run all tests
@@ -331,6 +335,7 @@ mvn clean compile
 ## Create executable JAR
 
 mvn clean package
+
 ```
 
 ## Build the application

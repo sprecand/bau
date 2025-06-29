@@ -6,39 +6,44 @@
 graph TB
 
 ```
+
 A[Angular Frontend] --> B[Spring Boot Backend]
 A --> C[AWS Cognito User Pool]
 B --> D[PostgreSQL Database]
 B --> E[AWS Cognito Identity Pool]
 B --> F[External Services]
-```
-
 
 ```
+
+```
+
 subgraph "Frontend"
     A1[Components] --> A2[Services]
     A2 --> A3[State Management]
     A4[AWS Amplify] --> A2
 end
-```
-
 
 ```
+
+```
+
 subgraph "Backend"
     B1[Controllers] --> B2[Services]
     B2 --> B3[Repositories]
     B3 --> B4[Domain Models]
     B5[Cognito JWT Filter] --> B1
 end
-```
-
 
 ```
+
+```
+
 subgraph "Database"
     D1[Users] --> D2[Betrieb]
     D2 --> D3[Bedarf]
     D3 --> D4[Applications]
 end
+
 ```
 
 ```
@@ -46,41 +51,45 @@ end
 graph TB
 
 ```
+
 A[Angular Frontend] --> B[Spring Boot Backend]
 A --> C[AWS Cognito User Pool]
 B --> D[PostgreSQL Database]
 B --> E[AWS Cognito Identity Pool]
 B --> F[External Services]
-```
-
 
 ```
+
+```
+
 subgraph "Frontend"
     A1[Components] --> A2[Services]
     A2 --> A3[State Management]
     A4[AWS Amplify] --> A2
 end
-```
-
 
 ```
+
+```
+
 subgraph "Backend"
     B1[Controllers] --> B2[Services]
     B2 --> B3[Repositories]
     B3 --> B4[Domain Models]
     B5[Cognito JWT Filter] --> B1
 end
-```
-
 
 ```
+
+```
+
 subgraph "Database"
     D1[Users] --> D2[Betrieb]
     D2 --> D3[Bedarf]
     D3 --> D4[Applications]
 end
-```
 
+```
 
 ```
 
@@ -172,9 +181,11 @@ end
   <mat-card-header class="mb-4">
 
 ```
+
 <mat-card-title class="text-2xl font-bold text-gray-800">
   Bedarf Details
 </mat-card-title>
+
 ```
 
   </mat-card-header>
@@ -182,10 +193,12 @@ end
   <mat-card-content class="space-y-4">
 
 ```
+
 <mat-form-field class="w-full">
   <mat-label>Holzbau Anzahl</mat-label>
   <input matInput type="number" class="text-lg">
 </mat-form-field>
+
 ```
 
   </mat-card-content>
@@ -193,16 +206,19 @@ end
   <mat-card-actions class="flex justify-end space-x-2">
 
 ```
+
 <button mat-button class="px-4 py-2 text-gray-600 hover:text-gray-800">
   Cancel
 </button>
 <button mat-raised-button color="primary" class="px-6 py-2">
   Save
 </button>
+
 ```
 
   </mat-card-actions>
 </mat-card>
+
 ```
 
 <!-- Material component with Tailwind styling -->
@@ -210,9 +226,11 @@ end
   <mat-card-header class="mb-4">
 
 ```
+
 <mat-card-title class="text-2xl font-bold text-gray-800">
   Bedarf Details
 </mat-card-title>
+
 ```
 
   </mat-card-header>
@@ -220,10 +238,12 @@ end
   <mat-card-content class="space-y-4">
 
 ```
+
 <mat-form-field class="w-full">
   <mat-label>Holzbau Anzahl</mat-label>
   <input matInput type="number" class="text-lg">
 </mat-form-field>
+
 ```
 
   </mat-card-content>
@@ -231,12 +251,14 @@ end
   <mat-card-actions class="flex justify-end space-x-2">
 
 ```
+
 <button mat-button class="px-4 py-2 text-gray-600 hover:text-gray-800">
   Cancel
 </button>
 <button mat-raised-button color="primary" class="px-6 py-2">
   Save
 </button>
+
 ```
 
   </mat-card-actions>
@@ -298,15 +320,17 @@ end
 sequenceDiagram
 
 ```
+
 participant U as User
 participant F as Frontend
 participant C as Cognito User Pool
 participant B as Backend
 participant D as Database
-```
-
 
 ```
+
+```
+
 U->>F: Enter credentials
 F->>C: Authenticate with Cognito
 C-->>F: JWT tokens (ID, Access, Refresh)
@@ -316,6 +340,7 @@ B->>D: Get user profile
 D-->>B: User data
 B-->>F: API response
 F-->>U: Display data
+
 ```
 
 ```
@@ -323,15 +348,17 @@ F-->>U: Display data
 sequenceDiagram
 
 ```
+
 participant U as User
 participant F as Frontend
 participant C as Cognito User Pool
 participant B as Backend
 participant D as Database
-```
-
 
 ```
+
+```
+
 U->>F: Enter credentials
 F->>C: Authenticate with Cognito
 C-->>F: JWT tokens (ID, Access, Refresh)
@@ -341,8 +368,8 @@ B->>D: Get user profile
 D-->>B: User data
 B-->>F: API response
 F-->>U: Display data
-```
 
+```
 
 ```
 
@@ -353,17 +380,20 @@ F-->>U: Display data
 ### Bedarf Creation Flow
 
 ```mermaid
+
 sequenceDiagram
 
 ```
+
 participant U as User
 participant F as Frontend
 participant B as Backend
 participant D as Database
-```
-
 
 ```
+
+```
+
 U->>F: Create bedarf
 F->>B: POST /api/v1/bedarf
 B->>B: Validate business rules
@@ -371,6 +401,7 @@ B->>D: Save bedarf
 D-->>B: Confirmation
 B-->>F: Bedarf created
 F-->>U: Success message
+
 ```
 
 ```
@@ -378,14 +409,16 @@ F-->>U: Success message
 sequenceDiagram
 
 ```
+
 participant U as User
 participant F as Frontend
 participant B as Backend
 participant D as Database
-```
-
 
 ```
+
+```
+
 U->>F: Create bedarf
 F->>B: POST /api/v1/bedarf
 B->>B: Validate business rules
@@ -393,8 +426,8 @@ B->>D: Save bedarf
 D-->>B: Confirmation
 B-->>F: Bedarf created
 F-->>U: Success message
-```
 
+```
 
 ```
 

@@ -10,48 +10,54 @@ Production deployment using Docker containers on AWS ECS with RDS PostgreSQL, au
 graph TB
 
 ```
+
 subgraph "CI/CD Pipeline"
     A[GitHub Repository]
     B[GitHub Actions]
     C[ECR Container Registry]
 end
-```
-
 
 ```
+
+```
+
 subgraph "CDN & Static Files"
     D[CloudFront CDN]
     E[S3 Bucket - Static Files]
 end
-```
-
 
 ```
+
+```
+
 subgraph "Application Layer"
     F[Application Load Balancer]
     G[ECS Cluster]
     H[Backend Container]
     I[Frontend Container]
 end
-```
-
 
 ```
+
+```
+
 subgraph "Data Layer"
     J[RDS PostgreSQL]
     K[ElastiCache Redis]
 end
-```
-
 
 ```
+
+```
+
 subgraph "Authentication"
     L[AWS Cognito]
 end
-```
-
 
 ```
+
+```
+
 A --> B
 B --> C
 C --> G
@@ -64,6 +70,7 @@ H --> J
 H --> K
 H --> L
 I --> H
+
 ```
 
 ```
@@ -71,48 +78,54 @@ I --> H
 graph TB
 
 ```
+
 subgraph "CI/CD Pipeline"
     A[GitHub Repository]
     B[GitHub Actions]
     C[ECR Container Registry]
 end
-```
-
 
 ```
+
+```
+
 subgraph "CDN & Static Files"
     D[CloudFront CDN]
     E[S3 Bucket - Static Files]
 end
-```
-
 
 ```
+
+```
+
 subgraph "Application Layer"
     F[Application Load Balancer]
     G[ECS Cluster]
     H[Backend Container]
     I[Frontend Container]
 end
-```
-
 
 ```
+
+```
+
 subgraph "Data Layer"
     J[RDS PostgreSQL]
     K[ElastiCache Redis]
 end
-```
-
 
 ```
+
+```
+
 subgraph "Authentication"
     L[AWS Cognito]
 end
-```
-
 
 ```
+
+```
+
 A --> B
 B --> C
 C --> G
@@ -125,8 +138,8 @@ H --> J
 H --> K
 H --> L
 I --> H
-```
 
+```
 
 ```
 
@@ -250,6 +263,7 @@ BILLING_ALERT_EMAIL=your_email@example.com
 ## SonarQube Analysis
 
 SONAR_TOKEN=your_sonar_token_here
+
 ```
 
 ## AWS Credentials
@@ -311,6 +325,7 @@ tofu plan -var-file=tofu.tfvars
 ## Apply infrastructure
 
 tofu apply -var-file=tofu.tfvars
+
 ```
 
 ## Clone infrastructure repo
@@ -348,6 +363,7 @@ AWS_COGNITO_CLIENT_ID=xxxxxxxxxxxxxxxxxxxxxxxxxx
 SPRING_DATASOURCE_URL=jdbc:postgresql://bau-prod.cluster-xyz.eu-central-1.rds.amazonaws.com:5432/bau_prod
 SPRING_DATASOURCE_USERNAME=bau_prod_user
 SPRING_DATASOURCE_PASSWORD=secure_password_here
+
 ```
 
 ## Production environment
@@ -405,6 +421,7 @@ docker push 123456789012.dkr.ecr.eu-central-1.amazonaws.com/bau-frontend:latest
 
 aws ecs update-service --cluster bau-cluster --service bau-backend --force-new-deployment
 aws ecs update-service --cluster bau-cluster --service bau-frontend --force-new-deployment
+
 ```
 
 ## Build Images
@@ -439,6 +456,7 @@ aws ecs update-service --cluster bau-cluster --service bau-frontend --force-new-
 ### Backend Dockerfile
 
 ```dockerfile
+
 FROM openjdk:21-jdk-slim
 
 WORKDIR /app
@@ -448,6 +466,7 @@ COPY target/bau-backend-*.jar app.jar
 EXPOSE 8080
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
+
 ```
 
 FROM openjdk:21-jdk-slim
@@ -469,6 +488,7 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 ### Frontend Dockerfile
 
 ```dockerfile
+
 FROM nginx:alpine
 
 COPY dist/bau-frontend /usr/share/nginx/html
@@ -477,6 +497,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
+
 ```
 
 FROM nginx:alpine
@@ -497,52 +518,57 @@ CMD ["nginx", "-g", "daemon off;"]
 ### Docker Compose (Development)
 
 ```yaml
+
 version: '3.8'
 
 services:
   postgres:
 
 ```
+
 image: postgres:15
 environment:
   POSTGRES_DB: bau_dev
   POSTGRES_USER: bau_user
   POSTGRES_PASSWORD: bau_password
 ports:
-  - "5432:5432"
+- "5432:5432"
 volumes:
-  - postgres_data:/var/lib/postgresql/data
-```
+- postgres_data:/var/lib/postgresql/data
 
+```
 
   backend:
 
 ```
+
 build: ./backend
 ports:
-  - "8080:8080"
+- "8080:8080"
 environment:
   SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/bau_dev
   SPRING_DATASOURCE_USERNAME: bau_user
   SPRING_DATASOURCE_PASSWORD: bau_password
 depends_on:
-  - postgres
-```
+- postgres
 
+```
 
   frontend:
 
 ```
+
 build: ./frontend
 ports:
-  - "4200:80"
+- "4200:80"
 depends_on:
-  - backend
-```
+- backend
 
+```
 
 volumes:
   postgres_data:
+
 ```
 
 version: '3.8'
@@ -551,43 +577,46 @@ services:
   postgres:
 
 ```
+
 image: postgres:15
 environment:
   POSTGRES_DB: bau_dev
   POSTGRES_USER: bau_user
   POSTGRES_PASSWORD: bau_password
 ports:
-  - "5432:5432"
+- "5432:5432"
 volumes:
-  - postgres_data:/var/lib/postgresql/data
-```
+- postgres_data:/var/lib/postgresql/data
 
+```
 
   backend:
 
 ```
+
 build: ./backend
 ports:
-  - "8080:8080"
+- "8080:8080"
 environment:
   SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/bau_dev
   SPRING_DATASOURCE_USERNAME: bau_user
   SPRING_DATASOURCE_PASSWORD: bau_password
 depends_on:
-  - postgres
-```
+- postgres
 
+```
 
   frontend:
 
 ```
+
 build: ./frontend
 ports:
-  - "4200:80"
+- "4200:80"
 depends_on:
-  - backend
-```
+- backend
 
+```
 
 volumes:
   postgres_data:
@@ -613,9 +642,11 @@ logging:
   options:
 
 ```
+
 awslogs-group: /ecs/bau-backend
 awslogs-region: eu-central-1
 awslogs-stream-prefix: ecs
+
 ```
 
 ```
@@ -627,11 +658,12 @@ logging:
   options:
 
 ```
+
 awslogs-group: /ecs/bau-backend
 awslogs-region: eu-central-1
 awslogs-stream-prefix: ecs
-```
 
+```
 
 ```
 
@@ -649,14 +681,17 @@ healthCheck:
   command:
 
 ```
+
 - CMD-SHELL
 - curl -f http://localhost:8080/actuator/health || exit 1
+
 ```
 
   interval: 30
   timeout: 5
   retries: 3
   startPeriod: 60
+
 ```
 
 ## ECS service health check
@@ -665,8 +700,10 @@ healthCheck:
   command:
 
 ```
+
 - CMD-SHELL
 - curl -f http://localhost:8080/actuator/health || exit 1
+
 ```
 
   interval: 30
@@ -784,6 +821,7 @@ healthCheck:
 
 aws ecs update-service --cluster bau-cluster --service bau-backend --task-definition bau-backend:previous-version
 aws ecs update-service --cluster bau-cluster --service bau-frontend --task-definition bau-frontend:previous-version
+
 ```
 
 ## Rollback to previous version

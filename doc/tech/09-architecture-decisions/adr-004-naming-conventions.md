@@ -31,24 +31,6 @@ Use package structure to distinguish object types rather than suffixes, except f
 ### Package Structure
 
 ```
-backend/src/main/java/com/bau/
-├── adapter/
-│   ├── in/web/dto/           # DTOs (no suffix)
-│   └── out/persistence/entity/ # JPA Entities (Entity suffix)
-├── application/
-│   ├── domain/               # Business Objects (no suffix)
-│   ├── usecase/              # Use Cases (no suffix)
-│   └── port/
-│       ├── in/               # Input Ports (no suffix)
-│       └── out/              # Output Ports (no suffix)
-└── shared/
-
-```
-├── config/               # Configuration (no suffix)
-└── util/                 # Utilities (no suffix)
-```
-
-```
 
 backend/src/main/java/com/bau/
 ├── adapter/
@@ -63,10 +45,32 @@ backend/src/main/java/com/bau/
 └── shared/
 
 ```
+
 ├── config/               # Configuration (no suffix)
 └── util/                 # Utilities (no suffix)
+
 ```
 
+```
+
+backend/src/main/java/com/bau/
+├── adapter/
+│   ├── in/web/dto/           # DTOs (no suffix)
+│   └── out/persistence/entity/ # JPA Entities (Entity suffix)
+├── application/
+│   ├── domain/               # Business Objects (no suffix)
+│   ├── usecase/              # Use Cases (no suffix)
+│   └── port/
+│       ├── in/               # Input Ports (no suffix)
+│       └── out/              # Output Ports (no suffix)
+└── shared/
+
+```
+
+├── config/               # Configuration (no suffix)
+└── util/                 # Utilities (no suffix)
+
+```
 
 ```
 
@@ -127,6 +131,7 @@ backend/src/main/java/com/bau/
 public class CreateBedarfRequest {
 
 ```
+
 private Integer holzbauAnzahl;
 private Integer zimmermannAnzahl;
 private LocalDate datumVon;
@@ -134,6 +139,7 @@ private LocalDate datumBis;
 private String adresse;
 private Boolean mitWerkzeug;
 private Boolean mitFahrzeug;
+
 ```
 
 }
@@ -142,6 +148,7 @@ private Boolean mitFahrzeug;
 public class Bedarf {
 
 ```
+
 private Long id;
 private Long betriebId;
 private Integer holzbauAnzahl;
@@ -152,6 +159,7 @@ private String adresse;
 private Boolean mitWerkzeug;
 private Boolean mitFahrzeug;
 private BedarfStatus status;
+
 ```
 
 }
@@ -162,64 +170,75 @@ private BedarfStatus status;
 public class BedarfEntity {
 
 ```
+
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long id;
-```
-
 
 ```
+
+```
+
 @Column(name = "betrieb_id")
 private Long betriebId;
-```
-
 
 ```
+
+```
+
 @Column(name = "holzbau_anzahl")
 private Integer holzbauAnzahl;
-```
-
 
 ```
+
+```
+
 @Column(name = "zimmermann_anzahl")
 private Integer zimmermannAnzahl;
-```
-
 
 ```
+
+```
+
 @Column(name = "datum_von")
 private LocalDate datumVon;
-```
-
 
 ```
+
+```
+
 @Column(name = "datum_bis")
 private LocalDate datumBis;
-```
-
 
 ```
+
+```
+
 @Column(name = "adresse")
 private String adresse;
-```
-
 
 ```
+
+```
+
 @Column(name = "mit_werkzeug")
 private Boolean mitWerkzeug;
-```
-
 
 ```
+
+```
+
 @Column(name = "mit_fahrzeug")
 private Boolean mitFahrzeug;
-```
-
 
 ```
+
+```
+
 @Enumerated(EnumType.STRING)
 @Column(name = "status")
 private BedarfStatus status;
+
 ```
 
 }
@@ -229,16 +248,19 @@ private BedarfStatus status;
 public class CreateBedarfUseCase {
 
 ```
+
 private final BedarfRepository bedarfRepository;
 private final BedarfMapper bedarfMapper;
-```
-
 
 ```
+
+```
+
 public Bedarf execute(CreateBedarfRequest request) {
     Bedarf bedarf = bedarfMapper.toDomain(request);
     return bedarfRepository.save(bedarf);
 }
+
 ```
 
 }
@@ -247,9 +269,11 @@ public Bedarf execute(CreateBedarfRequest request) {
 public interface BedarfRepository {
 
 ```
+
 Bedarf save(Bedarf bedarf);
 Optional<Bedarf> findById(Long id);
 List<Bedarf> findByBetriebId(Long betriebId);
+
 ```
 
 }
@@ -259,6 +283,7 @@ List<Bedarf> findByBetriebId(Long betriebId);
 public class BedarfMapper {
 
 ```
+
 public Bedarf toDomain(CreateBedarfRequest request) {
     Bedarf bedarf = new Bedarf();
     bedarf.setHolzbauAnzahl(request.getHolzbauAnzahl());
@@ -270,10 +295,11 @@ public Bedarf toDomain(CreateBedarfRequest request) {
     bedarf.setMitFahrzeug(request.getMitFahrzeug());
     return bedarf;
 }
-```
-
 
 ```
+
+```
+
 public BedarfResponse toResponse(Bedarf bedarf) {
     BedarfResponse response = new BedarfResponse();
     response.setId(bedarf.getId());
@@ -288,6 +314,7 @@ public BedarfResponse toResponse(Bedarf bedarf) {
     response.setStatus(bedarf.getStatus());
     return response;
 }
+
 ```
 
 }
@@ -297,6 +324,7 @@ public BedarfResponse toResponse(Bedarf bedarf) {
 public class BedarfEntityMapper {
 
 ```
+
 public BedarfEntity toEntity(Bedarf bedarf) {
     BedarfEntity entity = new BedarfEntity();
     entity.setId(bedarf.getId());
@@ -311,10 +339,11 @@ public BedarfEntity toEntity(Bedarf bedarf) {
     entity.setStatus(bedarf.getStatus());
     return entity;
 }
-```
-
 
 ```
+
+```
+
 public Bedarf toDomain(BedarfEntity entity) {
     Bedarf bedarf = new Bedarf();
     bedarf.setId(entity.getId());
@@ -329,15 +358,18 @@ public Bedarf toDomain(BedarfEntity entity) {
     bedarf.setStatus(entity.getStatus());
     return bedarf;
 }
+
 ```
 
 }
+
 ```
 
 // DTO (adapter/in/web/dto/)
 public class CreateBedarfRequest {
 
 ```
+
 private Integer holzbauAnzahl;
 private Integer zimmermannAnzahl;
 private LocalDate datumVon;
@@ -345,6 +377,7 @@ private LocalDate datumBis;
 private String adresse;
 private Boolean mitWerkzeug;
 private Boolean mitFahrzeug;
+
 ```
 
 }
@@ -353,6 +386,7 @@ private Boolean mitFahrzeug;
 public class Bedarf {
 
 ```
+
 private Long id;
 private Long betriebId;
 private Integer holzbauAnzahl;
@@ -363,6 +397,7 @@ private String adresse;
 private Boolean mitWerkzeug;
 private Boolean mitFahrzeug;
 private BedarfStatus status;
+
 ```
 
 }
@@ -373,64 +408,75 @@ private BedarfStatus status;
 public class BedarfEntity {
 
 ```
+
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long id;
-```
-
 
 ```
+
+```
+
 @Column(name = "betrieb_id")
 private Long betriebId;
-```
-
 
 ```
+
+```
+
 @Column(name = "holzbau_anzahl")
 private Integer holzbauAnzahl;
-```
-
 
 ```
+
+```
+
 @Column(name = "zimmermann_anzahl")
 private Integer zimmermannAnzahl;
-```
-
 
 ```
+
+```
+
 @Column(name = "datum_von")
 private LocalDate datumVon;
-```
-
 
 ```
+
+```
+
 @Column(name = "datum_bis")
 private LocalDate datumBis;
-```
-
 
 ```
+
+```
+
 @Column(name = "adresse")
 private String adresse;
-```
-
 
 ```
+
+```
+
 @Column(name = "mit_werkzeug")
 private Boolean mitWerkzeug;
-```
-
 
 ```
+
+```
+
 @Column(name = "mit_fahrzeug")
 private Boolean mitFahrzeug;
-```
-
 
 ```
+
+```
+
 @Enumerated(EnumType.STRING)
 @Column(name = "status")
 private BedarfStatus status;
+
 ```
 
 }
@@ -440,16 +486,19 @@ private BedarfStatus status;
 public class CreateBedarfUseCase {
 
 ```
+
 private final BedarfRepository bedarfRepository;
 private final BedarfMapper bedarfMapper;
-```
-
 
 ```
+
+```
+
 public Bedarf execute(CreateBedarfRequest request) {
     Bedarf bedarf = bedarfMapper.toDomain(request);
     return bedarfRepository.save(bedarf);
 }
+
 ```
 
 }
@@ -458,9 +507,11 @@ public Bedarf execute(CreateBedarfRequest request) {
 public interface BedarfRepository {
 
 ```
+
 Bedarf save(Bedarf bedarf);
 Optional<Bedarf> findById(Long id);
 List<Bedarf> findByBetriebId(Long betriebId);
+
 ```
 
 }
@@ -470,6 +521,7 @@ List<Bedarf> findByBetriebId(Long betriebId);
 public class BedarfMapper {
 
 ```
+
 public Bedarf toDomain(CreateBedarfRequest request) {
     Bedarf bedarf = new Bedarf();
     bedarf.setHolzbauAnzahl(request.getHolzbauAnzahl());
@@ -481,10 +533,11 @@ public Bedarf toDomain(CreateBedarfRequest request) {
     bedarf.setMitFahrzeug(request.getMitFahrzeug());
     return bedarf;
 }
-```
-
 
 ```
+
+```
+
 public BedarfResponse toResponse(Bedarf bedarf) {
     BedarfResponse response = new BedarfResponse();
     response.setId(bedarf.getId());
@@ -499,6 +552,7 @@ public BedarfResponse toResponse(Bedarf bedarf) {
     response.setStatus(bedarf.getStatus());
     return response;
 }
+
 ```
 
 }
@@ -508,6 +562,7 @@ public BedarfResponse toResponse(Bedarf bedarf) {
 public class BedarfEntityMapper {
 
 ```
+
 public BedarfEntity toEntity(Bedarf bedarf) {
     BedarfEntity entity = new BedarfEntity();
     entity.setId(bedarf.getId());
@@ -522,10 +577,11 @@ public BedarfEntity toEntity(Bedarf bedarf) {
     entity.setStatus(bedarf.getStatus());
     return entity;
 }
-```
-
 
 ```
+
+```
+
 public Bedarf toDomain(BedarfEntity entity) {
     Bedarf bedarf = new Bedarf();
     bedarf.setId(entity.getId());
@@ -540,6 +596,7 @@ public Bedarf toDomain(BedarfEntity entity) {
     bedarf.setStatus(entity.getStatus());
     return bedarf;
 }
+
 ```
 
 }
