@@ -1,23 +1,13 @@
 apiVersion: v1
 kind: Config
 metadata:
-  name: bau-production
-  version: "1.0.0"
-  updated: "2024-01-15T12:00:00Z"
-  description: "Production deployment configuration for Bau platform"
+  name: bau-deployment
+  version: "1.0.4"
+  updated: "2025-07-06T10:09:42Z"
 spec:
-  version: "1.0.0"
   backend:
-    replicas: 1
-    resources:
-      cpu: "256"
-      memory: "512"
+    image: "792761286369.dkr.ecr.eu-central-1.amazonaws.com/bau-backend:1.0.4"
+    version: "1.0.4"
   frontend:
-    replicas: 1
-    resources:
-      cpu: "256"
-      memory: "512"
-environment:
-  name: "production"
-  region: "eu-central-1"
-  cluster: "bau-cluster" 
+    image: "792761286369.dkr.ecr.eu-central-1.amazonaws.com/bau-frontend:1.0.4"
+    version: "1.0.4"
