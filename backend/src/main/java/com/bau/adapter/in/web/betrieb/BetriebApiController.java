@@ -22,7 +22,6 @@ import java.util.UUID;
  * REST controller for Betrieb API endpoints.
  */
 @RestController
-@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 @Slf4j
 public class BetriebApiController implements BetriebApi {
@@ -31,6 +30,7 @@ public class BetriebApiController implements BetriebApi {
     private final BetriebWebMapper mapper;
     
     @Override
+    @PostMapping("/betriebe")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BetriebResponse> createBetrieb(@Valid @RequestBody CreateBetriebRequest createBetriebRequest) {
         log.info("Creating new betrieb");
@@ -41,7 +41,8 @@ public class BetriebApiController implements BetriebApi {
     }
     
     @Override
-    public ResponseEntity<BetriebListResponse> listBetriebe(@Valid Integer page, @Valid Integer size) {
+    @GetMapping("/betriebe")
+    public ResponseEntity<BetriebListResponse> listBetriebe(@Valid @RequestParam(value = "page", defaultValue = "1") Integer page, @Valid @RequestParam(value = "size", defaultValue = "20") Integer size) {
         log.info("Retrieving betriebs - page: {}, size: {}", page, size);
         // Convert from 1-based API page to 0-based internal page
         int internalPage = page - 1;
@@ -61,6 +62,7 @@ public class BetriebApiController implements BetriebApi {
     }
 
     @Override
+    @GetMapping("/betriebe/{id}")
     public ResponseEntity<BetriebResponse> getBetriebById(@PathVariable UUID id) {
         log.info("Retrieving betrieb with id: {}", id);
         Optional<Betrieb> betriebOpt = betriebUseCase.getBetriebById(id);
@@ -72,6 +74,7 @@ public class BetriebApiController implements BetriebApi {
     }
 
     @Override
+    @PutMapping("/betriebe/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BetriebResponse> updateBetrieb(@PathVariable UUID id, @Valid @RequestBody UpdateBetriebRequest updateBetriebRequest) {
         log.info("Updating betrieb with id: {}", id);
@@ -85,6 +88,7 @@ public class BetriebApiController implements BetriebApi {
     }
 
     @Override
+    @DeleteMapping("/betriebe/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteBetrieb(@PathVariable UUID id) {
         log.info("Deleting betrieb with id: {}", id);
@@ -96,6 +100,7 @@ public class BetriebApiController implements BetriebApi {
     }
 
     @Override
+    @PatchMapping("/betriebe/{id}/status")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BetriebResponse> updateBetriebStatus(@PathVariable UUID id, @Valid @RequestBody UpdateBetriebStatusRequest updateBetriebStatusRequest) {
         log.info("Updating betrieb status for id: {} to status: {}", id, updateBetriebStatusRequest.getStatus());

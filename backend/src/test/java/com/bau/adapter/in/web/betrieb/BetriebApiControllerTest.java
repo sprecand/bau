@@ -105,7 +105,7 @@ class BetriebApiControllerTest {
             when(mapper.toResponse(testBetrieb)).thenReturn(testBetriebResponse);
 
             // When & Then
-            mockMvc.perform(post("/api/v1/betriebe")
+            mockMvc.perform(post("/betriebe")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(createRequest)))
                     .andExpect(status().isCreated())
@@ -124,7 +124,7 @@ class BetriebApiControllerTest {
         @DisplayName("Should return forbidden for non-admin user")
         void shouldReturnForbiddenForNonAdminUser() throws Exception {
             // When & Then
-            mockMvc.perform(post("/api/v1/betriebe")
+            mockMvc.perform(post("/betriebe")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(createRequest)))
                     .andExpect(status().isForbidden());
@@ -144,7 +144,7 @@ class BetriebApiControllerTest {
                     .telefon("+41 81 123 45 67");
 
             // When & Then
-            mockMvc.perform(post("/api/v1/betriebe")
+            mockMvc.perform(post("/betriebe")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(invalidRequest)))
                     .andExpect(status().isBadRequest());
@@ -158,10 +158,10 @@ class BetriebApiControllerTest {
         void shouldReturnBadRequestForMissingRequiredFields() throws Exception {
             // Given
             CreateBetriebRequest invalidRequest = new CreateBetriebRequest()
-                    .telefon("+41 81 123 45 67"); // Missing required fields
+                    .telefon("+41 81 123 45 67");
 
             // When & Then
-            mockMvc.perform(post("/api/v1/betriebe")
+            mockMvc.perform(post("/betriebe")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(invalidRequest)))
                     .andExpect(status().isBadRequest());
@@ -186,7 +186,7 @@ class BetriebApiControllerTest {
             when(mapper.toResponse(testBetrieb)).thenReturn(testBetriebResponse);
 
             // When & Then
-            mockMvc.perform(get("/api/v1/betriebe")
+            mockMvc.perform(get("/betriebe")
                             .param("page", "1")
                             .param("size", "20")
                             .contentType(MediaType.APPLICATION_JSON))
@@ -216,7 +216,7 @@ class BetriebApiControllerTest {
             when(betriebUseCase.getBetriebs(0, 20, null)).thenReturn(pageResult);
 
             // When & Then
-            mockMvc.perform(get("/api/v1/betriebe")
+            mockMvc.perform(get("/betriebe")
                             .param("page", "1")
                             .param("size", "20")
                             .contentType(MediaType.APPLICATION_JSON))
@@ -245,7 +245,7 @@ class BetriebApiControllerTest {
             when(mapper.toResponse(testBetrieb)).thenReturn(testBetriebResponse);
 
             // When & Then
-            mockMvc.perform(get("/api/v1/betriebe/{id}", testId)
+            mockMvc.perform(get("/betriebe/{id}", testId)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -266,7 +266,7 @@ class BetriebApiControllerTest {
             when(betriebUseCase.getBetriebById(nonExistentId)).thenReturn(Optional.empty());
 
             // When & Then
-            mockMvc.perform(get("/api/v1/betriebe/{id}", nonExistentId)
+            mockMvc.perform(get("/betriebe/{id}", nonExistentId)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isNotFound());
 
@@ -299,7 +299,7 @@ class BetriebApiControllerTest {
             when(mapper.toResponse(updatedBetrieb)).thenReturn(updatedResponse);
 
             // When & Then
-            mockMvc.perform(put("/api/v1/betriebe/{id}", testId)
+            mockMvc.perform(put("/betriebe/{id}", testId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(updateRequest)))
                     .andExpect(status().isOk())
@@ -322,7 +322,7 @@ class BetriebApiControllerTest {
             when(betriebUseCase.updateBetrieb(eq(nonExistentId), any(Betrieb.class))).thenReturn(Optional.empty());
 
             // When & Then
-            mockMvc.perform(put("/api/v1/betriebe/{id}", nonExistentId)
+            mockMvc.perform(put("/betriebe/{id}", nonExistentId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(updateRequest)))
                     .andExpect(status().isNotFound());
@@ -337,7 +337,7 @@ class BetriebApiControllerTest {
         @DisplayName("Should return forbidden for non-admin user")
         void shouldReturnForbiddenForNonAdminUser() throws Exception {
             // When & Then
-            mockMvc.perform(put("/api/v1/betriebe/{id}", testBetrieb.getId())
+            mockMvc.perform(put("/betriebe/{id}", testBetrieb.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(updateRequest)))
                     .andExpect(status().isForbidden());
@@ -355,7 +355,7 @@ class BetriebApiControllerTest {
                     .email("invalid-email");
 
             // When & Then
-            mockMvc.perform(put("/api/v1/betriebe/{id}", testBetrieb.getId())
+            mockMvc.perform(put("/betriebe/{id}", testBetrieb.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(invalidRequest)))
                     .andExpect(status().isBadRequest());
@@ -377,8 +377,7 @@ class BetriebApiControllerTest {
             when(betriebUseCase.deleteBetrieb(testId)).thenReturn(true);
 
             // When & Then
-            mockMvc.perform(delete("/api/v1/betriebe/{id}", testId)
-                            .contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(delete("/betriebe/{id}", testId))
                     .andExpect(status().isNoContent());
 
             verify(betriebUseCase).deleteBetrieb(testId);
@@ -393,8 +392,7 @@ class BetriebApiControllerTest {
             when(betriebUseCase.deleteBetrieb(nonExistentId)).thenReturn(false);
 
             // When & Then
-            mockMvc.perform(delete("/api/v1/betriebe/{id}", nonExistentId)
-                            .contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(delete("/betriebe/{id}", nonExistentId))
                     .andExpect(status().isNotFound());
 
             verify(betriebUseCase).deleteBetrieb(nonExistentId);
@@ -405,11 +403,10 @@ class BetriebApiControllerTest {
         @DisplayName("Should return forbidden for non-admin user")
         void shouldReturnForbiddenForNonAdminUser() throws Exception {
             // When & Then
-            mockMvc.perform(delete("/api/v1/betriebe/{id}", testBetrieb.getId())
-                            .contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(delete("/betriebe/{id}", testBetrieb.getId()))
                     .andExpect(status().isForbidden());
 
-            verifyNoInteractions(betriebUseCase);
+            verifyNoInteractions(betriebUseCase, mapper);
         }
     }
 
@@ -437,11 +434,12 @@ class BetriebApiControllerTest {
             when(mapper.toResponse(updatedBetrieb)).thenReturn(updatedResponse);
 
             // When & Then
-            mockMvc.perform(patch("/api/v1/betriebe/{id}/status", testId)
+            mockMvc.perform(patch("/betriebe/{id}/status", testId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(statusRequest)))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.id").value(testId.toString()))
                     .andExpect(jsonPath("$.status").value("INAKTIV"));
 
             verify(betriebUseCase).updateBetriebStatus(testId, BetriebStatus.INAKTIV);
@@ -460,7 +458,7 @@ class BetriebApiControllerTest {
             when(betriebUseCase.updateBetriebStatus(nonExistentId, BetriebStatus.INAKTIV)).thenReturn(Optional.empty());
 
             // When & Then
-            mockMvc.perform(patch("/api/v1/betriebe/{id}/status", nonExistentId)
+            mockMvc.perform(patch("/betriebe/{id}/status", nonExistentId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(statusRequest)))
                     .andExpect(status().isNotFound());
@@ -478,7 +476,7 @@ class BetriebApiControllerTest {
                     .status(UpdateBetriebStatusRequest.StatusEnum.INAKTIV);
 
             // When & Then
-            mockMvc.perform(patch("/api/v1/betriebe/{id}/status", testBetrieb.getId())
+            mockMvc.perform(patch("/betriebe/{id}/status", testBetrieb.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(statusRequest)))
                     .andExpect(status().isForbidden());
@@ -491,12 +489,12 @@ class BetriebApiControllerTest {
         @DisplayName("Should return bad request for missing status")
         void shouldReturnBadRequestForMissingStatus() throws Exception {
             // Given
-            UpdateBetriebStatusRequest invalidRequest = new UpdateBetriebStatusRequest(); // Missing status
+            UpdateBetriebStatusRequest statusRequest = new UpdateBetriebStatusRequest();
 
             // When & Then
-            mockMvc.perform(patch("/api/v1/betriebe/{id}/status", testBetrieb.getId())
+            mockMvc.perform(patch("/betriebe/{id}/status", testBetrieb.getId())
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(invalidRequest)))
+                            .content(objectMapper.writeValueAsString(statusRequest)))
                     .andExpect(status().isBadRequest());
 
             verifyNoInteractions(betriebUseCase, mapper);
