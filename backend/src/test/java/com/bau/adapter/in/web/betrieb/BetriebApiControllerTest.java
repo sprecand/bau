@@ -180,9 +180,9 @@ class BetriebApiControllerTest {
         void shouldListBetriebeSuccessfully() throws Exception {
             // Given
             BetriebUseCase.BetriebPageResult pageResult = new BetriebUseCase.BetriebPageResult(
-                    List.of(testBetrieb), 1, 1, 1, 20
+                    List.of(testBetrieb), 1, 1, 0, 20
             );
-            when(betriebUseCase.getBetriebs(1, 20, null)).thenReturn(pageResult);
+            when(betriebUseCase.getBetriebs(0, 20, null)).thenReturn(pageResult);
             when(mapper.toResponse(testBetrieb)).thenReturn(testBetriebResponse);
 
             // When & Then
@@ -201,7 +201,7 @@ class BetriebApiControllerTest {
                     .andExpect(jsonPath("$.hasNext").value(false))
                     .andExpect(jsonPath("$.hasPrevious").value(false));
 
-            verify(betriebUseCase).getBetriebs(1, 20, null);
+            verify(betriebUseCase).getBetriebs(0, 20, null);
             verify(mapper).toResponse(testBetrieb);
         }
 
@@ -211,9 +211,9 @@ class BetriebApiControllerTest {
         void shouldReturnEmptyListWhenNoBetribeExist() throws Exception {
             // Given
             BetriebUseCase.BetriebPageResult pageResult = new BetriebUseCase.BetriebPageResult(
-                    List.of(), 0, 0, 1, 20
+                    List.of(), 0, 0, 0, 20
             );
-            when(betriebUseCase.getBetriebs(1, 20, null)).thenReturn(pageResult);
+            when(betriebUseCase.getBetriebs(0, 20, null)).thenReturn(pageResult);
 
             // When & Then
             mockMvc.perform(get("/api/v1/betriebe")
@@ -226,7 +226,7 @@ class BetriebApiControllerTest {
                     .andExpect(jsonPath("$.content").isEmpty())
                     .andExpect(jsonPath("$.totalElements").value(0));
 
-            verify(betriebUseCase).getBetriebs(1, 20, null);
+            verify(betriebUseCase).getBetriebs(0, 20, null);
             verifyNoMoreInteractions(mapper);
         }
     }

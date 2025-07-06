@@ -1,11 +1,10 @@
 # Bau Platform
 
-**B2B platform exclusively for construction companies** to share temporary workforce needs.
+B2B platform for construction companies to coordinate temporary workforce requirements.
 
-Construction companies can post labor requirements and other construction companies can provide workers to meet those needs.
+Construction companies can post labor requirements and connect with other construction companies to fulfill those needs through temporary worker assignments.
 
-**Important**: This platform is designed solely for business-to-business relationships between construction companies.
-Individual workers cannot register or use the platform directly.
+**Business Model**: Exclusively B2B relationships between registered construction companies. Individual workers cannot register directly.
 
 ## Quick Start
 
@@ -14,98 +13,61 @@ Individual workers cannot register or use the platform directly.
 - Java 21
 - Node.js 20+
 - Docker & Docker Compose
-- AWS CLI configured (for deployment)
-- OpenTofu (for infrastructure management)
+- AWS CLI configured
+- OpenTofu for infrastructure management
 
 ### Local Development
 
 ```bash
-# Clone repository
 git clone <repository-url>
 cd bau
 
-# Set up environment
+# Environment setup
 cp env.template .env
-# Edit .env with your configuration
+# Configure .env with required settings
 
 # Start database
 docker-compose up -d postgres
 
-# Backend (Spring Boot)
+# Backend
 cd backend
 mvn spring-boot:run
 
-# Frontend (Angular)
+# Frontend
 cd frontend
 npm install
 npm start
 ```
 
-### Test Docker Builds
+### Deployment
 
 ```bash
-# Test containers before deployment
-./test-docker-build.sh
-```
-
-### Deploy Infrastructure to AWS
-
-```bash
-# One-time infrastructure setup with OpenTofu
+# Infrastructure setup (one-time)
 ./deploy-aws.sh
 
-# Or manual steps
-cd infrastructure
-make deploy  # Initialize, plan, and apply
+# Application deployment
+git push origin main  # Automatic via CI/CD
 ```
 
-### Deploy Application to AWS
+## Cost Management
+
+**Automatic Schedule**: 9 AM - 9 PM CET/CEST daily
 
 ```bash
-# After infrastructure is set up
-
-# Automatic deployment on push to main
-git push origin main
-
-# Or manual deployment via GitHub Actions
-# Go to: Actions → "CD - Deploy" → "Run workflow"
-```
-
-## 💰 Cost Management
-
-**Automatic daily schedule: 9 AM - 9 PM CET/CEST** (already enabled!)
-
-```bash
-# Check current status and costs
+# Status and cost monitoring
 ./manage-app.sh status
 
-# Manual override: Turn app ON
-./manage-app.sh start
-
-# Manual override: Turn app OFF
-./manage-app.sh stop
-
-# Completely destroy infrastructure (costs $0/month)
-./manage-app.sh destroy
+# Manual controls
+./manage-app.sh start    # Override: force start
+./manage-app.sh stop     # Override: force stop
+./manage-app.sh destroy  # Remove infrastructure
 ```
 
-**Cost breakdown:**
-
-- **Auto-schedule (9AM-9PM)**: ~$38/month (50% savings)
-- **Manual control**: ~$30-47/month  
-- **Always stopped**: ~$30/month (infrastructure only)
-- **Destroyed**: $0/month
-
-**Your app automatically:**
-- ✅ **Starts at 9 AM** (including weekends)
-- ✅ **Stops at 9 PM** daily
-- ✅ **Saves ~$10/month** vs 24/7 running
-
-## Documentation
-
-- [Business Requirements](doc/fach/fachlich.md) - Domain model and business rules
-- [Technical Documentation](doc/tech/README.md) - Architecture and development guide
-- [API Specification](api/) - OpenAPI specification
+**Monthly Costs**:
+- Auto-schedule (9AM-9PM): ~$38
+- Manual control: ~$30-47
+- Always stopped: ~$30 (infrastructure only)
+- Destroyed: $0
 
 ## Architecture
 
@@ -113,33 +75,28 @@ git push origin main
 - **Backend**: Spring Boot 3.x with Java 21 (Hexagonal Architecture)
 - **Database**: PostgreSQL 15
 - **Authentication**: AWS Cognito
-- **Infrastructure**: AWS (ECS, RDS, CloudFront)
+- **Infrastructure**: AWS ECS, RDS, CloudFront
 
-## Project Status
+## Documentation
 
-**In Development** - MVP phase
+- [Business Requirements](doc/fach/fachlich.md)
+- [Technical Documentation](doc/tech/README.md)
+- [API Specification](api/)
 
-### Current Focus
+## Development Status
 
-- Core domain implementation (Bedarf, Betrieb)
-- Authentication system
-- Basic CRUD operations
-- Pilot program setup
+**Phase**: MVP Development
 
-### Next Steps
+**Current**: Core domain implementation, authentication system, basic operations
+**Next**: Frontend-backend integration, testing, production deployment
 
-- Frontend-backend integration
-- Comprehensive testing
-- Performance optimization
-- Production deployment
+## Development Guidelines
 
-## Contributing
-
-1. Follow the [coding standards](doc/tech/08-cross-cutting-concepts/coding-standards.md)
-2. Write tests for new functionality
-3. Update documentation as needed
+1. Follow [coding standards](doc/tech/08-cross-cutting-concepts/coding-standards.md)
+2. Write comprehensive tests
+3. Update documentation with changes
 4. Submit pull requests for review
 
 ## License
 
-Private project - All rights reserved.
+Private project. All rights reserved.
