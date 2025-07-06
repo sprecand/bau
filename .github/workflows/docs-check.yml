@@ -32,19 +32,7 @@ jobs:
           doc/**/*.md
           api/**/*.md
           README.md
-        config: |
-          {
-            "MD013": {
-              "line_length": 120,
-              "code_blocks": false,
-              "tables": false,
-              "headings": false
-            },
-            "MD033": {
-              "allowed_elements": ["br", "details", "summary"]
-            },
-            "MD041": false
-          }
+        config: '.github/.markdownlint-cli2.jsonc'
     
     - name: Spell Check
       uses: streetsidesoftware/cspell-action@v6
