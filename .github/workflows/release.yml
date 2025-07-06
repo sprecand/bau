@@ -80,15 +80,33 @@ jobs:
       - name: Update backend version
         run: |
           VERSION="${{ steps.version.outputs.version }}"
-          sed -i "s/<version>.*-SNAPSHOT<\/version>/<version>$VERSION<\/version>/" backend/pom.xml
-          echo "Updated backend version to $VERSION"
+          
+          # Get current version from pom.xml (remove -SNAPSHOT if present)
+          CURRENT_VERSION=$(grep -oP '(?<=<version>)[^<]+' backend/pom.xml | head -1)
+          CURRENT_VERSION=${CURRENT_VERSION%-SNAPSHOT}
+          
+          if [ "$CURRENT_VERSION" != "$VERSION" ]; then
+            sed -i "s/<version>.*-SNAPSHOT<\/version>/<version>$VERSION<\/version>/" backend/pom.xml
+            sed -i "s/<version>$CURRENT_VERSION<\/version>/<version>$VERSION<\/version>/" backend/pom.xml
+            echo "Updated backend version from $CURRENT_VERSION to $VERSION"
+          else
+            echo "Backend version already at $VERSION, no update needed"
+          fi
 
       - name: Update frontend version
         run: |
           VERSION="${{ steps.version.outputs.version }}"
           cd frontend
-          npm version $VERSION --no-git-tag-version
-          echo "Updated frontend version to $VERSION"
+          
+          # Get current version from package.json
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          
+          if [ "$CURRENT_VERSION" != "$VERSION" ]; then
+            npm version $VERSION --no-git-tag-version
+            echo "Updated frontend version from $CURRENT_VERSION to $VERSION"
+          else
+            echo "Frontend version already at $VERSION, no update needed"
+          fi
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -132,10 +150,18 @@ jobs:
           VERSION="${{ steps.version.outputs.version }}"
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add backend/pom.xml frontend/package.json
-          git commit -m "chore: bump version to $VERSION"
+          
+          # Check if there are any changes to commit
+          if git diff --quiet backend/pom.xml frontend/package.json; then
+            echo "No version changes to commit"
+          else
+            git add backend/pom.xml frontend/package.json
+            git commit -m "chore: bump version to $VERSION"
+            git push origin HEAD:main
+          fi
+          
+          # Always create and push the tag (even if no version changes)
           git tag -a "v$VERSION" -m "Release version $VERSION"
-          git push origin HEAD:main
           git push origin "v$VERSION"
 
       - name: Create GitHub Release
