@@ -2,19 +2,24 @@
 
 ## Status
 
+
 Accepted
 
 ## Context
+
 
 Need consistent naming conventions across the codebase to improve readability and maintainability.
 
 ## Decision
 
+
 Use package structure to distinguish object types rather than suffixes, except for JPA entities.
 
 ## Consequences
 
+
 ### Positive
+
 
 - **Cleaner Names**: No suffix clutter in class names
 - **Package Clarity**: Object type is clear from package location
@@ -23,14 +28,17 @@ Use package structure to distinguish object types rather than suffixes, except f
 
 ### Negative
 
+
 - **Learning Curve**: Team needs to understand package structure
 - **IDE Support**: Less automatic type detection without suffixes
 
 ## Implementation
 
+
 ### Package Structure
 
-```
+
+```bash
 
 backend/src/main/java/com/bau/
 ├── adapter/
@@ -44,14 +52,14 @@ backend/src/main/java/com/bau/
 │       └── out/              # Output Ports (no suffix)
 └── shared/
 
-```
+```bash
 
 ├── config/               # Configuration (no suffix)
 └── util/                 # Utilities (no suffix)
 
-```
+```bash
 
-```
+```bash
 
 backend/src/main/java/com/bau/
 ├── adapter/
@@ -65,18 +73,20 @@ backend/src/main/java/com/bau/
 │       └── out/              # Output Ports (no suffix)
 └── shared/
 
-```
+```bash
 
 ├── config/               # Configuration (no suffix)
 └── util/                 # Utilities (no suffix)
 
-```
+```bash
 
-```
+```bash
 
 ### Naming Rules
 
+
 #### Classes
+
 
 - **DTOs**: `CreateBedarfRequest`, `BedarfResponse` (no suffix)
 - **Business Objects**: `Bedarf`, `Betrieb`, `User` (no suffix)
@@ -87,23 +97,28 @@ backend/src/main/java/com/bau/
 
 #### Methods
 
+
 - **Use Cases**: `execute()` for main business logic
 - **Repositories**: `save()`, `findById()`, `findByXxx()`
 - **Mappers**: `toDomain()`, `toEntity()`, `toResponse()`
 
 #### Variables
 
+
 - **Camel Case**: `bedarfId`, `betriebName`
 - **Constants**: `UPPER_SNAKE_CASE`
 - **Database Columns**: `snake_case`
 
 ### Example Implementation
+
 
 ```java
 
 ### Naming Rules
 
+
 #### Classes
+
 
 - **DTOs**: `CreateBedarfRequest`, `BedarfResponse` (no suffix)
 - **Business Objects**: `Bedarf`, `Betrieb`, `User` (no suffix)
@@ -114,23 +129,26 @@ backend/src/main/java/com/bau/
 
 #### Methods
 
+
 - **Use Cases**: `execute()` for main business logic
 - **Repositories**: `save()`, `findById()`, `findByXxx()`
 - **Mappers**: `toDomain()`, `toEntity()`, `toResponse()`
 
 #### Variables
 
+
 - **Camel Case**: `bedarfId`, `betriebName`
 - **Constants**: `UPPER_SNAKE_CASE`
 - **Database Columns**: `snake_case`
 
 ### Example Implementation
+
 
 ```java
 // DTO (adapter/in/web/dto/)
 public class CreateBedarfRequest {
 
-```
+```bash
 
 private Integer holzbauAnzahl;
 private Integer zimmermannAnzahl;
@@ -140,14 +158,14 @@ private String adresse;
 private Boolean mitWerkzeug;
 private Boolean mitFahrzeug;
 
-```
+```bash
 
 }
 
 // Business Object (application/domain/)
 public class Bedarf {
 
-```
+```bash
 
 private Long id;
 private Long betriebId;
@@ -160,7 +178,7 @@ private Boolean mitWerkzeug;
 private Boolean mitFahrzeug;
 private BedarfStatus status;
 
-```
+```bash
 
 }
 
@@ -169,77 +187,77 @@ private BedarfStatus status;
 @Table(name = "bedarf")
 public class BedarfEntity {
 
-```
+```bash
 
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long id;
 
-```
+```bash
 
-```
+```bash
 
 @Column(name = "betrieb_id")
 private Long betriebId;
 
-```
+```bash
 
-```
+```bash
 
 @Column(name = "holzbau_anzahl")
 private Integer holzbauAnzahl;
 
-```
+```bash
 
-```
+```bash
 
 @Column(name = "zimmermann_anzahl")
 private Integer zimmermannAnzahl;
 
-```
+```bash
 
-```
+```bash
 
 @Column(name = "datum_von")
 private LocalDate datumVon;
 
-```
+```bash
 
-```
+```bash
 
 @Column(name = "datum_bis")
 private LocalDate datumBis;
 
-```
+```bash
 
-```
+```bash
 
 @Column(name = "adresse")
 private String adresse;
 
-```
+```bash
 
-```
+```bash
 
 @Column(name = "mit_werkzeug")
 private Boolean mitWerkzeug;
 
-```
+```bash
 
-```
+```bash
 
 @Column(name = "mit_fahrzeug")
 private Boolean mitFahrzeug;
 
-```
+```bash
 
-```
+```bash
 
 @Enumerated(EnumType.STRING)
 @Column(name = "status")
 private BedarfStatus status;
 
-```
+```bash
 
 }
 
@@ -247,34 +265,34 @@ private BedarfStatus status;
 @Service
 public class CreateBedarfUseCase {
 
-```
+```bash
 
 private final BedarfRepository bedarfRepository;
 private final BedarfMapper bedarfMapper;
 
-```
+```bash
 
-```
+```bash
 
 public Bedarf execute(CreateBedarfRequest request) {
     Bedarf bedarf = bedarfMapper.toDomain(request);
     return bedarfRepository.save(bedarf);
 }
 
-```
+```bash
 
 }
 
 // Port (application/port/out/)
 public interface BedarfRepository {
 
-```
+```bash
 
 Bedarf save(Bedarf bedarf);
 Optional<Bedarf> findById(Long id);
 List<Bedarf> findByBetriebId(Long betriebId);
 
-```
+```bash
 
 }
 
@@ -282,7 +300,7 @@ List<Bedarf> findByBetriebId(Long betriebId);
 @Component
 public class BedarfMapper {
 
-```
+```bash
 
 public Bedarf toDomain(CreateBedarfRequest request) {
     Bedarf bedarf = new Bedarf();
@@ -296,9 +314,9 @@ public Bedarf toDomain(CreateBedarfRequest request) {
     return bedarf;
 }
 
-```
+```bash
 
-```
+```bash
 
 public BedarfResponse toResponse(Bedarf bedarf) {
     BedarfResponse response = new BedarfResponse();
@@ -315,7 +333,7 @@ public BedarfResponse toResponse(Bedarf bedarf) {
     return response;
 }
 
-```
+```bash
 
 }
 
@@ -323,7 +341,7 @@ public BedarfResponse toResponse(Bedarf bedarf) {
 @Component
 public class BedarfEntityMapper {
 
-```
+```bash
 
 public BedarfEntity toEntity(Bedarf bedarf) {
     BedarfEntity entity = new BedarfEntity();
@@ -340,9 +358,9 @@ public BedarfEntity toEntity(Bedarf bedarf) {
     return entity;
 }
 
-```
+```bash
 
-```
+```bash
 
 public Bedarf toDomain(BedarfEntity entity) {
     Bedarf bedarf = new Bedarf();
@@ -359,16 +377,16 @@ public Bedarf toDomain(BedarfEntity entity) {
     return bedarf;
 }
 
-```
+```bash
 
 }
 
-```
+```bash
 
 // DTO (adapter/in/web/dto/)
 public class CreateBedarfRequest {
 
-```
+```bash
 
 private Integer holzbauAnzahl;
 private Integer zimmermannAnzahl;
@@ -378,14 +396,14 @@ private String adresse;
 private Boolean mitWerkzeug;
 private Boolean mitFahrzeug;
 
-```
+```bash
 
 }
 
 // Business Object (application/domain/)
 public class Bedarf {
 
-```
+```bash
 
 private Long id;
 private Long betriebId;
@@ -398,7 +416,7 @@ private Boolean mitWerkzeug;
 private Boolean mitFahrzeug;
 private BedarfStatus status;
 
-```
+```bash
 
 }
 
@@ -407,77 +425,77 @@ private BedarfStatus status;
 @Table(name = "bedarf")
 public class BedarfEntity {
 
-```
+```bash
 
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long id;
 
-```
+```bash
 
-```
+```bash
 
 @Column(name = "betrieb_id")
 private Long betriebId;
 
-```
+```bash
 
-```
+```bash
 
 @Column(name = "holzbau_anzahl")
 private Integer holzbauAnzahl;
 
-```
+```bash
 
-```
+```bash
 
 @Column(name = "zimmermann_anzahl")
 private Integer zimmermannAnzahl;
 
-```
+```bash
 
-```
+```bash
 
 @Column(name = "datum_von")
 private LocalDate datumVon;
 
-```
+```bash
 
-```
+```bash
 
 @Column(name = "datum_bis")
 private LocalDate datumBis;
 
-```
+```bash
 
-```
+```bash
 
 @Column(name = "adresse")
 private String adresse;
 
-```
+```bash
 
-```
+```bash
 
 @Column(name = "mit_werkzeug")
 private Boolean mitWerkzeug;
 
-```
+```bash
 
-```
+```bash
 
 @Column(name = "mit_fahrzeug")
 private Boolean mitFahrzeug;
 
-```
+```bash
 
-```
+```bash
 
 @Enumerated(EnumType.STRING)
 @Column(name = "status")
 private BedarfStatus status;
 
-```
+```bash
 
 }
 
@@ -485,34 +503,34 @@ private BedarfStatus status;
 @Service
 public class CreateBedarfUseCase {
 
-```
+```bash
 
 private final BedarfRepository bedarfRepository;
 private final BedarfMapper bedarfMapper;
 
-```
+```bash
 
-```
+```bash
 
 public Bedarf execute(CreateBedarfRequest request) {
     Bedarf bedarf = bedarfMapper.toDomain(request);
     return bedarfRepository.save(bedarf);
 }
 
-```
+```bash
 
 }
 
 // Port (application/port/out/)
 public interface BedarfRepository {
 
-```
+```bash
 
 Bedarf save(Bedarf bedarf);
 Optional<Bedarf> findById(Long id);
 List<Bedarf> findByBetriebId(Long betriebId);
 
-```
+```bash
 
 }
 
@@ -520,7 +538,7 @@ List<Bedarf> findByBetriebId(Long betriebId);
 @Component
 public class BedarfMapper {
 
-```
+```bash
 
 public Bedarf toDomain(CreateBedarfRequest request) {
     Bedarf bedarf = new Bedarf();
@@ -534,9 +552,9 @@ public Bedarf toDomain(CreateBedarfRequest request) {
     return bedarf;
 }
 
-```
+```bash
 
-```
+```bash
 
 public BedarfResponse toResponse(Bedarf bedarf) {
     BedarfResponse response = new BedarfResponse();
@@ -553,7 +571,7 @@ public BedarfResponse toResponse(Bedarf bedarf) {
     return response;
 }
 
-```
+```bash
 
 }
 
@@ -561,7 +579,7 @@ public BedarfResponse toResponse(Bedarf bedarf) {
 @Component
 public class BedarfEntityMapper {
 
-```
+```bash
 
 public BedarfEntity toEntity(Bedarf bedarf) {
     BedarfEntity entity = new BedarfEntity();
@@ -578,9 +596,9 @@ public BedarfEntity toEntity(Bedarf bedarf) {
     return entity;
 }
 
-```
+```bash
 
-```
+```bash
 
 public Bedarf toDomain(BedarfEntity entity) {
     Bedarf bedarf = new Bedarf();
@@ -597,18 +615,20 @@ public Bedarf toDomain(BedarfEntity entity) {
     return bedarf;
 }
 
-```
+```bash
 
 }
 
-```
+```bash
 
 ## Related
+
 
 - [ADR-001: Hexagonal Architecture](adr-001-hexagonal-architecture.md) - Overall architecture
 - [ADR-003: Entity & DTO Separation](adr-003-entity-dto-separation.md) - Object type separation
 
 ## Related
+
 
 - [ADR-001: Hexagonal Architecture](adr-001-hexagonal-architecture.md) - Overall architecture
 - [ADR-003: Entity & DTO Separation](adr-003-entity-dto-separation.md) - Object type separation

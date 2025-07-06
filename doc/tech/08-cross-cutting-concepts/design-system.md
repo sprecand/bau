@@ -2,11 +2,14 @@
 
 ## Overview
 
+
 The Bau Platform uses a modern, comprehensive design system built on OKLCH color space, providing superior accessibility, dark mode support, and perceptual uniformity. This system integrates seamlessly with Angular Material and Tailwind CSS.
 
 ## Color System
 
+
 ### OKLCH Advantages
+
 
 - **Perceptual Uniformity**: Consistent lightness across all hues
 - **Better Accessibility**: Improved contrast ratios and readability
@@ -15,8 +18,10 @@ The Bau Platform uses a modern, comprehensive design system built on OKLCH color
 
 ### Color Tokens
 
+
 #### Core Colors
 
+
 ```css
 :root {
   /*Backgrounds*/
@@ -30,7 +35,7 @@ The Bau Platform uses a modern, comprehensive design system built on OKLCH color
 --popover-foreground: oklch(0.1450 0 0);      /*Dark text in popovers*/
 }
 
-```
+```bash
 
 :root {
   /*Backgrounds*/
@@ -44,13 +49,15 @@ The Bau Platform uses a modern, comprehensive design system built on OKLCH color
 --popover-foreground: oklch(0.1450 0 0);      /*Dark text in popovers*/
 }
 
-```
+```bash
 
 #### Brand Colors
+
 
 ```css
 
 #### Brand Colors
+
 
 ```css
 
@@ -68,7 +75,7 @@ The Bau Platform uses a modern, comprehensive design system built on OKLCH color
 --accent-foreground: oklch(0.2050 0 0);       /*Dark text on accent*/
 }
 
-```
+```bash
 
 :root {
   /*Primary Brand*/
@@ -84,13 +91,15 @@ The Bau Platform uses a modern, comprehensive design system built on OKLCH color
 --accent-foreground: oklch(0.2050 0 0);       /*Dark text on accent*/
 }
 
-```
+```bash
 
 #### State Colors
+
 
 ```css
 
 #### State Colors
+
 
 ```css
 
@@ -104,7 +113,7 @@ The Bau Platform uses a modern, comprehensive design system built on OKLCH color
 --muted-foreground: oklch(0.5560 0 0);            /*Muted text*/
 }
 
-```
+```bash
 
 :root {
   /*Destructive Actions*/
@@ -116,13 +125,15 @@ The Bau Platform uses a modern, comprehensive design system built on OKLCH color
 --muted-foreground: oklch(0.5560 0 0);            /*Muted text*/
 }
 
-```
+```bash
 
 #### UI Elements
+
 
 ```css
 
 #### UI Elements
+
 
 ```css
 
@@ -133,7 +144,7 @@ The Bau Platform uses a modern, comprehensive design system built on OKLCH color
 --ring: oklch(0.7080 0 0);                        /*Focus rings*/
 }
 
-```
+```bash
 
 :root {
   /*Borders & Inputs*/
@@ -142,13 +153,15 @@ The Bau Platform uses a modern, comprehensive design system built on OKLCH color
 --ring: oklch(0.7080 0 0);                        /*Focus rings*/
 }
 
-```
+```bash
 
 #### Sidebar
+
 
 ```css
 
 #### Sidebar
+
 
 ```css
 
@@ -164,7 +177,7 @@ The Bau Platform uses a modern, comprehensive design system built on OKLCH color
 --sidebar-ring: oklch(0.7080 0 0);                /*Focus in sidebar*/
 }
 
-```
+```bash
 
 :root {
   /*Sidebar Navigation*/
@@ -178,13 +191,15 @@ The Bau Platform uses a modern, comprehensive design system built on OKLCH color
 --sidebar-ring: oklch(0.7080 0 0);                /*Focus in sidebar*/
 }
 
-```
+```bash
 
 ### Dark Mode
+
 
 ```css
 
 ### Dark Mode
+
 
 ```css
 
@@ -226,7 +241,7 @@ The Bau Platform uses a modern, comprehensive design system built on OKLCH color
 --sidebar-ring: oklch(0.4390 0 0);                /*Dark focus in sidebar*/
 }
 
-```
+```bash
 
 .dark {
 --background: oklch(0.1450 0 0);                  /*Dark background*/
@@ -266,73 +281,79 @@ The Bau Platform uses a modern, comprehensive design system built on OKLCH color
 --sidebar-ring: oklch(0.4390 0 0);                /*Dark focus in sidebar*/
 }
 
-```
+```bash
 
 ## Typography
 
+
 ### Font Stack
+
 
 ```css
 
 ## Typography
 
+
 ### Font Stack
+
 
 ```css
 
 :root {
 --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
 
-```
+```bash
 
 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
 sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
 'Segoe UI Symbol', 'Noto Color Emoji';
 
-```
+```bash
 
 --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
 --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
 
-```
+```bash
 
 "Liberation Mono", "Courier New", monospace;
 
-```
+```bash
 
 }
 
-```
+```bash
 
 :root {
 --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
 
-```
+```bash
 
 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
 sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
 'Segoe UI Symbol', 'Noto Color Emoji';
 
-```
+```bash
 
 --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
 --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
 
-```
+```bash
 
 "Liberation Mono", "Courier New", monospace;
 
-```
+```bash
 
 }
 
-```
+```bash
 
 ### Typography Scale
+
 
 ```css
 
 ### Typography Scale
+
 
 ```css
 
@@ -348,7 +369,7 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
 .text-sm { font-size: 0.875rem; line-height: 1.25rem; }   /*14px*/
 .text-xs { font-size: 0.75rem; line-height: 1rem; }       /*12px*/
 
-```
+```bash
 
 /*Headings*/
 .text-4xl { font-size: 2.25rem; line-height: 2.5rem; }    /*36px*/
@@ -362,17 +383,21 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
 .text-sm { font-size: 0.875rem; line-height: 1.25rem; }   /*14px*/
 .text-xs { font-size: 0.75rem; line-height: 1rem; }       /*12px*/
 
-```
+```bash
 
 ## Spacing & Layout
 
+
 ### Border Radius
+
 
 ```css
 
 ## Spacing & Layout
 
+
 ### Border Radius
+
 
 ```css
 
@@ -386,7 +411,7 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
 .rounded-lg { border-radius: var(--radius); }              /*10px*/
 .rounded-xl { border-radius: calc(var(--radius) + 4px); }  /*14px*/
 
-```
+```bash
 
 :root {
 --radius: 0.625rem;  /*10px base radius*/
@@ -398,13 +423,15 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
 .rounded-lg { border-radius: var(--radius); }              /*10px*/
 .rounded-xl { border-radius: calc(var(--radius) + 4px); }  /*14px*/
 
-```
+```bash
 
 ### Shadows
+
 
 ```css
 
 ### Shadows
+
 
 ```css
 
@@ -415,7 +442,7 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
 --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
 }
 
-```
+```bash
 
 :root {
 --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
@@ -424,13 +451,16 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
 --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
 }
 
-```
+```bash
 
 ## Usage Guidelines
 
+
 ### Color Usage
 
+
 #### Primary Color
+
 
 - **Use for**: Main CTAs, active states, brand elements
 - **Don't use for**: Large backgrounds, body text
@@ -438,11 +468,13 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
 
 #### Secondary Color
 
+
 - **Use for**: Supporting actions, inactive states
 - **Don't use for**: Primary actions, important alerts
 - **Example**: Cancel buttons, form labels
 
 #### Destructive Color
+
 
 - **Use for**: Delete actions, error states, warnings
 - **Don't use for**: Success messages, neutral actions
@@ -450,21 +482,27 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
 
 #### Muted Colors
 
+
 - **Use for**: Placeholder text, disabled states, subtle backgrounds
 - **Don't use for**: Important information, primary actions
 - **Example**: Form placeholders, disabled buttons
 
 ### Component Patterns
 
+
 #### Cards
+
 
 ```html
 
 ## Usage Guidelines
 
+
 ### Color Usage
 
+
 #### Primary Color
+
 
 - **Use for**: Main CTAs, active states, brand elements
 - **Don't use for**: Large backgrounds, body text
@@ -472,11 +510,13 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
 
 #### Secondary Color
 
+
 - **Use for**: Supporting actions, inactive states
 - **Don't use for**: Primary actions, important alerts
 - **Example**: Cancel buttons, form labels
 
 #### Destructive Color
+
 
 - **Use for**: Delete actions, error states, warnings
 - **Don't use for**: Success messages, neutral actions
@@ -484,19 +524,22 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
 
 #### Muted Colors
 
+
 - **Use for**: Placeholder text, disabled states, subtle backgrounds
 - **Don't use for**: Important information, primary actions
 - **Example**: Form placeholders, disabled buttons
 
 ### Component Patterns
 
+
 #### Cards
+
 
 ```html
 <mat-card class="bg-card border border-border shadow-md rounded-lg">
   <mat-card-header class="border-b border-border pb-4">
 
-```
+```bash
 
 <mat-card-title class="text-card-foreground text-xl font-semibold">
   Card Title
@@ -505,23 +548,23 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
   Card subtitle
 </mat-card-subtitle>
 
-```
+```bash
 
   </mat-card-header>
 
   <mat-card-content class="pt-4">
 
-```
+```bash
 
 <p class="text-card-foreground">Card content goes here.</p>
 
-```
+```bash
 
   </mat-card-content>
 
   <mat-card-actions class="border-t border-border pt-4">
 
-```
+```bash
 
 <button mat-raised-button class="bg-primary text-primary-foreground">
   Primary Action
@@ -530,17 +573,17 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
   Secondary Action
 </button>
 
-```
+```bash
 
   </mat-card-actions>
 </mat-card>
 
-```
+```bash
 
 <mat-card class="bg-card border border-border shadow-md rounded-lg">
   <mat-card-header class="border-b border-border pb-4">
 
-```
+```bash
 
 <mat-card-title class="text-card-foreground text-xl font-semibold">
   Card Title
@@ -549,23 +592,23 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
   Card subtitle
 </mat-card-subtitle>
 
-```
+```bash
 
   </mat-card-header>
 
   <mat-card-content class="pt-4">
 
-```
+```bash
 
 <p class="text-card-foreground">Card content goes here.</p>
 
-```
+```bash
 
   </mat-card-content>
 
   <mat-card-actions class="border-t border-border pt-4">
 
-```
+```bash
 
 <button mat-raised-button class="bg-primary text-primary-foreground">
   Primary Action
@@ -574,25 +617,27 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
   Secondary Action
 </button>
 
-```
+```bash
 
   </mat-card-actions>
 </mat-card>
 
-```
+```bash
 
 #### Forms
+
 
 ```html
 
 #### Forms
+
 
 ```html
 
 <form class="space-y-6 bg-card p-6 rounded-lg border border-border">
   <div class="space-y-4">
 
-```
+```bash
 
 <mat-form-field class="w-full">
   <mat-label class="text-muted-foreground">Company Name</mat-label>
@@ -601,9 +646,9 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
          placeholder="Enter company name">
 </mat-form-field>
 
-```
+```bash
 
-```
+```bash
 
 <mat-form-field class="w-full">
   <mat-label class="text-muted-foreground">Email</mat-label>
@@ -613,13 +658,13 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
          placeholder="Enter email address">
 </mat-form-field>
 
-```
+```bash
 
   </div>
 
   <div class="flex justify-end space-x-3">
 
-```
+```bash
 
 <button type="button"
         mat-button
@@ -632,17 +677,17 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
   Save Company
 </button>
 
-```
+```bash
 
   </div>
 </form>
 
-```
+```bash
 
 <form class="space-y-6 bg-card p-6 rounded-lg border border-border">
   <div class="space-y-4">
 
-```
+```bash
 
 <mat-form-field class="w-full">
   <mat-label class="text-muted-foreground">Company Name</mat-label>
@@ -651,9 +696,9 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
          placeholder="Enter company name">
 </mat-form-field>
 
-```
+```bash
 
-```
+```bash
 
 <mat-form-field class="w-full">
   <mat-label class="text-muted-foreground">Email</mat-label>
@@ -663,13 +708,13 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
          placeholder="Enter email address">
 </mat-form-field>
 
-```
+```bash
 
   </div>
 
   <div class="flex justify-end space-x-3">
 
-```
+```bash
 
 <button type="button"
         mat-button
@@ -682,33 +727,35 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
   Save Company
 </button>
 
-```
+```bash
 
   </div>
 </form>
 
-```
+```bash
 
 #### Navigation
+
 
 ```html
 
 #### Navigation
+
 
 ```html
 
 <nav class="bg-sidebar border-r border-sidebar-border h-full">
   <div class="p-4">
 
-```
+```bash
 
 <h2 class="text-sidebar-foreground text-lg font-semibold mb-4">
   Bau Platform
 </h2>
 
-```
+```bash
 
-```
+```bash
 
 <ul class="space-y-2">
   <li>
@@ -734,25 +781,25 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
   </li>
 </ul>
 
-```
+```bash
 
   </div>
 </nav>
 
-```
+```bash
 
 <nav class="bg-sidebar border-r border-sidebar-border h-full">
   <div class="p-4">
 
-```
+```bash
 
 <h2 class="text-sidebar-foreground text-lg font-semibold mb-4">
   Bau Platform
 </h2>
 
-```
+```bash
 
-```
+```bash
 
 <ul class="space-y-2">
   <li>
@@ -778,34 +825,40 @@ sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
   </li>
 </ul>
 
-```
+```bash
 
   </div>
 </nav>
 
-```
+```bash
 
 ## Accessibility
 
+
 ### Contrast Ratios
+
 
 - **Text on background**: WCAG AA compliant (4.5:1 minimum)
 - **Large text**: WCAG AA compliant (3:1 minimum)
 - **Interactive elements**: Clear focus states with ring colors
 
 ### Focus Management
+
 
 ```css
 
 ## Accessibility
 
+
 ### Contrast Ratios
+
 
 - **Text on background**: WCAG AA compliant (4.5:1 minimum)
 - **Large text**: WCAG AA compliant (3:1 minimum)
 - **Interactive elements**: Clear focus states with ring colors
 
 ### Focus Management
+
 
 ```css
 /*Focus styles using design tokens*/
@@ -820,7 +873,7 @@ button:focus-visible {
   ring-offset: 2px;
 }
 
-```
+```bash
 
 /*Focus styles using design tokens*/
 .focus-visible {
@@ -834,9 +887,10 @@ button:focus-visible {
   ring-offset: 2px;
 }
 
-```
+```bash
 
 ### Dark Mode
+
 
 - Automatic detection via `prefers-color-scheme`
 - Manual toggle support
@@ -844,19 +898,24 @@ button:focus-visible {
 
 ## Implementation
 
+
 ### CSS Setup
+
 
 ```css
 
 ### Dark Mode
 
+
 - Automatic detection via `prefers-color-scheme`
 - Manual toggle support
 - Consistent contrast ratios in both modes
 
 ## Implementation
 
+
 ### CSS Setup
+
 
 ```css
 /*globals.css*/
@@ -880,7 +939,7 @@ body {
   transition-duration: 150ms;
 }
 
-```
+```bash
 
 /*globals.css*/
 @use url('./design-system.css');
@@ -903,39 +962,47 @@ body {
   transition-duration: 150ms;
 }
 
-```
+```bash
 
 ### Angular Material Integration
+
 
 See [Coding Standards - Angular Material Theme Integration](./coding-standards.md#angular-material-theme-integration)
 
 ### Tailwind Configuration
 
+
 See [Coding Standards - Tailwind Integration](./coding-standards.md#tailwind-integration)
 
 ## Design Tokens Export
 
+
 ### For Figma
+
 
 ```json
 
 ### Angular Material Integration
 
+
 See [Coding Standards - Angular Material Theme Integration](./coding-standards.md#angular-material-theme-integration)
 
 ### Tailwind Configuration
+
 
 See [Coding Standards - Tailwind Integration](./coding-standards.md#tailwind-integration)
 
 ## Design Tokens Export
 
+
 ### For Figma
+
 
 ```json
 {
   "colors": {
 
-```
+```bash
 
 "primary": {
   "value": "oklch(0.6324 0.1363 157.8607)",
@@ -946,17 +1013,17 @@ See [Coding Standards - Tailwind Integration](./coding-standards.md#tailwind-int
   "type": "color"
 }
 
-```
+```bash
 
   }
 }
 
-```
+```bash
 
 {
   "colors": {
 
-```
+```bash
 
 "primary": {
   "value": "oklch(0.6324 0.1363 157.8607)",
@@ -967,96 +1034,100 @@ See [Coding Standards - Tailwind Integration](./coding-standards.md#tailwind-int
   "type": "color"
 }
 
-```
+```bash
 
   }
 }
 
-```
+```bash
 
 ### For Developers
+
 
 ```typescript
 
 ### For Developers
+
 
 ```typescript
 
 export const designTokens = {
   colors: {
 
-```
+```bash
 
 primary: 'oklch(0.6324 0.1363 157.8607)',
 background: 'oklch(1 0 0)',
 // ... other tokens
 
-```
+```bash
 
   },
   spacing: {
 
-```
+```bash
 
 radius: '0.625rem'
 
-```
+```bash
 
   },
   typography: {
 
-```
+```bash
 
 fontSans: 'var(--font-sans)'
 
-```
+```bash
 
   }
 } as const;
 
-```
+```bash
 
 export const designTokens = {
   colors: {
 
-```
+```bash
 
 primary: 'oklch(0.6324 0.1363 157.8607)',
 background: 'oklch(1 0 0)',
 // ... other tokens
 
-```
+```bash
 
   },
   spacing: {
 
-```
+```bash
 
 radius: '0.625rem'
 
-```
+```bash
 
   },
   typography: {
 
-```
+```bash
 
 fontSans: 'var(--font-sans)'
 
-```
+```bash
 
   }
 } as const;
 
-```
+```bash
 
 ## Related Documentation
+
 
 - [Coding Standards](./coding-standards.md)
 - [Frontend Development Guide](./development.md)
 - [Component Library](../05-building-blocks/frontend-architecture.md)
 
 ## Related Documentation
+
 
 - [Coding Standards](./coding-standards.md)
 - [Frontend Development Guide](./development.md)

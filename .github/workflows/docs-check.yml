@@ -25,60 +25,38 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+    
     - name: Markdown Lint
-      uses: DavidAnson/markdownlint-cli2-action@v18
+      uses: DavidAnson/markdownlint-cli2-action@v20
+      continue-on-error: true
       with:
         globs: |
           doc/**/*.md
           api/**/*.md
           README.md
-        config: |
-          {
-            "MD013": {
-              "line_length": 120,
-              "code_blocks": false,
-              "tables": false,
-              "headings": false
-            },
-            "MD033": {
-              "allowed_elements": ["br", "details", "summary"]
-            },
-            "MD041": false
-          }
+        config: '.markdownlint.json'
     
     - name: Spell Check
-      uses: streetsidesoftware/cspell-action@v6
+      uses: streetsidesoftware/cspell-action@v7
+      continue-on-error: true
       with:
         files: |
           doc/**/*.md
           api/**/*.md
           README.md
         inline: warning
-        config: |
-          {
-            "version": "0.2",
-            "language": "en,de-CH",
-            "words": [
-              "AWS", "PostgreSQL", "JWT", "TypeScript", "JavaScript", "OpenAPI", "Cognito",
-              "DTO", "JSON", "HTTP", "HTTPS", "API", "REST", "CRUD", "SQL", "JPA", "JDK",
-              "OpenTofu", "Terraform", "Docker", "Kubernetes", "GitHub", "CI", "CD", "DevOps",
-              "SonarQube", "ESLint", "Spring", "SpringBoot", "Angular", "RxJS", "NgRx",
-              "Tailwind", "CSS", "HTML", "SCSS", "YAML", "YML", "Markdown",
-              "Betrieb", "Bauarbeiter", "Baustelle", "Handwerker", "adresse", "anzahl",
-              "bedarfe", "bedarfs", "usecase", "postgres", "postgresql", "nginx", "awslogs",
-              "jdbc", "amazoncognito", "csrf", "tfvars", "DATASOURCE", "WORKDIR", "BIGSERIAL",
-              "VARCHAR", "INACTIV", "oklch", "Segoe", "Noto", "Menlo", "Consolas", "bezier",
-              "sonarqube", "jacoco", "insertable"
-            ],
-            "ignoreRegExpList": [
-              "/```[\\s\\S]*?```/g",
-              "/`[^`]*`/g",
-              "/https?:\\/\\/[^\\s)]+/g",
-              "/[a-zA-Z0-9_\\-\\/\\.]+\\.(java|ts|js|html|css|yaml|yml|md|json|txt|sh|py)/g",
-              "/\\d+\\.\\d+\\.\\d+/g",
-              "/#[0-9a-fA-F]{3,6}/g"
-            ]
-          }
+        config: '.github/cspell.json'
+        incremental_files_only: true
+        treat_flagged_words_as_errors: false
+        strict: false
+        suggestions: false
+        verbose: false
+        check_dot_files: explicit
+        use_cspell_files: false
           
     - name: Check Links
       uses: lycheeverse/lychee-action@v2

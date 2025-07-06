@@ -1,0 +1,33 @@
+{
+  "version": "0.2",
+  "language": ["en", "de-CH"],
+  "words": [
+    "AWS", "PostgreSQL", "JWT", "TypeScript", "JavaScript", "OpenAPI", "Cognito",
+    "DTO", "JSON", "HTTP", "HTTPS", "API", "REST", "CRUD", "SQL", "JPA", "JDK",
+    "OpenTofu", "Terraform", "Docker", "Kubernetes", "GitHub", "CI", "CD", "DevOps",
+    "SonarQube", "ESLint", "Spring", "SpringBoot", "Angular", "RxJS", "NgRx",
+    "Tailwind", "CSS", "HTML", "SCSS", "YAML", "YML", "Markdown",
+    "usecase", "postgres", "postgresql", "nginx", "awslogs",
+    "jdbc", "amazoncognito", "csrf", "tfvars", "DATASOURCE", "WORKDIR",
+    "dbname", "tablespace", "varchar", "nullable", "springdoc", "javaTimeModule",
+    "objectMapper", "serializers", "deserializers", "lombok", "slf4j", "logback",
+    "WebFlux", "ReactiveMongoRepository", "MongoTemplate", "JUnit", "Mockito",
+    "ArgumentMatchers", "TestContainer", "assertThat", "Jacoco", "SonarCloud",
+    "artifactory", "nexus", "maven", "gradle", "dockerfile", "buildx",
+    "kubernetes", "kubectl", "kustomize", "skaffold", "terraform", "opentofu",
+    "cloudformation", "pulumi", "ansible", "serverless", "amplify",
+    "OKLCH", "oklch", "Segoe", "Noto", "Menlo", "Consolas", "WCAG", "SARIF"
+  ],
+  "ignorePaths": [
+    "node_modules/**",
+    "dist/**",
+    "build/**",
+    "coverage/**",
+    "*.min.js",
+    "*.bundle.js",
+    "package-lock.json",
+    "yarn.lock",
+    "*.log",
+    "doc/fach/**/*.md"
+  ]
+} 

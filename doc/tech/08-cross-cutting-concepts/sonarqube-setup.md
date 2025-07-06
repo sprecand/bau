@@ -2,9 +2,11 @@
 
 ## Overview
 
+
 This project uses SonarQube for continuous code quality analysis, covering both backend (Java/Spring Boot) and frontend (TypeScript/Angular) code.
 
 ## Features Analyzed
+
 
 - **Code Quality**: Bugs, vulnerabilities, code smells
 - **Code Coverage**: Test coverage for both backend and frontend
@@ -14,7 +16,9 @@ This project uses SonarQube for continuous code quality analysis, covering both 
 
 ## Code Coverage Strategy
 
+
 ### Focus on Business Logic
+
 
 Our coverage strategy prioritizes meaningful tests over percentage targets:
 
@@ -25,9 +29,11 @@ Our coverage strategy prioritizes meaningful tests over percentage targets:
 
 ### Exclusion Strategy
 
+
 The following code is excluded from SonarQube analysis and coverage:
 
 #### Generated Code
+
 
 - OpenAPI generated DTOs (`com.bau.adapter.in.web.dto.*`)
 - OpenAPI generated API interfaces (`com.bau.adapter.in.web.api.*`)
@@ -35,16 +41,19 @@ The following code is excluded from SonarQube analysis and coverage:
 
 #### Infrastructure Code
 
+
 - Spring Boot application main class (`*Application.java`)
 - Configuration classes (`*Config.java`, `*Configuration.java`)
 - JPA entity classes (`*Entity.java`)
 
 #### Test and Build Artifacts
 
+
 - Test files (`**/*.spec.ts`, `**/*Test.java`)
 - Build directories (`target/**`, `node_modules/**`, `dist/**`)
 
 ### Current Coverage Results
+
 
 As of the latest build:
 - **Application Services**: 83% coverage ✅
@@ -56,9 +65,11 @@ This focused approach ensures high-quality tests for business-critical code whil
 
 ## GitHub Actions Integration
 
+
 The SonarQube analysis runs automatically in CI/CD pipeline after tests complete.
 
 ### Required GitHub Secrets
+
 
 Add these secrets to your GitHub repository settings:
 
@@ -66,6 +77,7 @@ Add these secrets to your GitHub repository settings:
 2. `SONAR_TOKEN` - Your SonarQube authentication token
 
 ### Setting up SonarCloud (Recommended)
+
 
 1. Go to [SonarCloud.io](https://sonarcloud.io)
 2. Sign in with your GitHub account
@@ -75,7 +87,9 @@ Add these secrets to your GitHub repository settings:
 
 ## Local Development
 
+
 ### Running SonarQube Locally
+
 
 1. **Start SonarQube with Docker:**```bash
    docker run -d --name sonarqube -p 9000:9000 sonarqube:latest
@@ -106,18 +120,20 @@ Add these secrets to your GitHub repository settings:
 
 ## Backend analysis
 
+
    cd backend
    mvn clean verify sonar:sonar \
 
-```
+```bash
 
 -Dsonar.projectKey=your-project-key \
 -Dsonar.host.url=http://localhost:9000 \
 -Dsonar.token=your-token
 
-```
+```bash
 
 ## Frontend coverage (run first)
+
 
    cd frontend
    npm run test:ci
@@ -126,18 +142,20 @@ Add these secrets to your GitHub repository settings:
 
 ## Backend analysis
 
+
    cd backend
    mvn clean verify sonar:sonar \
 
-```
+```bash
 
 -Dsonar.projectKey=your-project-key \
 -Dsonar.host.url=http://localhost:9000 \
 -Dsonar.token=your-token
 
-```
+```bash
 
 ## Frontend coverage (run first)
+
 
    cd frontend
    npm run test:ci
@@ -146,12 +164,15 @@ Add these secrets to your GitHub repository settings:
 
 ## Configuration Files
 
+
 ### Maven Configuration (backend/pom.xml)
+
 
 - JaCoCo plugin for Java code coverage with exclusions
 - SonarQube Maven plugin for analysis
 
 ### Project Configuration (sonar-project.properties)
+
 
 - Multi-language project setup
 - Coverage report paths
@@ -161,18 +182,23 @@ Add these secrets to your GitHub repository settings:
 
 ### Key Configuration Features
 
+
 #### Coverage Exclusions
+
 
 ```properties
 
 ## Configuration Files
 
+
 ### Maven Configuration (backend/pom.xml)
+
 
 - JaCoCo plugin for Java code coverage with exclusions
 - SonarQube Maven plugin for analysis
 
 ### Project Configuration (sonar-project.properties)
+
 
 - Multi-language project setup
 - Coverage report paths
@@ -182,7 +208,9 @@ Add these secrets to your GitHub repository settings:
 
 ### Key Configuration Features
 
+
 #### Coverage Exclusions
+
 
 ```properties
 sonar.coverage.exclusions=\**/target/generated-sources/**,\
@@ -192,7 +220,7 @@ sonar.coverage.exclusions=\**/target/generated-sources/**,\
   **/*Config.java,\
   **/*Configuration.java
 
-```
+```bash
 
 sonar.coverage.exclusions=\
   **/target/generated-sources/**,\
@@ -202,15 +230,17 @@ sonar.coverage.exclusions=\
   **/*Config.java,\
   **/*Configuration.java
 
-```
+```bash
 
 #### Issue Ignoring for Generated Code
+
 
 - Cognitive complexity issues ignored in generated code
 - "Too many parameters" warnings suppressed
 - Unused import warnings excluded
 
 ## Quality Gates
+
 
 The project is configured with quality gates that must pass:
 - **Coverage**: Minimum test coverage thresholds for non-excluded code
@@ -220,7 +250,9 @@ The project is configured with quality gates that must pass:
 
 ## Troubleshooting
 
+
 ### Common Issues
+
 
 1. **Missing coverage reports:**- Ensure tests run before SonarQube analysis
 - Check coverage report paths in configuration
@@ -238,15 +270,18 @@ The project is configured with quality gates that must pass:
 
 ### Debug Commands
 
+
 ```bash
 
 #### Issue Ignoring for Generated Code
+
 
 - Cognitive complexity issues ignored in generated code
 - "Too many parameters" warnings suppressed
 - Unused import warnings excluded
 
 ## Quality Gates
+
 
 The project is configured with quality gates that must pass:
 -**Coverage**: Minimum test coverage thresholds for non-excluded code
@@ -256,7 +291,9 @@ The project is configured with quality gates that must pass:
 
 ## Troubleshooting
 
+
 ### Common Issues
+
 
 1. **Missing coverage reports:**- Ensure tests run before SonarQube analysis
 - Check coverage report paths in configuration
@@ -275,47 +312,58 @@ The project is configured with quality gates that must pass:
 
 ### Debug Commands
 
+
 ```bash
 
 ## Test SonarQube connectivity
 
+
 curl -u your-token: https://sonarcloud.io/api/authentication/validate
 
 ## Check Maven SonarQube plugin
+
 
 mvn help:describe -Dplugin=org.sonarsource.scanner.maven:sonar-maven-plugin
 
 ## Verbose SonarQube analysis
 
+
 mvn sonar:sonar -X -Dsonar.verbose=true
 
 ## Check JaCoCo exclusions
 
+
 mvn clean test jacoco:report
 
-```
+```bash
 
 ## Test SonarQube connectivity
 
+
 curl -u your-token: https://sonarcloud.io/api/authentication/validate
 
 ## Check Maven SonarQube plugin
+
 
 mvn help:describe -Dplugin=org.sonarsource.scanner.maven:sonar-maven-plugin
 
 ## Verbose SonarQube analysis
 
+
 mvn sonar:sonar -X -Dsonar.verbose=true
 
 ## Check JaCoCo exclusions
 
+
 mvn clean test jacoco:report
 
-```
+```bash
 
 ## Integration with IDEs
 
+
 ### IntelliJ IDEA
+
 
 1. Install SonarLint plugin
 2. Connect to SonarQube server
@@ -323,11 +371,13 @@ mvn clean test jacoco:report
 
 ### VS Code
 
+
 1. Install SonarLint extension
 2. Configure connected mode
 3. Set project binding
 
 ## Related Documentation
+
 
 - [Coding Standards](coding-standards.md)
 - [Development Guide](development.md)
@@ -335,7 +385,9 @@ mvn clean test jacoco:report
 
 ## Integration with IDEs
 
+
 ### IntelliJ IDEA
+
 
 1. Install SonarLint plugin
 2. Connect to SonarQube server
@@ -343,11 +395,13 @@ mvn clean test jacoco:report
 
 ### VS Code
 
+
 1. Install SonarLint extension
 2. Configure connected mode
 3. Set project binding
 
 ## Related Documentation
+
 
 - [Coding Standards](coding-standards.md)
 - [Development Guide](development.md)
