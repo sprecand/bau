@@ -1,5 +1,5 @@
 # Multi-stage build for Spring Boot backend
-FROM eclipse-temurin:21-jdk as builder
+FROM eclipse-temurin:21.0.7_6-jdk as builder
 
 # Install Maven
 RUN apt-get update && apt-get install -y maven && rm -rf /var/lib/apt/lists/*
@@ -20,7 +20,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Runtime stage
-FROM eclipse-temurin:21-jre
+FROM eclipse-temurin:21.0.7_6-jre
 
 # Install curl for health checks
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
