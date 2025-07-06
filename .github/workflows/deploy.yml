@@ -220,7 +220,7 @@ jobs:
           
           # Download current task definition and filter out metadata fields
           aws ecs describe-task-definition --task-definition $ECR_REPOSITORY_BACKEND \
-            --query 'taskDefinition | {family, taskRoleArn, executionRoleArn, networkMode, containerDefinitions, volumes, placementConstraints, requiresCompatibilities, cpu, memory, tags, pidMode, ipcMode, proxyConfiguration, inferenceAccelerators, ephemeralStorage, runtimePlatform}' \
+            --query 'taskDefinition | {family: family, taskRoleArn: taskRoleArn, executionRoleArn: executionRoleArn, networkMode: networkMode, containerDefinitions: containerDefinitions, volumes: volumes, placementConstraints: placementConstraints, requiresCompatibilities: requiresCompatibilities, cpu: cpu, memory: memory, tags: tags, pidMode: pidMode, ipcMode: ipcMode, proxyConfiguration: proxyConfiguration, inferenceAccelerators: inferenceAccelerators, ephemeralStorage: ephemeralStorage, runtimePlatform: runtimePlatform}' \
             > task-definition-backend.json
           
           # Update image in task definition
@@ -250,7 +250,7 @@ jobs:
           
           # Download current task definition and filter out metadata fields
           aws ecs describe-task-definition --task-definition $ECR_REPOSITORY_FRONTEND \
-            --query 'taskDefinition | {family, taskRoleArn, executionRoleArn, networkMode, containerDefinitions, volumes, placementConstraints, requiresCompatibilities, cpu, memory, tags, pidMode, ipcMode, proxyConfiguration, inferenceAccelerators, ephemeralStorage, runtimePlatform}' \
+            --query 'taskDefinition | {family: family, taskRoleArn: taskRoleArn, executionRoleArn: executionRoleArn, networkMode: networkMode, containerDefinitions: containerDefinitions, volumes: volumes, placementConstraints: placementConstraints, requiresCompatibilities: requiresCompatibilities, cpu: cpu, memory: memory, tags: tags, pidMode: pidMode, ipcMode: ipcMode, proxyConfiguration: proxyConfiguration, inferenceAccelerators: inferenceAccelerators, ephemeralStorage: ephemeralStorage, runtimePlatform: runtimePlatform}' \
             > task-definition-frontend.json
           
           # Update image in task definition
