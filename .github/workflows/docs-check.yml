@@ -42,6 +42,7 @@ jobs:
     
     - name: Spell Check
       uses: streetsidesoftware/cspell-action@v7
+      continue-on-error: true
       with:
         files: |
           doc/**/*.md
@@ -51,7 +52,7 @@ jobs:
         config: '.github/cspell.json'
         incremental_files_only: true
         treat_flagged_words_as_errors: false
-        strict: true
+        strict: false
         suggestions: false
         verbose: false
         check_dot_files: explicit

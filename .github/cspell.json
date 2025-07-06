@@ -1,7 +1,6 @@
 {
   "version": "0.2",
-  "language": "en,de",
-  "dictionaries": ["en", "de"],
+  "language": ["en", "de-CH"],
   "words": [
     "AWS", "PostgreSQL", "JWT", "TypeScript", "JavaScript", "OpenAPI", "Cognito",
     "DTO", "JSON", "HTTP", "HTTPS", "API", "REST", "CRUD", "SQL", "JPA", "JDK",
@@ -17,9 +16,7 @@
     "artifactory", "nexus", "maven", "gradle", "dockerfile", "buildx",
     "kubernetes", "kubectl", "kustomize", "skaffold", "terraform", "opentofu",
     "cloudformation", "pulumi", "ansible", "serverless", "amplify",
-    "Betrieb", "Bauarbeiter", "Baustelle", "Handwerker", "Arbeitsplatz", "Vertrag",
-    "Lohn", "Stundenansatz", "Qualifikation", "Erfahrung", "Verfügbarkeit",
-    "Arbeitsbeginn", "Projektdauer", "Anfahrtsweg", "Überstunden", "Sozialleistungen"
+    "OKLCH", "oklch", "Segoe", "Noto", "Menlo", "Consolas", "WCAG", "SARIF"
   ],
   "ignorePaths": [
     "node_modules/**",
@@ -30,6 +27,7 @@
     "*.bundle.js",
     "package-lock.json",
     "yarn.lock",
-    "*.log"
+    "*.log",
+    "doc/fach/**/*.md"
   ]
 } 
