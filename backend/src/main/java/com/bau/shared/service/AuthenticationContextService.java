@@ -23,6 +23,21 @@ import java.util.UUID;
 @Service
 @Slf4j
 public class AuthenticationContextService {
+
+    /**
+     * Data structure to hold JWT claims extracted from different token types.
+     */
+    private record JwtClaims(
+            String sub,
+            String email,
+            String username,
+            String givenName,
+            String familyName,
+            Boolean emailVerified,
+            List<String> groups,
+            String betriebIdClaim,
+            String betriebNameClaim
+    ) {}
     
     /**
      * Get the current authenticated user from the security context.
@@ -58,48 +73,19 @@ public class AuthenticationContextService {
             DecodedJWT decodedJWT = JWT.decode(tokenString);
             
             // Extract claims from AWS Cognito JWT
-            String sub = decodedJWT.getSubject();
-            String email = decodedJWT.getClaim("email").asString();
-            String username = decodedJWT.getClaim("cognito:username").asString();
-            String givenName = decodedJWT.getClaim("given_name").asString();
-            String familyName = decodedJWT.getClaim("family_name").asString();
-            Boolean emailVerified = decodedJWT.getClaim("email_verified").asBoolean();
+            JwtClaims claims = new JwtClaims(
+                    decodedJWT.getSubject(),
+                    decodedJWT.getClaim("email").asString(),
+                    decodedJWT.getClaim("cognito:username").asString(),
+                    decodedJWT.getClaim("given_name").asString(),
+                    decodedJWT.getClaim("family_name").asString(),
+                    decodedJWT.getClaim("email_verified").asBoolean(),
+                    decodedJWT.getClaim("cognito:groups").asList(String.class),
+                    decodedJWT.getClaim("custom:betrieb_id").asString(),
+                    decodedJWT.getClaim("custom:betrieb_name").asString()
+            );
             
-            // Extract groups (roles) from Cognito
-            List<String> groups = decodedJWT.getClaim("cognito:groups").asList(String.class);
-            UserRole role = extractRoleFromGroups(groups);
-            
-            // Extract custom attributes
-            String betriebIdClaim = decodedJWT.getClaim("custom:betrieb_id").asString();
-            String betriebNameClaim = decodedJWT.getClaim("custom:betrieb_name").asString();
-            
-            // Build user object
-            User.UserBuilder userBuilder = User.builder()
-                    .id(UUID.fromString(sub))
-                    .username(username != null ? username : email)
-                    .email(email)
-                    .firstName(givenName)
-                    .lastName(familyName)
-                    .role(role)
-                    .status(UserStatus.AKTIV)
-                    .emailVerified(emailVerified != null ? emailVerified : false)
-                    .createdAt(Instant.now()) // JWT doesn't contain creation time
-                    .updatedAt(Instant.now());
-            
-            // Set betrieb information if available
-            if (betriebIdClaim != null) {
-                try {
-                    userBuilder.betriebId(UUID.fromString(betriebIdClaim));
-                } catch (IllegalArgumentException e) {
-                    log.warn("Invalid betrieb_id format in JWT: {}", betriebIdClaim);
-                }
-            }
-            
-            if (betriebNameClaim != null) {
-                userBuilder.betriebName(betriebNameClaim);
-            }
-            
-            User user = userBuilder.build();
+            User user = buildUserFromClaims(claims);
             log.debug("Extracted user from JWT string: id={}, email={}, role={}", user.getId(), user.getEmail(), user.getRole());
             
             return user;
@@ -150,48 +136,19 @@ public class AuthenticationContextService {
     private Optional<User> extractUserFromJwt(Jwt jwt) {
         try {
             // Extract claims from AWS Cognito JWT
-            String sub = jwt.getClaimAsString("sub");
-            String email = jwt.getClaimAsString("email");
-            String username = jwt.getClaimAsString("cognito:username");
-            String givenName = jwt.getClaimAsString("given_name");
-            String familyName = jwt.getClaimAsString("family_name");
-            Boolean emailVerified = jwt.getClaimAsBoolean("email_verified");
+            JwtClaims claims = new JwtClaims(
+                    jwt.getClaimAsString("sub"),
+                    jwt.getClaimAsString("email"),
+                    jwt.getClaimAsString("cognito:username"),
+                    jwt.getClaimAsString("given_name"),
+                    jwt.getClaimAsString("family_name"),
+                    jwt.getClaimAsBoolean("email_verified"),
+                    jwt.getClaimAsStringList("cognito:groups"),
+                    jwt.getClaimAsString("custom:betrieb_id"),
+                    jwt.getClaimAsString("custom:betrieb_name")
+            );
             
-            // Extract groups (roles) from Cognito
-            List<String> groups = jwt.getClaimAsStringList("cognito:groups");
-            UserRole role = extractRoleFromGroups(groups);
-            
-            // Extract custom attributes
-            String betriebIdClaim = jwt.getClaimAsString("custom:betrieb_id");
-            String betriebNameClaim = jwt.getClaimAsString("custom:betrieb_name");
-            
-            // Build user object
-            User.UserBuilder userBuilder = User.builder()
-                    .id(UUID.fromString(sub))
-                    .username(username != null ? username : email)
-                    .email(email)
-                    .firstName(givenName)
-                    .lastName(familyName)
-                    .role(role)
-                    .status(UserStatus.AKTIV)
-                    .emailVerified(emailVerified != null ? emailVerified : false)
-                    .createdAt(Instant.now()) // JWT doesn't contain creation time
-                    .updatedAt(Instant.now());
-            
-            // Set betrieb information if available
-            if (betriebIdClaim != null) {
-                try {
-                    userBuilder.betriebId(UUID.fromString(betriebIdClaim));
-                } catch (IllegalArgumentException e) {
-                    log.warn("Invalid betrieb_id format in JWT: {}", betriebIdClaim);
-                }
-            }
-            
-            if (betriebNameClaim != null) {
-                userBuilder.betriebName(betriebNameClaim);
-            }
-            
-            User user = userBuilder.build();
+            User user = buildUserFromClaims(claims);
             log.debug("Extracted user from JWT: id={}, email={}, role={}", user.getId(), user.getEmail(), user.getRole());
             
             return Optional.of(user);
@@ -200,6 +157,46 @@ public class AuthenticationContextService {
             log.error("Failed to extract user from JWT token", e);
             return Optional.empty();
         }
+    }
+
+    /**
+     * Build a User object from extracted JWT claims.
+     * This method contains the common logic for creating User objects from JWT claims.
+     * 
+     * @param claims the extracted JWT claims
+     * @return the User object built from the claims
+     */
+    private User buildUserFromClaims(JwtClaims claims) {
+        // Extract role from groups
+        UserRole role = extractRoleFromGroups(claims.groups());
+        
+        // Build user object
+        User.UserBuilder userBuilder = User.builder()
+                .id(UUID.fromString(claims.sub()))
+                .username(claims.username() != null ? claims.username() : claims.email())
+                .email(claims.email())
+                .firstName(claims.givenName())
+                .lastName(claims.familyName())
+                .role(role)
+                .status(UserStatus.AKTIV)
+                .emailVerified(claims.emailVerified() != null ? claims.emailVerified() : false)
+                .createdAt(Instant.now()) // JWT doesn't contain creation time
+                .updatedAt(Instant.now());
+        
+        // Set betrieb information if available
+        if (claims.betriebIdClaim() != null) {
+            try {
+                userBuilder.betriebId(UUID.fromString(claims.betriebIdClaim()));
+            } catch (IllegalArgumentException e) {
+                log.warn("Invalid betrieb_id format in JWT: {}", claims.betriebIdClaim());
+            }
+        }
+        
+        if (claims.betriebNameClaim() != null) {
+            userBuilder.betriebName(claims.betriebNameClaim());
+        }
+        
+        return userBuilder.build();
     }
     
     /**
@@ -214,30 +211,35 @@ public class AuthenticationContextService {
             return UserRole.BETRIEB;
         }
         
-        // Check for admin role first
-        if (groups.contains("ADMIN")) {
-            return UserRole.ADMIN;
+        // Check for specific roles in groups
+        for (String group : groups) {
+            switch (group.toLowerCase()) {
+                case "admin", "administrators":
+                    return UserRole.ADMIN;
+                case "betrieb", "company", "arbeiter", "worker":
+                    return UserRole.BETRIEB;
+                default:
+                    log.debug("Unknown group in JWT: {}", group);
+            }
         }
         
-        // Default to BETRIEB role
+        // Default to BETRIEB if no recognized role found
+        log.debug("No recognized role found in groups: {}, defaulting to BETRIEB", groups);
         return UserRole.BETRIEB;
     }
     
     /**
-     * Create a mock user for local development.
-     * This method should only be used when running in local profile.
+     * Create a mock user for testing.
      * 
-     * @return a mock user for testing
+     * @return a mock user
      */
     public User createMockUser() {
         return User.builder()
-                .id(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"))
-                .username("john.doe@bau-ag-grabs.ch")
-                .email("john.doe@bau-ag-grabs.ch")
-                .firstName("John")
-                .lastName("Doe")
-                .betriebId(UUID.fromString("123e4567-e89b-12d3-a456-426614174001"))
-                .betriebName("Bau AG Grabs")
+                .id(UUID.randomUUID())
+                .username("testuser")
+                .email("test@example.com")
+                .firstName("Test")
+                .lastName("User")
                 .role(UserRole.BETRIEB)
                 .status(UserStatus.AKTIV)
                 .emailVerified(true)
