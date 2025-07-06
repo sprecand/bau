@@ -25,6 +25,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+    
+    - name: Install German Dictionary
+      run: |
+        npm install -g @cspell/dict-de-de
+        
     - name: Markdown Lint
       uses: DavidAnson/markdownlint-cli2-action@v20
       continue-on-error: true
