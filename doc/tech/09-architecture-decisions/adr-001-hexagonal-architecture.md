@@ -2,9 +2,11 @@
 
 ## Status
 
+
 Accepted
 
 ## Context
+
 
 Need to choose an architecture pattern for the Bau platform that provides:
 - Clear separation of concerns
@@ -14,9 +16,10 @@ Need to choose an architecture pattern for the Bau platform that provides:
 
 ## Decision
 
+
 Use **Hexagonal Architecture**(Ports & Adapters) with the following package structure:
 
-```
+```bash
 backend/src/main/java/com/bau/
 ├── adapter/                  # All adapters
 │   ├── in/                   # Driving adapters (controllers, events)
@@ -27,7 +30,7 @@ backend/src/main/java/com/bau/
 │   └── port/                 # Port interfaces
 └── shared/                   # Shared utilities and configuration
 
-```
+```bash
 
 backend/src/main/java/com/bau/
 ├── adapter/                  # All adapters
@@ -39,11 +42,13 @@ backend/src/main/java/com/bau/
 │   └── port/                 # Port interfaces
 └── shared/                   # Shared utilities and configuration
 
-```
+```bash
 
 ## Consequences
 
+
 ### Positive
+
 
 -**Testability**: Each layer can be tested independently
 - **Maintainability**: Clear separation of concerns
@@ -52,18 +57,22 @@ backend/src/main/java/com/bau/
 
 ### Negative
 
+
 - **Complexity**: More initial setup required
 - **Learning Curve**: Team needs to understand the pattern
 - **Overhead**: More files and interfaces for simple features
 
 ## Related
 
+
 - [Backend Architecture](../05-building-blocks/backend-architecture.md) - Detailed implementation
 - [Naming Conventions](../naming-conventions.md) - Package and class naming
 
 ## Consequences
 
+
 ### Positive
+
 
 - **Testability**: Each layer can be tested independently
 - **Maintainability**: Clear separation of concerns
@@ -72,11 +81,13 @@ backend/src/main/java/com/bau/
 
 ### Negative
 
+
 - **Complexity**: More initial setup required
 - **Learning Curve**: Team needs to understand the pattern
 - **Overhead**: More files and interfaces for simple features
 
 ## Related
+
 
 - [Backend Architecture](../05-building-blocks/backend-architecture.md) - Detailed implementation
 - [Naming Conventions](../naming-conventions.md) - Package and class naming

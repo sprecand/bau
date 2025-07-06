@@ -2,9 +2,11 @@
 
 ## Status
 
+
 Accepted
 
 ## Context
+
 
 Need to choose an authentication solution for the Bau platform that provides:
 - Enterprise-grade security
@@ -14,11 +16,14 @@ Need to choose an authentication solution for the Bau platform that provides:
 
 ## Decision
 
+
 Use **AWS Cognito**for authentication and user management.
 
 ## Consequences
 
+
 ### Positive
+
 
 -**Security**: Enterprise-grade authentication with OAuth 2.0
 - **Integration**: Seamless AWS ecosystem integration
@@ -28,11 +33,13 @@ Use **AWS Cognito**for authentication and user management.
 
 ### Negative
 
+
 - **Vendor Lock-in**: Tied to AWS ecosystem
 - **Complexity**: Initial setup requires AWS knowledge
 - **Customization**: Limited UI customization options
 
 ## Implementation
+
 
 - **Frontend**: AWS Amplify for Angular integration
 - **Backend**: JWT validation with Spring Security
@@ -40,6 +47,7 @@ Use **AWS Cognito**for authentication and user management.
 - **Groups**: Role-based access control
 
 ## Related
+
 
 - [Authentication Flow](../06-runtime/authentication-flow.md) - Implementation details
 - [Development Guide](../development.md) - Setup instructions

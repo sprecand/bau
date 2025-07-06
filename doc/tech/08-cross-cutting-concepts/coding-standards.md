@@ -2,9 +2,11 @@
 
 ## Overview
 
+
 This document defines all coding standards, patterns, and best practices for the Bau platform development.
 
 ## Table of Contents
+
 
 1. [Backend Standards (Java 21 + Spring Boot 3)](#backend-standards)
 2. [Frontend Standards (Angular 20+)](#frontend-standards)
@@ -17,7 +19,9 @@ This document defines all coding standards, patterns, and best practices for the
 
 ## Backend Standards (Java 21 + Spring Boot 3)
 
+
 ### Code Quality Principles
+
 
 - **Use Optionals**: Never return null, use `Optional<T>` for nullable results
 - **Minimal Javadoc**: Only add Javadoc for public methods that need explanation
@@ -27,7 +31,8 @@ This document defines all coding standards, patterns, and best practices for the
 
 ### Package Structure
 
-```
+
+```bash
 
 backend/src/main/java/com/bau/
 ├── adapter/
@@ -46,15 +51,15 @@ backend/src/main/java/com/bau/
 │       └── out/             # Output ports (repository interfaces)
 └── shared/
 
-```
+```bash
 
 ├── config/              # Configuration classes
 ├── util/                # Utility classes
 └── exception/           # Custom exceptions
 
-```
+```bash
 
-```
+```bash
 
 backend/src/main/java/com/bau/
 ├── adapter/
@@ -73,93 +78,99 @@ backend/src/main/java/com/bau/
 │       └── out/             # Output ports (repository interfaces)
 └── shared/
 
-```
+```bash
 
 ├── config/              # Configuration classes
 ├── util/                # Utility classes
 └── exception/           # Custom exceptions
 
-```
+```bash
 
-```
+```bash
 
 ### Code Patterns
 
+
 #### Domain Entity Template
+
 
 ```java
 
 ### Code Patterns
 
+
 #### Domain Entity Template
+
 
 ```java
 
 public class {EntityName} {
 
-```
+```bash
 
 private UUID id;
 private UUID betriebId;
 // other fields
 
-```
+```bash
 
-```
+```bash
 
 // Business logic methods
 public boolean isValid{BusinessRule}() {
     // validation logic
 }
 
-```
+```bash
 
-```
+```bash
 
 // No getters/setters in domain entities
 // Use constructor or builder pattern
 
-```
+```bash
 
 }
 
-```
+```bash
 
 public class {EntityName} {
 
-```
+```bash
 
 private UUID id;
 private UUID betriebId;
 // other fields
 
-```
+```bash
 
-```
+```bash
 
 // Business logic methods
 public boolean isValid{BusinessRule}() {
     // validation logic
 }
 
-```
+```bash
 
-```
+```bash
 
 // No getters/setters in domain entities
 // Use constructor or builder pattern
 
-```
+```bash
 
 }
 
-```
+```bash
 
 #### Use Case Template
+
 
 ```java
 
 #### Use Case Template
+
 
 ```java
 
@@ -167,33 +178,33 @@ public boolean isValid{BusinessRule}() {
 @Slf4j
 public class {Action}{EntityName}UseCase {
 
-```
+```bash
 
 private static final Logger log = LoggerFactory.getLogger({Action}{EntityName}UseCase.class);
 
-```
+```bash
 
-```
+```bash
 
 private final {EntityName}Repository {entityName}Repository;
 private final {EntityName}Mapper {entityName}Mapper;
 
-```
+```bash
 
-```
+```bash
 
 public Optional<{EntityName}> execute({Action}{EntityName}Request request) {
     log.debug("Processing {action} for {entityName}: {}", request.getId());
 
-```
+```bash
 
-```
+```bash
 
 {EntityName} {entityName} = {entityName}Mapper.toDomain(request);
 
-```
+```bash
 
-```
+```bash
 
 // Business validation
 if (!{entityName}.isValid{BusinessRule}()) {
@@ -201,57 +212,57 @@ if (!{entityName}.isValid{BusinessRule}()) {
     return Optional.empty();
 }
 
-```
+```bash
 
-```
+```bash
 
 {EntityName} saved{EntityName} = {entityName}Repository.save({entityName});
 log.info("Successfully {action} {entityName} with id: {}", saved{EntityName}.getId());
 
-```
+```bash
 
-```
+```bash
 
 return Optional.of(saved{EntityName});
 }
 
-```
+```bash
 
 }
 
-```
+```bash
 
 @Service
 @Slf4j
 public class {Action}{EntityName}UseCase {
 
-```
+```bash
 
 private static final Logger log = LoggerFactory.getLogger({Action}{EntityName}UseCase.class);
 
-```
+```bash
 
-```
+```bash
 
 private final {EntityName}Repository {entityName}Repository;
 private final {EntityName}Mapper {entityName}Mapper;
 
-```
+```bash
 
-```
+```bash
 
 public Optional<{EntityName}> execute({Action}{EntityName}Request request) {
     log.debug("Processing {action} for {entityName}: {}", request.getId());
 
-```
+```bash
 
-```
+```bash
 
 {EntityName} {entityName} = {entityName}Mapper.toDomain(request);
 
-```
+```bash
 
-```
+```bash
 
 // Business validation
 if (!{entityName}.isValid{BusinessRule}()) {
@@ -259,31 +270,33 @@ if (!{entityName}.isValid{BusinessRule}()) {
     return Optional.empty();
 }
 
-```
+```bash
 
-```
+```bash
 
 {EntityName} saved{EntityName} = {entityName}Repository.save({entityName});
 log.info("Successfully {action} {entityName} with id: {}", saved{EntityName}.getId());
 
-```
+```bash
 
-```
+```bash
 
 return Optional.of(saved{EntityName});
 }
 
-```
+```bash
 
 }
 
-```
+```bash
 
 #### Controller Template
+
 
 ```java
 
 #### Controller Template
+
 
 ```java
 
@@ -292,51 +305,51 @@ return Optional.of(saved{EntityName});
 @Slf4j
 public class {EntityName}ApiController implements {EntityName}Api {
 
-```
+```bash
 
 private final {EntityName}UseCase {entityName}UseCase;
 private final {EntityName}WebMapper {entityName}WebMapper;
 
-```
+```bash
 
-```
+```bash
 
 @Override
 public ResponseEntity<{EntityName}ResponseDto> create{EntityName}({EntityName}CreateRequestDto request) {
     log.debug("Creating {entityName}: {}", request);
 
-```
+```bash
 
-```
+```bash
 
 Optional<{EntityName}> {entityName}Opt = {entityName}UseCase.create{EntityName}(request);
 
-```
+```bash
 
-```
+```bash
 
 if ({entityName}Opt.isEmpty()) {
     log.warn("{EntityName} creation failed");
     return ResponseEntity.badRequest().build();
 }
 
-```
+```bash
 
-```
+```bash
 
 {EntityName}ResponseDto response = {entityName}WebMapper.toResponseDto({entityName}Opt.get());
 log.info("Successfully created {entityName} with id: {}", {entityName}Opt.get().getId());
 
-```
+```bash
 
-```
+```bash
 
 return ResponseEntity.status(HttpStatus.CREATED).body(response);
 }
 
-```
+```bash
 
-```
+```bash
 
 @Override
 public ResponseEntity<List<{EntityName}ResponseDto>> getAll{EntityName}s(/*pagination params*/) {
@@ -347,68 +360,68 @@ public ResponseEntity<List<{EntityName}ResponseDto>> getAll{EntityName}s(/*pagin
     return ResponseEntity.ok(response);
 }
 
-```
+```bash
 
-```
+```bash
 
 // ... other CRUD operations from generated {EntityName}Api interface
 
-```
+```bash
 
 }
 
-```
+```bash
 
 @RestController
 @RequiredArgsConstructor
 @Slf4j
 public class {EntityName}ApiController implements {EntityName}Api {
 
-```
+```bash
 
 private final {EntityName}UseCase {entityName}UseCase;
 private final {EntityName}WebMapper {entityName}WebMapper;
 
-```
+```bash
 
-```
+```bash
 
 @Override
 public ResponseEntity<{EntityName}ResponseDto> create{EntityName}({EntityName}CreateRequestDto request) {
     log.debug("Creating {entityName}: {}", request);
 
-```
+```bash
 
-```
+```bash
 
 Optional<{EntityName}> {entityName}Opt = {entityName}UseCase.create{EntityName}(request);
 
-```
+```bash
 
-```
+```bash
 
 if ({entityName}Opt.isEmpty()) {
     log.warn("{EntityName} creation failed");
     return ResponseEntity.badRequest().build();
 }
 
-```
+```bash
 
-```
+```bash
 
 {EntityName}ResponseDto response = {entityName}WebMapper.toResponseDto({entityName}Opt.get());
 log.info("Successfully created {entityName} with id: {}", {entityName}Opt.get().getId());
 
-```
+```bash
 
-```
+```bash
 
 return ResponseEntity.status(HttpStatus.CREATED).body(response);
 }
 
-```
+```bash
 
-```
+```bash
 
 @Override
 public ResponseEntity<List<{EntityName}ResponseDto>> getAll{EntityName}s(/*pagination params*/) {
@@ -419,61 +432,65 @@ public ResponseEntity<List<{EntityName}ResponseDto>> getAll{EntityName}s(/*pagin
     return ResponseEntity.ok(response);
 }
 
-```
+```bash
 
-```
+```bash
 
 // ... other CRUD operations from generated {EntityName}Api interface
 
-```
+```bash
 
 }
 
-```
+```bash
 
 #### Repository Interface Template
+
 
 ```java
 
 #### Repository Interface Template
+
 
 ```java
 
 public interface {EntityName}Repository {
 
-```
+```bash
 
 {EntityName} save({EntityName} {entityName});
 Optional<{EntityName}> findById(UUID id);
 List<{EntityName}> findByBetriebId(UUID betriebId);
 // other query methods
 
-```
+```bash
 
 }
 
-```
+```bash
 
 public interface {EntityName}Repository {
 
-```
+```bash
 
 {EntityName} save({EntityName} {entityName});
 Optional<{EntityName}> findById(UUID id);
 List<{EntityName}> findByBetriebId(UUID betriebId);
 // other query methods
 
-```
+```bash
 
 }
 
-```
+```bash
 
 #### JPA Entity Template
+
 
 ```java
 
 #### JPA Entity Template
+
 
 ```java
 
@@ -481,104 +498,106 @@ List<{EntityName}> findByBetriebId(UUID betriebId);
 @Table(name = "{tableName}")
 public class {EntityName}Entity {
 
-```
+```bash
 
 @Id
 @GeneratedValue(strategy = GenerationType.UUID)
 private UUID id;
 
-```
+```bash
 
-```
+```bash
 
 @Column(name = "betrieb_id")
 private UUID betriebId;
 
-```
+```bash
 
-```
+```bash
 
 // other fields with proper column mappings
 
-```
+```bash
 
-```
+```bash
 
 @CreatedDate
 @Column(name = "created_at")
 private LocalDateTime createdAt;
 
-```
+```bash
 
-```
+```bash
 
 @LastModifiedDate
 @Column(name = "updated_at")
 private LocalDateTime updatedAt;
 
-```
+```bash
 
 }
 
-```
+```bash
 
 @Entity
 @Table(name = "{tableName}")
 public class {EntityName}Entity {
 
-```
+```bash
 
 @Id
 @GeneratedValue(strategy = GenerationType.UUID)
 private UUID id;
 
-```
+```bash
 
-```
+```bash
 
 @Column(name = "betrieb_id")
 private UUID betriebId;
 
-```
+```bash
 
-```
+```bash
 
 // other fields with proper column mappings
 
-```
+```bash
 
-```
+```bash
 
 @CreatedDate
 @Column(name = "created_at")
 private LocalDateTime createdAt;
 
-```
+```bash
 
-```
+```bash
 
 @LastModifiedDate
 @Column(name = "updated_at")
 private LocalDateTime updatedAt;
 
-```
+```bash
 
 }
 
-```
+```bash
 
 #### Mapper Template
+
 
 ```java
 
 #### Mapper Template
+
 
 ```java
 
 @Component
 public class {EntityName}Mapper {
 
-```
+```bash
 
 public {EntityName} toDomain(Create{EntityName}Request request) {
     {EntityName} {entityName} = new {EntityName}();
@@ -587,9 +606,9 @@ public {EntityName} toDomain(Create{EntityName}Request request) {
     return {entityName};
 }
 
-```
+```bash
 
-```
+```bash
 
 public {EntityName}Response toResponse({EntityName} {entityName}) {
     {EntityName}Response response = new {EntityName}Response();
@@ -599,16 +618,16 @@ public {EntityName}Response toResponse({EntityName} {entityName}) {
     return response;
 }
 
-```
+```bash
 
 }
 
-```
+```bash
 
 @Component
 public class {EntityName}Mapper {
 
-```
+```bash
 
 public {EntityName} toDomain(Create{EntityName}Request request) {
     {EntityName} {entityName} = new {EntityName}();
@@ -617,9 +636,9 @@ public {EntityName} toDomain(Create{EntityName}Request request) {
     return {entityName};
 }
 
-```
+```bash
 
-```
+```bash
 
 public {EntityName}Response toResponse({EntityName} {entityName}) {
     {EntityName}Response response = new {EntityName}Response();
@@ -629,15 +648,17 @@ public {EntityName}Response toResponse({EntityName} {entityName}) {
     return response;
 }
 
-```
+```bash
 
 }
 
-```
+```bash
 
 ### Java 21 Best Practices
 
+
 #### Language Features
+
 
 - Use **records**for immutable data transfer objects
 - Use**pattern matching**for switch expressions and instanceof
@@ -647,6 +668,7 @@ public {EntityName}Response toResponse({EntityName} {entityName}) {
 
 #### Null Safety
 
+
 - Prefer `Optional<T>` over nullable references
 - Use `Optional.ofNullable()` for potentially null values
 - Use `Optional.orElse()` or `Optional.orElseGet()` for defaults
@@ -654,11 +676,14 @@ public {EntityName}Response toResponse({EntityName} {entityName}) {
 
 #### Logging (SLF4J)
 
+
 ```java
 
 ### Java 21 Best Practices
 
+
 #### Language Features
+
 
 - Use**records**for immutable data transfer objects
 - Use**pattern matching**for switch expressions and instanceof
@@ -668,12 +693,14 @@ public {EntityName}Response toResponse({EntityName} {entityName}) {
 
 #### Null Safety
 
+
 - Prefer `Optional<T>` over nullable references
 - Use `Optional.ofNullable()` for potentially null values
 - Use `Optional.orElse()` or `Optional.orElseGet()` for defaults
 - Avoid `Optional.get()` without checking `isPresent()`
 
 #### Logging (SLF4J)
+
 
 ```java
 import org.slf4j.Logger;
@@ -682,20 +709,20 @@ import org.slf4j.LoggerFactory;
 @Slf4j  // Lombok annotation
 public class ExampleService {
 
-```
+```bash
 
 private static final Logger log = LoggerFactory.getLogger(ExampleService.class);
 
-```
+```bash
 
-```
+```bash
 
 public void processData(String data) {
     log.debug("Processing data: {}", data);
 
-```
+```bash
 
-```
+```bash
 
 try {
     // processing logic
@@ -706,11 +733,11 @@ try {
 }
 }
 
-```
+```bash
 
 }
 
-```
+```bash
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -718,20 +745,20 @@ import org.slf4j.LoggerFactory;
 @Slf4j  // Lombok annotation
 public class ExampleService {
 
-```
+```bash
 
 private static final Logger log = LoggerFactory.getLogger(ExampleService.class);
 
-```
+```bash
 
-```
+```bash
 
 public void processData(String data) {
     log.debug("Processing data: {}", data);
 
-```
+```bash
 
-```
+```bash
 
 try {
     // processing logic
@@ -742,15 +769,17 @@ try {
 }
 }
 
-```
+```bash
 
 }
 
-```
+```bash
 
 ### Spring Boot 3.x Patterns
 
+
 #### Configuration
+
 
 - Use `@ConfigurationProperties` for externalized configuration
 - Use `@ConditionalOnProperty` for conditional beans
@@ -759,12 +788,14 @@ try {
 
 #### Dependency Injection
 
+
 - Use constructor injection for required dependencies
 - Use `@Autowired` sparingly (constructor injection is preferred)
 - Use `@Qualifier` when multiple beans of same type exist
 - Use `@Lazy` for expensive beans that aren't always needed
 
 #### Validation
+
 
 - Use Bean Validation annotations on DTOs
 - Use `@Valid` in controller methods
@@ -773,6 +804,7 @@ try {
 
 #### Security
 
+
 - Use Spring Security with JWT tokens
 - Use `@PreAuthorize` for method-level security
 - Use `@Secured` for role-based access control
@@ -780,7 +812,9 @@ try {
 
 ### Database Patterns
 
+
 #### JPA Best Practices
+
 
 - Use `@Entity` for database entities only
 - Use `@Table` to specify table names
@@ -790,12 +824,14 @@ try {
 
 #### Repository Pattern
 
+
 - Extend `JpaRepository` for basic CRUD operations
 - Use `@Query` for complex queries
 - Use `@Modifying` for update/delete operations
 - Use `@Transactional` for multi-step operations
 
 #### Transaction Management
+
 
 - Use `@Transactional` at service layer
 - Use `REQUIRED` propagation (default)
@@ -804,7 +840,9 @@ try {
 
 ### API Design
 
+
 #### REST Controllers
+
 
 - Use `@RestController` for REST APIs
 - Use `@RequestMapping` for base paths
@@ -815,12 +853,14 @@ try {
 
 #### Response Handling
 
+
 - Use `ResponseEntity<T>` for custom responses
 - Use appropriate HTTP status codes
 - Use consistent error response format
 - Use `@ResponseStatus` for default status codes
 
 #### Error Handling
+
 
 - Use `@ControllerAdvice` for global exception handling
 - Use `@ExceptionHandler` for specific exceptions
@@ -831,15 +871,20 @@ try {
 
 ## Frontend Standards (Angular 20+)
 
+
 ### Component Patterns
 
+
 #### Standalone Component Template
+
 
 ```typescript
 
 ### Spring Boot 3.x Patterns
 
+
 #### Configuration
+
 
 - Use `@ConfigurationProperties` for externalized configuration
 - Use `@ConditionalOnProperty` for conditional beans
@@ -848,12 +893,14 @@ try {
 
 #### Dependency Injection
 
+
 - Use constructor injection for required dependencies
 - Use `@Autowired` sparingly (constructor injection is preferred)
 - Use `@Qualifier` when multiple beans of same type exist
 - Use `@Lazy` for expensive beans that aren't always needed
 
 #### Validation
+
 
 - Use Bean Validation annotations on DTOs
 - Use `@Valid` in controller methods
@@ -862,6 +909,7 @@ try {
 
 #### Security
 
+
 - Use Spring Security with JWT tokens
 - Use `@PreAuthorize` for method-level security
 - Use `@Secured` for role-based access control
@@ -869,7 +917,9 @@ try {
 
 ### Database Patterns
 
+
 #### JPA Best Practices
+
 
 - Use `@Entity` for database entities only
 - Use `@Table` to specify table names
@@ -879,12 +929,14 @@ try {
 
 #### Repository Pattern
 
+
 - Extend `JpaRepository` for basic CRUD operations
 - Use `@Query` for complex queries
 - Use `@Modifying` for update/delete operations
 - Use `@Transactional` for multi-step operations
 
 #### Transaction Management
+
 
 - Use `@Transactional` at service layer
 - Use `REQUIRED` propagation (default)
@@ -893,7 +945,9 @@ try {
 
 ### API Design
 
+
 #### REST Controllers
+
 
 - Use `@RestController` for REST APIs
 - Use `@RequestMapping` for base paths
@@ -904,12 +958,14 @@ try {
 
 #### Response Handling
 
+
 - Use `ResponseEntity<T>` for custom responses
 - Use appropriate HTTP status codes
 - Use consistent error response format
 - Use `@ResponseStatus` for default status codes
 
 #### Error Handling
+
 
 - Use `@ControllerAdvice` for global exception handling
 - Use `@ExceptionHandler` for specific exceptions
@@ -920,9 +976,12 @@ try {
 
 ## Frontend Standards (Angular 20+)
 
+
 ### Component Patterns
 
+
 #### Standalone Component Template
+
 
 ```typescript
 @Component({
@@ -930,20 +989,20 @@ try {
   standalone: true,
   imports: [
 
-```
+```bash
 
 CommonModule,
 MatCardModule,
 MatButtonModule,
 // other Material modules
 
-```
+```bash
 
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
 
-```
+```bash
 
 <mat-card class="p-6 bg-white shadow-lg rounded-lg">
   <mat-card-header class="mb-4">
@@ -952,17 +1011,17 @@ MatButtonModule,
     </mat-card-title>
   </mat-card-header>
 
-```
+```bash
 
-```
+```bash
 
 <mat-card-content class="space-y-4">
   <!-- content -->
 </mat-card-content>
 
-```
+```bash
 
-```
+```bash
 
 <mat-card-actions class="flex justify-end space-x-2">
   <button mat-button class="px-4 py-2 text-gray-600 hover:text-gray-800">
@@ -974,7 +1033,7 @@ MatButtonModule,
 </mat-card-actions>
 mat-card>
 
-```
+```bash
 
   `
 })
@@ -988,24 +1047,24 @@ export class {ComponentName}Component {
 
   constructor() {
 
-```
+```bash
 
 this.load{Data}();
 
-```
+```bash
 
   }
 
   private async load{Data}(): Promise<void> {
 
-```
+```bash
 
 this.loading.set(true);
 this.error.set(null);
 
-```
+```bash
 
-```
+```bash
 
 try {
   const result = await this.{serviceName}.get{Data}();
@@ -1017,32 +1076,32 @@ try {
   this.loading.set(false);
 }
 
-```
+```bash
 
   }
 }
 
-```
+```bash
 
 @Component({
   selector: 'app-{component-name}',
   standalone: true,
   imports: [
 
-```
+```bash
 
 CommonModule,
 MatCardModule,
 MatButtonModule,
 // other Material modules
 
-```
+```bash
 
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
 
-```
+```bash
 
 <mat-card class="p-6 bg-white shadow-lg rounded-lg">
   <mat-card-header class="mb-4">
@@ -1051,17 +1110,17 @@ MatButtonModule,
     </mat-card-title>
   </mat-card-header>
 
-```
+```bash
 
-```
+```bash
 
 <mat-card-content class="space-y-4">
   <!-- content -->
 </mat-card-content>
 
-```
+```bash
 
-```
+```bash
 
 <mat-card-actions class="flex justify-end space-x-2">
   <button mat-button class="px-4 py-2 text-gray-600 hover:text-gray-800">
@@ -1073,7 +1132,7 @@ MatButtonModule,
 </mat-card-actions>
 mat-card>
 
-```
+```bash
 
   `
 })
@@ -1087,24 +1146,24 @@ export class {ComponentName}Component {
 
   constructor() {
 
-```
+```bash
 
 this.load{Data}();
 
-```
+```bash
 
   }
 
   private async load{Data}(): Promise<void> {
 
-```
+```bash
 
 this.loading.set(true);
 this.error.set(null);
 
-```
+```bash
 
-```
+```bash
 
 try {
   const result = await this.{serviceName}.get{Data}();
@@ -1116,18 +1175,20 @@ try {
   this.loading.set(false);
 }
 
-```
+```bash
 
   }
 }
 
-```
+```bash
 
 #### Service Template
+
 
 ```typescript
 
 #### Service Template
+
 
 ```typescript
 
@@ -1140,63 +1201,63 @@ export class {EntityName}Service {
 
   async get{EntityName}s(): Promise<{EntityName}[]> {
 
-```
+```bash
 
 const token = await this.authService.getIdToken();
 const headers = { Authorization: `Bearer ${token}` };
 
-```
+```bash
 
-```
+```bash
 
 return firstValueFrom(
   this.http.get<{EntityName}[]>(this.apiUrl, { headers })
 );
 
-```
+```bash
 
   }
 
   async create{EntityName}(request: Create{EntityName}Request): Promise<{EntityName}> {
 
-```
+```bash
 
 const token = await this.authService.getIdToken();
 const headers = { Authorization: `Bearer ${token}` };
 
-```
+```bash
 
-```
+```bash
 
 return firstValueFrom(
   this.http.post<{EntityName}>(this.apiUrl, request, { headers })
 );
 
-```
+```bash
 
   }
 
   async get{EntityName}ById(id: string): Promise<{EntityName}> {
 
-```
+```bash
 
 const token = await this.authService.getIdToken();
 const headers = { Authorization: `Bearer ${token}` };
 
-```
+```bash
 
-```
+```bash
 
 return firstValueFrom(
   this.http.get<{EntityName}>(`${this.apiUrl}/${id}`, { headers })
 );
 
-```
+```bash
 
   }
 }
 
-```
+```bash
 
 @Injectable({ providedIn: 'root' })
 export class {EntityName}Service {
@@ -1207,69 +1268,71 @@ export class {EntityName}Service {
 
   async get{EntityName}s(): Promise<{EntityName}[]> {
 
-```
+```bash
 
 const token = await this.authService.getIdToken();
 const headers = { Authorization: `Bearer ${token}` };
 
-```
+```bash
 
-```
+```bash
 
 return firstValueFrom(
   this.http.get<{EntityName}[]>(this.apiUrl, { headers })
 );
 
-```
+```bash
 
   }
 
   async create{EntityName}(request: Create{EntityName}Request): Promise<{EntityName}> {
 
-```
+```bash
 
 const token = await this.authService.getIdToken();
 const headers = { Authorization: `Bearer ${token}` };
 
-```
+```bash
 
-```
+```bash
 
 return firstValueFrom(
   this.http.post<{EntityName}>(this.apiUrl, request, { headers })
 );
 
-```
+```bash
 
   }
 
   async get{EntityName}ById(id: string): Promise<{EntityName}> {
 
-```
+```bash
 
 const token = await this.authService.getIdToken();
 const headers = { Authorization: `Bearer ${token}` };
 
-```
+```bash
 
-```
+```bash
 
 return firstValueFrom(
   this.http.get<{EntityName}>(`${this.apiUrl}/${id}`, { headers })
 );
 
-```
+```bash
 
   }
 }
 
-```
+```bash
 
 #### Form Component Template
+
 
 ```typescript
 
 #### Form Component Template
+
 
 ```typescript
 
@@ -1278,7 +1341,7 @@ return firstValueFrom(
   standalone: true,
   imports: [
 
-```
+```bash
 
 CommonModule,
 ReactiveFormsModule,
@@ -1287,13 +1350,13 @@ MatInputModule,
 MatButtonModule,
 MatCardModule,
 
-```
+```bash
 
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
 
-```
+```bash
 
 <mat-card class="p-6 bg-white shadow-lg rounded-lg">
   <mat-card-header class="mb-4">
@@ -1302,9 +1365,9 @@ MatCardModule,
     </mat-card-title>
   </mat-card-header>
 
-```
+```bash
 
-```
+```bash
 
 <mat-card-content>
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
@@ -1316,15 +1379,15 @@ MatCardModule,
       </mat-error>
     </mat-form-field>
 
-```
+```bash
 
-```
+```bash
 
 <!-- other form fields -->
 
-```
+```bash
 
-```
+```bash
 
 <div class="flex justify-end space-x-2">
   <button type="button" mat-button
@@ -1342,7 +1405,7 @@ form>
 t-card-content>
 card>
 
-```
+```bash
 
   `
 })
@@ -1353,12 +1416,12 @@ export class {EntityName}FormComponent {
 
   protected readonly form = new FormGroup({
 
-```
+```bash
 
 name: new FormControl('', [Validators.required]),
 // other form controls
 
-```
+```bash
 
   });
 
@@ -1367,17 +1430,17 @@ name: new FormControl('', [Validators.required]),
 
   constructor() {
 
-```
+```bash
 
 this.initializeForm();
 
-```
+```bash
 
   }
 
   private initializeForm(): void {
 
-```
+```bash
 
 const id = this.route.snapshot.paramMap.get('id');
 if (id) {
@@ -1385,13 +1448,13 @@ if (id) {
   this.load{EntityName}(id);
 }
 
-```
+```bash
 
   }
 
   private async load{EntityName}(id: string): Promise<void> {
 
-```
+```bash
 
 try {
   const {entityName} = await this.{serviceName}.get{EntityName}ById(id);
@@ -1400,32 +1463,32 @@ try {
   console.error('Error loading {entityName}:', err);
 }
 
-```
+```bash
 
   }
 
   protected async onSubmit(): Promise<void> {
 
-```
+```bash
 
 if (this.form.invalid) return;
 
-```
+```bash
 
-```
+```bash
 
 this.loading.set(true);
 
-```
+```bash
 
-```
+```bash
 
 try {
   const request = this.form.value as Create{EntityName}Request;
 
-```
+```bash
 
-```
+```bash
 
 if (this.isEditMode()) {
   const id = this.route.snapshot.paramMap.get('id')!;
@@ -1434,9 +1497,9 @@ if (this.isEditMode()) {
   await this.{serviceName}.create{EntityName}(request);
 }
 
-```
+```bash
 
-```
+```bash
 
 this.router.navigate(['/{entityName}s']);
 catch (err) {
@@ -1445,29 +1508,29 @@ finally {
 this.loading.set(false);
 }
 
-```
+```bash
 
   }
 
   protected onCancel(): void {
 
-```
+```bash
 
 this.router.navigate(['/{entityName}s']);
 
-```
+```bash
 
   }
 }
 
-```
+```bash
 
 @Component({
   selector: 'app-{entity-name}-form',
   standalone: true,
   imports: [
 
-```
+```bash
 
 CommonModule,
 ReactiveFormsModule,
@@ -1476,13 +1539,13 @@ MatInputModule,
 MatButtonModule,
 MatCardModule,
 
-```
+```bash
 
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
 
-```
+```bash
 
 <mat-card class="p-6 bg-white shadow-lg rounded-lg">
   <mat-card-header class="mb-4">
@@ -1491,9 +1554,9 @@ MatCardModule,
     </mat-card-title>
   </mat-card-header>
 
-```
+```bash
 
-```
+```bash
 
 <mat-card-content>
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
@@ -1505,15 +1568,15 @@ MatCardModule,
       </mat-error>
     </mat-form-field>
 
-```
+```bash
 
-```
+```bash
 
 <!-- other form fields -->
 
-```
+```bash
 
-```
+```bash
 
 <div class="flex justify-end space-x-2">
   <button type="button" mat-button
@@ -1531,7 +1594,7 @@ form>
 t-card-content>
 card>
 
-```
+```bash
 
   `
 })
@@ -1542,12 +1605,12 @@ export class {EntityName}FormComponent {
 
   protected readonly form = new FormGroup({
 
-```
+```bash
 
 name: new FormControl('', [Validators.required]),
 // other form controls
 
-```
+```bash
 
   });
 
@@ -1556,17 +1619,17 @@ name: new FormControl('', [Validators.required]),
 
   constructor() {
 
-```
+```bash
 
 this.initializeForm();
 
-```
+```bash
 
   }
 
   private initializeForm(): void {
 
-```
+```bash
 
 const id = this.route.snapshot.paramMap.get('id');
 if (id) {
@@ -1574,13 +1637,13 @@ if (id) {
   this.load{EntityName}(id);
 }
 
-```
+```bash
 
   }
 
   private async load{EntityName}(id: string): Promise<void> {
 
-```
+```bash
 
 try {
   const {entityName} = await this.{serviceName}.get{EntityName}ById(id);
@@ -1589,32 +1652,32 @@ try {
   console.error('Error loading {entityName}:', err);
 }
 
-```
+```bash
 
   }
 
   protected async onSubmit(): Promise<void> {
 
-```
+```bash
 
 if (this.form.invalid) return;
 
-```
+```bash
 
-```
+```bash
 
 this.loading.set(true);
 
-```
+```bash
 
-```
+```bash
 
 try {
   const request = this.form.value as Create{EntityName}Request;
 
-```
+```bash
 
-```
+```bash
 
 if (this.isEditMode()) {
   const id = this.route.snapshot.paramMap.get('id')!;
@@ -1623,9 +1686,9 @@ if (this.isEditMode()) {
   await this.{serviceName}.create{EntityName}(request);
 }
 
-```
+```bash
 
-```
+```bash
 
 this.router.navigate(['/{entityName}s']);
 catch (err) {
@@ -1634,26 +1697,28 @@ finally {
 this.loading.set(false);
 }
 
-```
+```bash
 
   }
 
   protected onCancel(): void {
 
-```
+```bash
 
 this.router.navigate(['/{entityName}s']);
 
-```
+```bash
 
   }
 }
 
-```
+```bash
 
 ### Angular 20+ Best Practices
 
+
 #### Standalone Components
+
 
 - Use standalone components instead of NgModules
 - Import only required dependencies
@@ -1661,6 +1726,7 @@ this.router.navigate(['/{entityName}s']);
 - Use `inject()` function for dependency injection
 
 #### Signals (Modern State Management)
+
 
 - Use signals for reactive state management
 - Use `signal()` for mutable state
@@ -1670,12 +1736,14 @@ this.router.navigate(['/{entityName}s']);
 
 #### Dependency Injection
 
+
 - Use `inject()` function instead of constructor injection
 - Use `providedIn: 'root'` for singleton services
 - Use `providedIn: 'any'` for component-scoped services
 - Use `providedIn: 'platform'` for platform-wide services
 
 #### TypeScript Best Practices
+
 
 - Use strict TypeScript configuration
 - Use interfaces for object shapes
@@ -1685,6 +1753,7 @@ this.router.navigate(['/{entityName}s']);
 
 ### Styling Strategy
 
+
 - **Angular Material**: Pre-built components (buttons, forms, dialogs)
 - **Tailwind CSS**: Custom styling, layout, responsive design
 - **Design System**: OKLCH-based color tokens with dark mode support
@@ -1693,7 +1762,9 @@ this.router.navigate(['/{entityName}s']);
 
 ### Design System
 
+
 #### Color System (OKLCH)
+
 
 We use a modern OKLCH-based color system that provides:
 - **Perceptual Uniformity**: Consistent lightness across all hues
@@ -1702,12 +1773,15 @@ We use a modern OKLCH-based color system that provides:
 - **Semantic Tokens**: Meaningful color names for maintainability
 
 #### CSS Custom Properties
+
 
 ```css
 
 ### Angular 20+ Best Practices
 
+
 #### Standalone Components
+
 
 - Use standalone components instead of NgModules
 - Import only required dependencies
@@ -1715,6 +1789,7 @@ We use a modern OKLCH-based color system that provides:
 - Use `inject()` function for dependency injection
 
 #### Signals (Modern State Management)
+
 
 - Use signals for reactive state management
 - Use `signal()` for mutable state
@@ -1724,12 +1799,14 @@ We use a modern OKLCH-based color system that provides:
 
 #### Dependency Injection
 
+
 - Use `inject()` function instead of constructor injection
 - Use `providedIn: 'root'` for singleton services
 - Use `providedIn: 'any'` for component-scoped services
 - Use `providedIn: 'platform'` for platform-wide services
 
 #### TypeScript Best Practices
+
 
 - Use strict TypeScript configuration
 - Use interfaces for object shapes
@@ -1739,6 +1816,7 @@ We use a modern OKLCH-based color system that provides:
 
 ### Styling Strategy
 
+
 - **Angular Material**: Pre-built components (buttons, forms, dialogs)
 - **Tailwind CSS**: Custom styling, layout, responsive design
 - **Design System**: OKLCH-based color tokens with dark mode support
@@ -1747,7 +1825,9 @@ We use a modern OKLCH-based color system that provides:
 
 ### Design System
 
+
 #### Color System (OKLCH)
+
 
 We use a modern OKLCH-based color system that provides:
 - **Perceptual Uniformity**: Consistent lightness across all hues
@@ -1756,6 +1836,7 @@ We use a modern OKLCH-based color system that provides:
 - **Semantic Tokens**: Meaningful color names for maintainability
 
 #### CSS Custom Properties
+
 
 ```css
 :root {
@@ -1813,7 +1894,7 @@ We use a modern OKLCH-based color system that provides:
   /*... other dark mode colors*/
 }
 
-```
+```bash
 
 :root {
   /*Core Colors*/
@@ -1870,13 +1951,15 @@ We use a modern OKLCH-based color system that provides:
   /*... other dark mode colors*/
 }
 
-```
+```bash
 
 #### Tailwind Integration
+
 
 ```javascript
 
 #### Tailwind Integration
+
 
 ```javascript
 
@@ -1886,7 +1969,7 @@ module.exports = {
   darkMode: 'class',
   theme: {
 
-```
+```bash
 
 extend: {
   colors: {
@@ -1942,13 +2025,13 @@ extend: {
   }
 }
 
-```
+```bash
 
   },
   plugins: []
 }
 
-```
+```bash
 
 // tailwind.config.js
 module.exports = {
@@ -1956,7 +2039,7 @@ module.exports = {
   darkMode: 'class',
   theme: {
 
-```
+```bash
 
 extend: {
   colors: {
@@ -2012,19 +2095,21 @@ extend: {
   }
 }
 
-```
+```bash
 
   },
   plugins: []
 }
 
-```
+```bash
 
 #### Angular Material Theme Integration
+
 
 ```scss
 
 #### Angular Material Theme Integration
+
 
 ```scss
 
@@ -2049,7 +2134,7 @@ $custom-primary: mat.define-palette((
   A700: oklch(var(--primary) / 0.7),
   contrast: (
 
-```
+```bash
 
 50: oklch(var(--primary-foreground)),
 100: oklch(var(--primary-foreground)),
@@ -2066,7 +2151,7 @@ A200: oklch(var(--primary-foreground)),
 A400: oklch(var(--primary-foreground)),
 A700: oklch(var(--primary-foreground))
 
-```
+```bash
 
   )
 ));
@@ -2074,13 +2159,13 @@ A700: oklch(var(--primary-foreground))
 $theme: mat.define-light-theme((
   color: (
 
-```
+```bash
 
 primary: $custom-primary,
 accent: $custom-primary,
 warn: mat.define-palette(mat.$red-palette)
 
-```
+```bash
 
   ),
   typography: mat.define-typography-config(),
@@ -2089,7 +2174,7 @@ warn: mat.define-palette(mat.$red-palette)
 
 @include mat.all-component-themes($theme);
 
-```
+```bash
 
 // styles/material-theme.scss
 @use '@angular/material' as mat;
@@ -2112,7 +2197,7 @@ $custom-primary: mat.define-palette((
   A700: oklch(var(--primary) / 0.7),
   contrast: (
 
-```
+```bash
 
 50: oklch(var(--primary-foreground)),
 100: oklch(var(--primary-foreground)),
@@ -2129,7 +2214,7 @@ A200: oklch(var(--primary-foreground)),
 A400: oklch(var(--primary-foreground)),
 A700: oklch(var(--primary-foreground))
 
-```
+```bash
 
   )
 ));
@@ -2137,13 +2222,13 @@ A700: oklch(var(--primary-foreground))
 $theme: mat.define-light-theme((
   color: (
 
-```
+```bash
 
 primary: $custom-primary,
 accent: $custom-primary,
 warn: mat.define-palette(mat.$red-palette)
 
-```
+```bash
 
   ),
   typography: mat.define-typography-config(),
@@ -2152,9 +2237,10 @@ warn: mat.define-palette(mat.$red-palette)
 
 @include mat.all-component-themes($theme);
 
-```
+```bash
 
 ### State Management
+
 
 - Use Angular Signals for reactive state
 - Use computed signals for derived state
@@ -2163,6 +2249,7 @@ warn: mat.define-palette(mat.$red-palette)
 
 ### Authentication Patterns
 
+
 - Use AWS Amplify for Cognito integration
 - HTTP interceptor for automatic token injection
 - Auth service with proper error handling
@@ -2170,18 +2257,22 @@ warn: mat.define-palette(mat.$red-palette)
 
 ### Styling Patterns
 
+
 #### Design System + Material + Tailwind Combination
+
 
 ```html
 
 ### State Management
 
+
 - Use Angular Signals for reactive state
 - Use computed signals for derived state
 - Keep state management simple - avoid complex libraries initially
 - Use signals over RxJS for simple state
 
 ### Authentication Patterns
+
 
 - Use AWS Amplify for Cognito integration
 - HTTP interceptor for automatic token injection
@@ -2190,14 +2281,16 @@ warn: mat.define-palette(mat.$red-palette)
 
 ### Styling Patterns
 
+
 #### Design System + Material + Tailwind Combination
+
 
 ```html
 <!-- Card with Design System tokens -->
 <mat-card class="p-6 bg-card border border-border shadow-md rounded-lg hover:shadow-lg transition-shadow">
   <mat-card-header class="mb-4">
 
-```
+```bash
 
 <mat-card-title class="text-2xl font-bold text-card-foreground">
   {{ title }}
@@ -2206,7 +2299,7 @@ warn: mat.define-palette(mat.$red-palette)
   {{ subtitle }}
 </mat-card-subtitle>
 
-```
+```bash
 
   </mat-card-header>
 </mat-card>
@@ -2215,12 +2308,12 @@ warn: mat.define-palette(mat.$red-palette)
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
   <mat-form-field class="w-full">
 
-```
+```bash
 
 <mat-label>Field</mat-label>
 <input matInput class="text-lg bg-input border-border">
 
-```
+```bash
 
   </mat-form-field>
 </div>
@@ -2229,30 +2322,30 @@ warn: mat.define-palette(mat.$red-palette)
 <div class="flex gap-3">
   <button mat-raised-button
 
-```
+```bash
 
 class="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-2 rounded-md transition-colors">
 y Action
 
-```
+```bash
 
   </button>
   <button mat-button
 
-```
+```bash
 
 class="text-muted-foreground hover:text-foreground px-4 py-2 rounded-md transition-colors">
 
-```
+```bash
 
   </button>
   <button mat-raised-button
 
-```
+```bash
 
 class="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 py-2 rounded-md transition-colors">
 
-```
+```bash
 
   </button>
 </div>
@@ -2261,7 +2354,7 @@ class="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 p
 <aside class="bg-sidebar border-r border-sidebar-border w-64 h-screen">
   <nav class="p-4 space-y-2">
 
-```
+```bash
 
 <a class="flex items-center px-3 py-2 rounded-md bg-sidebar-accent text-sidebar-accent-foreground hover:bg-sidebar-accent/80">
   <mat-icon class="mr-3">dashboard</mat-icon>
@@ -2272,18 +2365,18 @@ class="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 p
   Bedarfs
 </a>
 
-```
+```bash
 
   </nav>
 </aside>
 
-```
+```bash
 
 <!-- Card with Design System tokens -->
 <mat-card class="p-6 bg-card border border-border shadow-md rounded-lg hover:shadow-lg transition-shadow">
   <mat-card-header class="mb-4">
 
-```
+```bash
 
 <mat-card-title class="text-2xl font-bold text-card-foreground">
   {{ title }}
@@ -2292,7 +2385,7 @@ class="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 p
   {{ subtitle }}
 </mat-card-subtitle>
 
-```
+```bash
 
   </mat-card-header>
 </mat-card>
@@ -2301,12 +2394,12 @@ class="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 p
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
   <mat-form-field class="w-full">
 
-```
+```bash
 
 <mat-label>Field</mat-label>
 <input matInput class="text-lg bg-input border-border">
 
-```
+```bash
 
   </mat-form-field>
 </div>
@@ -2315,30 +2408,30 @@ class="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 p
 <div class="flex gap-3">
   <button mat-raised-button
 
-```
+```bash
 
 class="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-2 rounded-md transition-colors">
 y Action
 
-```
+```bash
 
   </button>
   <button mat-button
 
-```
+```bash
 
 class="text-muted-foreground hover:text-foreground px-4 py-2 rounded-md transition-colors">
 
-```
+```bash
 
   </button>
   <button mat-raised-button
 
-```
+```bash
 
 class="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 py-2 rounded-md transition-colors">
 
-```
+```bash
 
   </button>
 </div>
@@ -2347,7 +2440,7 @@ class="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 p
 <aside class="bg-sidebar border-r border-sidebar-border w-64 h-screen">
   <nav class="p-4 space-y-2">
 
-```
+```bash
 
 <a class="flex items-center px-3 py-2 rounded-md bg-sidebar-accent text-sidebar-accent-foreground hover:bg-sidebar-accent/80">
   <mat-icon class="mr-3">dashboard</mat-icon>
@@ -2358,18 +2451,20 @@ class="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 p
   Bedarfs
 </a>
 
-```
+```bash
 
   </nav>
 </aside>
 
-```
+```bash
 
 ### Responsive Design Patterns
+
 
 ```html
 
 ### Responsive Design Patterns
+
 
 ```html
 
@@ -2377,11 +2472,11 @@ class="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 p
 <div class="container mx-auto px-4 py-6">
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 
-```
+```bash
 
 <!-- Cards -->
 
-```
+```bash
 
   </div>
 </div>
@@ -2390,16 +2485,16 @@ class="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 p
 <nav class="bg-white shadow-lg">
   <div class="max-w-7xl mx-auto px-4">
 
-```
+```bash
 
 <div class="flex justify-between h-16">
   <div class="flex items-center">
     <span class="text-xl font-bold text-gray-800">Bau</span>
   </div>
 
-```
+```bash
 
-```
+```bash
 
 <!-- Mobile menu button -->
 <div class="md:hidden flex items-center">
@@ -2408,9 +2503,9 @@ class="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 p
   </button>
 </div>
 
-```
+```bash
 
-```
+```bash
 
 <!-- Desktop menu -->
 <div class="hidden md:flex items-center space-x-4">
@@ -2423,22 +2518,22 @@ class="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 p
 </div>
 div>
 
-```
+```bash
 
   </div>
 </nav>
 
-```
+```bash
 
 <!-- Mobile-first responsive layout -->
 <div class="container mx-auto px-4 py-6">
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 
-```
+```bash
 
 <!-- Cards -->
 
-```
+```bash
 
   </div>
 </div>
@@ -2447,16 +2542,16 @@ div>
 <nav class="bg-white shadow-lg">
   <div class="max-w-7xl mx-auto px-4">
 
-```
+```bash
 
 <div class="flex justify-between h-16">
   <div class="flex items-center">
     <span class="text-xl font-bold text-gray-800">Bau</span>
   </div>
 
-```
+```bash
 
-```
+```bash
 
 <!-- Mobile menu button -->
 <div class="md:hidden flex items-center">
@@ -2465,9 +2560,9 @@ div>
   </button>
 </div>
 
-```
+```bash
 
-```
+```bash
 
 <!-- Desktop menu -->
 <div class="hidden md:flex items-center space-x-4">
@@ -2480,18 +2575,20 @@ div>
 </div>
 div>
 
-```
+```bash
 
   </div>
 </nav>
 
-```
+```bash
 
 ---
 
 ## Architecture Patterns
 
+
 ### Hexagonal Architecture
+
 
 - **Domain**: Business entities and logic (no dependencies)
 - **Application**: Use cases and orchestration
@@ -2500,13 +2597,16 @@ div>
 
 ### Package Structure
 
-```
+
+```bash
 
 ---
 
 ## Architecture Patterns
 
+
 ### Hexagonal Architecture
+
 
 - **Domain**: Business entities and logic (no dependencies)
 - **Application**: Use cases and orchestration
@@ -2515,7 +2615,8 @@ div>
 
 ### Package Structure
 
-```
+
+```bash
 
 backend/src/main/java/com/bau/
 ├── adapter/
@@ -2534,15 +2635,15 @@ backend/src/main/java/com/bau/
 │       └── out/             # Output ports (repository interfaces)
 └── shared/
 
-```
+```bash
 
 ├── config/              # Configuration classes
 ├── util/                # Utility classes
 └── exception/           # Custom exceptions
 
-```
+```bash
 
-```
+```bash
 
 backend/src/main/java/com/bau/
 ├── adapter/
@@ -2561,17 +2662,18 @@ backend/src/main/java/com/bau/
 │       └── out/             # Output ports (repository interfaces)
 └── shared/
 
-```
+```bash
 
 ├── config/              # Configuration classes
 ├── util/                # Utility classes
 └── exception/           # Custom exceptions
 
-```
+```bash
 
-```
+```bash
 
 ### Entity & DTO Separation
+
 
 - **Domain Entities**: Business logic, no JPA annotations
 - **JPA Entities**: Database representation only
@@ -2579,6 +2681,7 @@ backend/src/main/java/com/bau/
 - **Mappers**: Convert between layers
 
 ### Naming Conventions
+
 
 - **Domain Objects**: No suffix (e.g., `Bedarf`, `Betrieb`)
 - **JPA Entities**: `Entity` suffix (e.g., `BedarfEntity`)
@@ -2590,13 +2693,17 @@ backend/src/main/java/com/bau/
 
 ## Testing Standards
 
+
 ### Backend Testing
 
+
 #### Unit Test Template
+
 
 ```java
 
 ### Entity & DTO Separation
+
 
 - **Domain Entities**: Business logic, no JPA annotations
 - **JPA Entities**: Database representation only
@@ -2604,6 +2711,7 @@ backend/src/main/java/com/bau/
 - **Mappers**: Convert between layers
 
 ### Naming Conventions
+
 
 - **Domain Objects**: No suffix (e.g., `Bedarf`, `Betrieb`)
 - **JPA Entities**: `Entity` suffix (e.g., `BedarfEntity`)
@@ -2615,36 +2723,39 @@ backend/src/main/java/com/bau/
 
 ## Testing Standards
 
+
 ### Backend Testing
 
+
 #### Unit Test Template
+
 
 ```java
 @ExtendWith(MockitoExtension.class)
 class {Action}{EntityName}UseCaseTest {
 
-```
+```bash
 
 @Mock
 private {EntityName}Repository {entityName}Repository;
 
-```
+```bash
 
-```
+```bash
 
 @Mock
 private {EntityName}Mapper {entityName}Mapper;
 
-```
+```bash
 
-```
+```bash
 
 @InjectMocks
 private {Action}{EntityName}UseCase useCase;
 
-```
+```bash
 
-```
+```bash
 
 @Test
 void should{Action}{EntityName}_whenValidRequest() {
@@ -2652,37 +2763,37 @@ void should{Action}{EntityName}_whenValidRequest() {
     Create{EntityName}Request request = new Create{EntityName}Request();
     // setup request
 
-```
+```bash
 
-```
+```bash
 
 {EntityName} {entityName} = new {EntityName}();
 // setup domain object
 
-```
+```bash
 
-```
+```bash
 
 {EntityName} saved{EntityName} = new {EntityName}();
 saved{EntityName}.setId(UUID.randomUUID());
 
-```
+```bash
 
-```
+```bash
 
 when({entityName}Mapper.toDomain(request)).thenReturn({entityName});
 when({entityName}Repository.save({entityName})).thenReturn(saved{EntityName});
 
-```
+```bash
 
-```
+```bash
 
 // When
 Optional<{EntityName}> result = useCase.execute(request);
 
-```
+```bash
 
-```
+```bash
 
 // Then
 assertThat(result).isPresent();
@@ -2690,37 +2801,37 @@ assertThat(result.get().getId()).isEqualTo(saved{EntityName}.getId());
 verify({entityName}Repository).save({entityName});
 }
 
-```
+```bash
 
 }
 
-```
+```bash
 
 @ExtendWith(MockitoExtension.class)
 class {Action}{EntityName}UseCaseTest {
 
-```
+```bash
 
 @Mock
 private {EntityName}Repository {entityName}Repository;
 
-```
+```bash
 
-```
+```bash
 
 @Mock
 private {EntityName}Mapper {entityName}Mapper;
 
-```
+```bash
 
-```
+```bash
 
 @InjectMocks
 private {Action}{EntityName}UseCase useCase;
 
-```
+```bash
 
-```
+```bash
 
 @Test
 void should{Action}{EntityName}_whenValidRequest() {
@@ -2728,37 +2839,37 @@ void should{Action}{EntityName}_whenValidRequest() {
     Create{EntityName}Request request = new Create{EntityName}Request();
     // setup request
 
-```
+```bash
 
-```
+```bash
 
 {EntityName} {entityName} = new {EntityName}();
 // setup domain object
 
-```
+```bash
 
-```
+```bash
 
 {EntityName} saved{EntityName} = new {EntityName}();
 saved{EntityName}.setId(UUID.randomUUID());
 
-```
+```bash
 
-```
+```bash
 
 when({entityName}Mapper.toDomain(request)).thenReturn({entityName});
 when({entityName}Repository.save({entityName})).thenReturn(saved{EntityName});
 
-```
+```bash
 
-```
+```bash
 
 // When
 Optional<{EntityName}> result = useCase.execute(request);
 
-```
+```bash
 
-```
+```bash
 
 // Then
 assertThat(result).isPresent();
@@ -2766,13 +2877,14 @@ assertThat(result.get().getId()).isEqualTo(saved{EntityName}.getId());
 verify({entityName}Repository).save({entityName});
 }
 
-```
+```bash
 
 }
 
-```
+```bash
 
 #### Testing Guidelines
+
 
 - Unit tests for all business logic
 - Integration tests for APIs
@@ -2783,11 +2895,14 @@ verify({entityName}Repository).save({entityName});
 
 ### Frontend Testing
 
+
 #### Component Test Template
+
 
 ```typescript
 
 #### Testing Guidelines
+
 
 - Unit tests for all business logic
 - Integration tests for APIs
@@ -2798,7 +2913,9 @@ verify({entityName}Repository).save({entityName});
 
 ### Frontend Testing
 
+
 #### Component Test Template
+
 
 ```typescript
 describe('{ComponentName}Component', () => {
@@ -2808,13 +2925,13 @@ describe('{ComponentName}Component', () => {
 
   beforeEach(async () => {
 
-```
+```bash
 
 const spy = jasmine.createSpyObj('{ServiceName}', ['get{Data}']);
 
-```
+```bash
 
-```
+```bash
 
 await TestBed.configureTestingModule({
   imports: [{ComponentName}Component],
@@ -2823,58 +2940,58 @@ await TestBed.configureTestingModule({
   ]
 }).compileComponents();
 
-```
+```bash
 
-```
+```bash
 
 fixture = TestBed.createComponent({ComponentName}Component);
 component = fixture.componentInstance;
 {serviceName} = TestBed.inject({ServiceName}) as jasmine.SpyObj<{ServiceName}>;
 
-```
+```bash
 
   });
 
   it('should create', () => {
 
-```
+```bash
 
 expect(component).toBeTruthy();
 
-```
+```bash
 
   });
 
   it('should load data on init', async () => {
 
-```
+```bash
 
 // Given
 const mockData = [{ id: '1', name: 'Test' }];
 {serviceName}.get{Data}.and.returnValue(Promise.resolve(mockData));
 
-```
+```bash
 
-```
+```bash
 
 // When
 fixture.detectChanges();
 await fixture.whenStable();
 
-```
+```bash
 
-```
+```bash
 
 // Then
 expect({serviceName}.get{Data}).toHaveBeenCalled();
 expect(component.{data}()).toEqual(mockData);
 
-```
+```bash
 
   });
 });
 
-```
+```bash
 
 describe('{ComponentName}Component', () => {
   let component: {ComponentName}Component;
@@ -2883,13 +3000,13 @@ describe('{ComponentName}Component', () => {
 
   beforeEach(async () => {
 
-```
+```bash
 
 const spy = jasmine.createSpyObj('{ServiceName}', ['get{Data}']);
 
-```
+```bash
 
-```
+```bash
 
 await TestBed.configureTestingModule({
   imports: [{ComponentName}Component],
@@ -2898,60 +3015,61 @@ await TestBed.configureTestingModule({
   ]
 }).compileComponents();
 
-```
+```bash
 
-```
+```bash
 
 fixture = TestBed.createComponent({ComponentName}Component);
 component = fixture.componentInstance;
 {serviceName} = TestBed.inject({ServiceName}) as jasmine.SpyObj<{ServiceName}>;
 
-```
+```bash
 
   });
 
   it('should create', () => {
 
-```
+```bash
 
 expect(component).toBeTruthy();
 
-```
+```bash
 
   });
 
   it('should load data on init', async () => {
 
-```
+```bash
 
 // Given
 const mockData = [{ id: '1', name: 'Test' }];
 {serviceName}.get{Data}.and.returnValue(Promise.resolve(mockData));
 
-```
+```bash
 
-```
+```bash
 
 // When
 fixture.detectChanges();
 await fixture.whenStable();
 
-```
+```bash
 
-```
+```bash
 
 // Then
 expect({serviceName}.get{Data}).toHaveBeenCalled();
 expect(component.{data}()).toEqual(mockData);
 
-```
+```bash
 
   });
 });
 
-```
+```bash
 
 #### Testing Guidelines
+
 
 - Unit tests for components and services
 - Integration tests for user workflows
@@ -2964,7 +3082,9 @@ expect(component.{data}()).toEqual(mockData);
 
 ## Code Quality Tools
 
+
 ### Backend
+
 
 - **Maven**: Build, test, dependency management
 - **Spotless**: Code formatting
@@ -2973,6 +3093,7 @@ expect(component.{data}()).toEqual(mockData);
 - **Mockito**: Mocking framework
 
 ### Frontend
+
 
 - **ESLint**: Code linting
 - **Prettier**: Code formatting
@@ -2984,7 +3105,9 @@ expect(component.{data}()).toEqual(mockData);
 
 ## Business Domain Rules
 
+
 ### Bedarf Validation
+
 
 - Date range must be valid (start < end)
 - At least one worker type must be specified
@@ -2993,12 +3116,14 @@ expect(component.{data}()).toEqual(mockData);
 
 ### Betrieb Validation
 
+
 - Name is required
 - Address is required
 - Email must be valid format
 - Phone number must be valid format
 
 ### User Management
+
 
 - Email must be unique
 - Password must meet security requirements
@@ -3007,11 +3132,13 @@ expect(component.{data}()).toEqual(mockData);
 
 #### User Roles
 
+
 The system supports two user roles:
 - **ADMIN**: System administrators with full access to manage the platform
 - **BETRIEB**: Construction companies that can create/manage Bedarf and view other companies' Bedarf
 
 #### Role-Based Access Control
+
 
 - **ADMIN role**: Full system access, user management, system oversight
 - **BETRIEB role**: Limited to own company data, can create/update/delete own Bedarf, view all Bedarf for application
@@ -3019,6 +3146,7 @@ The system supports two user roles:
 ---
 
 ## Related Documentation
+
 
 - [Architecture Decisions](../09-architecture-decisions/)
 - [Backend Architecture](../05-building-blocks/backend-architecture.md)
@@ -3027,6 +3155,7 @@ The system supports two user roles:
 
 #### Testing Guidelines
 
+
 - Unit tests for components and services
 - Integration tests for user workflows
 - E2E tests for critical paths
@@ -3038,7 +3167,9 @@ The system supports two user roles:
 
 ## Code Quality Tools
 
+
 ### Backend
+
 
 - **Maven**: Build, test, dependency management
 - **Spotless**: Code formatting
@@ -3047,6 +3178,7 @@ The system supports two user roles:
 - **Mockito**: Mocking framework
 
 ### Frontend
+
 
 - **ESLint**: Code linting
 - **Prettier**: Code formatting
@@ -3058,7 +3190,9 @@ The system supports two user roles:
 
 ## Business Domain Rules
 
+
 ### Bedarf Validation
+
 
 - Date range must be valid (start < end)
 - At least one worker type must be specified
@@ -3067,12 +3201,14 @@ The system supports two user roles:
 
 ### Betrieb Validation
 
+
 - Name is required
 - Address is required
 - Email must be valid format
 - Phone number must be valid format
 
 ### User Management
+
 
 - Email must be unique
 - Password must meet security requirements
@@ -3081,11 +3217,13 @@ The system supports two user roles:
 
 #### User Roles
 
+
 The system supports two user roles:
 - **ADMIN**: System administrators with full access to manage the platform
 - **BETRIEB**: Construction companies that can create/manage Bedarf and view other companies' Bedarf
 
 #### Role-Based Access Control
+
 
 - **ADMIN role**: Full system access, user management, system oversight
 - **BETRIEB role**: Limited to own company data, can create/update/delete own Bedarf, view all Bedarf for application
@@ -3093,6 +3231,7 @@ The system supports two user roles:
 ---
 
 ## Related Documentation
+
 
 - [Architecture Decisions](../09-architecture-decisions/)
 - [Backend Architecture](../05-building-blocks/backend-architecture.md)
