@@ -35,11 +35,6 @@ jobs:
           README.md
         config: '.markdownlint.json'
     
-    - name: Install German Dictionary
-      run: |
-        npm install -g cspell @cspell/dict-de-de
-        cspell link add @cspell/dict-de-de
-        
     - name: Spell Check
       uses: streetsidesoftware/cspell-action@v7
       with:
