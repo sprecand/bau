@@ -2,12 +2,12 @@ apiVersion: v1
 kind: Config
 metadata:
   name: bau-deployment
-  version: "1.0.10"
-  updated: "2025-07-06T17:46:12Z"
+  version: "1.0.11"
+  updated: "2025-07-06T18:02:35Z"
 spec:
   backend:
-    image: "792761286369.dkr.ecr.eu-central-1.amazonaws.com/bau-backend:1.0.10"
-    version: "1.0.10"
+    image: "792761286369.dkr.ecr.eu-central-1.amazonaws.com/bau-backend:1.0.11"
+    version: "1.0.11"
   frontend:
-    image: "792761286369.dkr.ecr.eu-central-1.amazonaws.com/bau-frontend:1.0.10"
-    version: "1.0.10"
+    image: "792761286369.dkr.ecr.eu-central-1.amazonaws.com/bau-frontend:1.0.11"
+    version: "1.0.11"
