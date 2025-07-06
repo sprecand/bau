@@ -32,7 +32,7 @@ jobs:
           doc/**/*.md
           api/**/*.md
           README.md
-        config: '.github/.markdownlint-cli2.jsonc'
+        config: '.markdownlint.json'
     
     - name: Spell Check
       uses: streetsidesoftware/cspell-action@v6

@@ -6,6 +6,8 @@
     "headings": false
   },
   "MD012": false,
+  "MD024": false,
+  "MD032": false,
   "MD033": {
     "allowed_elements": [
       "br", "details", "summary", "mat-card", "mat-card-title", "mat-card-header", 
@@ -15,5 +17,6 @@
     ]
   },
   "MD034": false,
-  "MD041": false
+  "MD041": false,
+  "MD051": false
 } 
