@@ -193,6 +193,7 @@ jobs:
           AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
           
           # Login to ECR
+          export DOCKER_CONFIG=$(mktemp -d)
           aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
           
           # Check if backend image exists
@@ -218,15 +219,30 @@ jobs:
         run: |
           echo "Deploying backend version $VERSION..."
           
-          # Download current task definition and filter out metadata fields
+          # Download current task definition
           aws ecs describe-task-definition --task-definition $ECR_REPOSITORY_BACKEND \
-            --query 'taskDefinition | {family: family, taskRoleArn: taskRoleArn, executionRoleArn: executionRoleArn, networkMode: networkMode, containerDefinitions: containerDefinitions, volumes: volumes, placementConstraints: placementConstraints, requiresCompatibilities: requiresCompatibilities, cpu: cpu, memory: memory, tags: tags, pidMode: pidMode, ipcMode: ipcMode, proxyConfiguration: proxyConfiguration, inferenceAccelerators: inferenceAccelerators, ephemeralStorage: ephemeralStorage, runtimePlatform: runtimePlatform}' \
+            --query 'taskDefinition' \
             > task-definition-backend.json
           
-          # Update image in task definition
-          jq --arg IMAGE "$BACKEND_IMAGE" \
-            '.containerDefinitions[0].image = $IMAGE' \
-            task-definition-backend.json > updated-task-definition-backend.json
+          # Update image in task definition and remove metadata fields
+          jq --arg IMAGE "$BACKEND_IMAGE" '
+            {
+              family: .family,
+              taskRoleArn: .taskRoleArn,
+              executionRoleArn: .executionRoleArn,
+              networkMode: .networkMode,
+              containerDefinitions: (.containerDefinitions | map(
+                if .name == "backend" then .image = $IMAGE else . end
+              )),
+              volumes: .volumes,
+              placementConstraints: .placementConstraints,
+              requiresCompatibilities: .requiresCompatibilities,
+              cpu: .cpu,
+              memory: .memory
+            } | 
+            # Remove null values
+            walk(if type == "object" then with_entries(select(.value != null)) else . end)
+          ' task-definition-backend.json > updated-task-definition-backend.json
           
           # Register new task definition
           aws ecs register-task-definition \
@@ -248,15 +264,30 @@ jobs:
         run: |
           echo "Deploying frontend version $VERSION..."
           
-          # Download current task definition and filter out metadata fields
+          # Download current task definition (simplified approach)
           aws ecs describe-task-definition --task-definition $ECR_REPOSITORY_FRONTEND \
-            --query 'taskDefinition | {family: family, taskRoleArn: taskRoleArn, executionRoleArn: executionRoleArn, networkMode: networkMode, containerDefinitions: containerDefinitions, volumes: volumes, placementConstraints: placementConstraints, requiresCompatibilities: requiresCompatibilities, cpu: cpu, memory: memory, tags: tags, pidMode: pidMode, ipcMode: ipcMode, proxyConfiguration: proxyConfiguration, inferenceAccelerators: inferenceAccelerators, ephemeralStorage: ephemeralStorage, runtimePlatform: runtimePlatform}' \
+            --query 'taskDefinition' \
             > task-definition-frontend.json
           
-          # Update image in task definition
-          jq --arg IMAGE "$FRONTEND_IMAGE" \
-            '.containerDefinitions[0].image = $IMAGE' \
-            task-definition-frontend.json > updated-task-definition-frontend.json
+          # Update image in task definition and remove metadata fields
+          jq --arg IMAGE "$FRONTEND_IMAGE" '
+            {
+              family: .family,
+              taskRoleArn: .taskRoleArn,
+              executionRoleArn: .executionRoleArn,
+              networkMode: .networkMode,
+              containerDefinitions: (.containerDefinitions | map(
+                if .name == "frontend" then .image = $IMAGE else . end
+              )),
+              volumes: .volumes,
+              placementConstraints: .placementConstraints,
+              requiresCompatibilities: .requiresCompatibilities,
+              cpu: .cpu,
+              memory: .memory
+            } | 
+            # Remove null values
+            walk(if type == "object" then with_entries(select(.value != null)) else . end)
+          ' task-definition-frontend.json > updated-task-definition-frontend.json
           
           # Register new task definition
           aws ecs register-task-definition \
