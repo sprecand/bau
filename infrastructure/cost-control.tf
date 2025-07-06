@@ -2,7 +2,8 @@
 
 # SNS Topic for billing alerts
 resource "aws_sns_topic" "billing_alerts" {
-  name = "${var.project_name}-billing-alerts"
+  count = var.enable_billing_alerts ? 1 : 0
+  name  = "${var.project_name}-billing-alerts"
 
   tags = {
     Name = "${var.project_name}-billing-alerts"
@@ -11,14 +12,15 @@ resource "aws_sns_topic" "billing_alerts" {
 
 # SNS Subscription (you'll need to confirm via email)
 resource "aws_sns_topic_subscription" "billing_alerts_email" {
-  count     = var.alert_email != "" ? 1 : 0
-  topic_arn = aws_sns_topic.billing_alerts.arn
+  count     = var.enable_billing_alerts && var.alert_email != "" ? 1 : 0
+  topic_arn = aws_sns_topic.billing_alerts[0].arn
   protocol  = "email"
   endpoint  = var.alert_email
 }
 
 # CloudWatch Billing Alarm
 resource "aws_cloudwatch_metric_alarm" "billing_alarm" {
+  count               = var.enable_billing_alerts ? 1 : 0
   alarm_name          = "${var.project_name}-billing-alarm"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"
@@ -28,7 +30,7 @@ resource "aws_cloudwatch_metric_alarm" "billing_alarm" {
   statistic           = "Maximum"
   threshold           = var.monthly_budget_limit
   alarm_description   = "This metric monitors aws billing charges"
-  alarm_actions       = [aws_sns_topic.billing_alerts.arn]
+  alarm_actions       = [aws_sns_topic.billing_alerts[0].arn]
 
   dimensions = {
     Currency = "USD"
@@ -41,6 +43,7 @@ resource "aws_cloudwatch_metric_alarm" "billing_alarm" {
 
 # Budget for monthly spending limit
 resource "aws_budgets_budget" "monthly_budget" {
+  count         = var.enable_billing_alerts ? 1 : 0
   name          = "${var.project_name}-monthly-budget"
   budget_type   = "COST"
   limit_amount  = var.monthly_budget_limit

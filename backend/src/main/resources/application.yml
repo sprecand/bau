@@ -3,7 +3,7 @@ spring:
     name: bau-platform
   
   datasource:
-    url: jdbc:postgresql://localhost:5432/bau_platform
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/bau_platform}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:password}
     driver-class-name: org.postgresql.Driver

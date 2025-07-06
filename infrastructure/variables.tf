@@ -29,6 +29,12 @@ variable "alert_email" {
   default     = ""
 }
 
+variable "enable_billing_alerts" {
+  description = "Enable billing alerts, budgets, and SNS notifications"
+  type        = bool
+  default     = true
+}
+
 variable "enable_auto_shutdown" {
   description = "Enable automatic daily schedule: startup at 9 AM CET/CEST, shutdown at 9 PM CET/CEST"
   type        = bool

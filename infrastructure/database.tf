@@ -38,7 +38,7 @@ resource "aws_security_group" "database" {
 resource "aws_db_instance" "postgres" {
   identifier     = "${var.project_name}-postgres"
   engine         = "postgres"
-  engine_version = "15.5"
+  engine_version = "15.8"
   instance_class = var.db_instance_class
   allocated_storage = var.db_allocated_storage
   storage_type      = "gp2"
