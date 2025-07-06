@@ -160,9 +160,14 @@ jobs:
             git push origin HEAD:main
           fi
           
-          # Always create and push the tag (even if no version changes)
-          git tag -a "v$VERSION" -m "Release version $VERSION"
-          git push origin "v$VERSION"
+          # Check if tag already exists
+          if git tag -l "v$VERSION" | grep -q "v$VERSION"; then
+            echo "Tag v$VERSION already exists, skipping tag creation"
+          else
+            echo "Creating new tag v$VERSION"
+            git tag -a "v$VERSION" -m "Release version $VERSION"
+            git push origin "v$VERSION"
+          fi
 
       - name: Create GitHub Release
         uses: actions/create-release@v1
