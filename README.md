@@ -73,29 +73,33 @@ git push origin main
 
 ## 💰 Cost Management
 
-**Save money with the AWS management script!**
+**Automatic daily schedule: 9 AM - 9 PM CET/CEST** (already enabled!)
 
 ```bash
-# Turn app ON (costs ~$17/month)
-./manage-app.sh start
-
-# Turn app OFF (saves ~$16/month, costs ~$0.30/month)
-./manage-app.sh stop
-
 # Check current status and costs
 ./manage-app.sh status
 
-# Completely destroy infrastructure (saves ~$17/month)
+# Manual override: Turn app ON
+./manage-app.sh start
+
+# Manual override: Turn app OFF
+./manage-app.sh stop
+
+# Completely destroy infrastructure (costs $0/month)
 ./manage-app.sh destroy
 ```
 
-**Smart cost savings:**
+**Cost breakdown:**
 
-- **Daily on/off**: Save ~$5-8/month (work 8 hours/day)
-- **Weekend shutdown**: Save ~$4-5/month
-- **Auto-shutdown**: 10 PM UTC daily (already enabled)
+- **Auto-schedule (9AM-9PM)**: ~$38/month (50% savings)
+- **Manual control**: ~$30-47/month  
+- **Always stopped**: ~$30/month (infrastructure only)
+- **Destroyed**: $0/month
 
-📖 **Full guide**: [AWS Cost Management Guide](AWS-MANAGEMENT.md)
+**Your app automatically:**
+- ✅ **Starts at 9 AM** (including weekends)
+- ✅ **Stops at 9 PM** daily
+- ✅ **Saves ~$10/month** vs 24/7 running
 
 ## Documentation
 

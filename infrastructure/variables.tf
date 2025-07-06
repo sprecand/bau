@@ -30,7 +30,7 @@ variable "alert_email" {
 }
 
 variable "enable_auto_shutdown" {
-  description = "Enable automatic daily shutdown of ECS services"
+  description = "Enable automatic daily schedule: startup at 9 AM CET/CEST, shutdown at 9 PM CET/CEST"
   type        = bool
   default     = true
 }
@@ -58,4 +58,48 @@ variable "frontend_memory" {
   description = "Memory for frontend in MB"
   type        = number
   default     = 512
+}
+
+# Database Variables
+variable "db_instance_class" {
+  description = "RDS instance class"
+  type        = string
+  default     = "db.t3.micro"
+}
+
+variable "db_allocated_storage" {
+  description = "Allocated storage for RDS instance in GB"
+  type        = number
+  default     = 20
+}
+
+variable "db_name" {
+  description = "Database name"
+  type        = string
+  default     = "bau_platform"
+}
+
+variable "db_username" {
+  description = "Database username"
+  type        = string
+  default     = "bau_user"
+}
+
+variable "db_password" {
+  description = "Database password"
+  type        = string
+  sensitive   = true
+}
+
+# Domain Variables
+variable "domain_name" {
+  description = "Custom domain name for the application (e.g., example.com). Leave empty to use ALB DNS name"
+  type        = string
+  default     = ""
+}
+
+variable "create_api_subdomain" {
+  description = "Create api.domain.com subdomain for API endpoints"
+  type        = bool
+  default     = false
 } 

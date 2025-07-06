@@ -102,11 +102,16 @@ print_status() {
     TOTAL_SERVICES=$((BACKEND_DESIRED + FRONTEND_DESIRED))
     if [[ $TOTAL_SERVICES -gt 0 ]]; then
         HOURLY_COST=$(echo "scale=3; $TOTAL_SERVICES * 0.012" | bc)
-        DAILY_COST=$(echo "scale=2; $HOURLY_COST * 24" | bc)
-        MONTHLY_COST=$(echo "scale=2; $DAILY_COST * 30" | bc)
-        echo -e "   ${PURPLE}💰 Estimated cost: \$${HOURLY_COST}/hour, \$${DAILY_COST}/day, \$${MONTHLY_COST}/month${NC}"
+        DAILY_COST_24H=$(echo "scale=2; $HOURLY_COST * 24" | bc)
+        DAILY_COST_12H=$(echo "scale=2; $HOURLY_COST * 12" | bc)
+        MONTHLY_COST_24H=$(echo "scale=2; $DAILY_COST_24H * 30" | bc)
+        MONTHLY_COST_12H=$(echo "scale=2; $DAILY_COST_12H * 30 + 30" | bc)  # +30 for infrastructure
+        MONTHLY_COST_24H_TOTAL=$(echo "scale=2; $MONTHLY_COST_24H + 30" | bc)  # +30 for infrastructure
+        echo -e "   💰 Running cost: \$${HOURLY_COST}/hour (compute only)"
+        echo -e "   💰 With auto-schedule (9AM-9PM): ~\$${MONTHLY_COST_12H}/month total"
+        echo -e "   💰 If running 24/7: ~\$${MONTHLY_COST_24H_TOTAL}/month total"
     else
-        echo -e "   ${GREEN}💰 Current cost: ~\$0.01/day (infrastructure only)${NC}"
+        echo -e "   ${GREEN}💰 Current cost: ~\$30/month (infrastructure only)${NC}"
     fi
     echo
 }
@@ -175,14 +180,15 @@ show_status() {
     echo ""
     
     if [[ "$backend_count" == "0" && "$frontend_count" == "0" ]]; then
-        echo "Status: 🔴 STOPPED (saving money)"
-        echo "Monthly cost: ~$0.30"
+        echo "Status: 🔴 STOPPED"
+        echo "Monthly cost: ~$30 (infrastructure only)"
     elif [[ "$backend_count" == "1" && "$frontend_count" == "1" ]]; then
         echo "Status: 🟢 RUNNING"
-        echo "Monthly cost: ~$17"
+        echo "Monthly cost: ~$38 (with auto-schedule 9AM-9PM)"
+        echo "             ~$47 (if running 24/7)"
     else
         echo "Status: 🟡 PARTIAL (mixed state)"
-        echo "Monthly cost: ~$8-17"
+        echo "Monthly cost: ~$34-42"
     fi
     echo ""
 }
@@ -341,9 +347,10 @@ show_help() {
     echo "  3. git commit -m 'deploy: v1.2.3'"
     echo "  4. git push                 # Triggers automatic deployment"
     echo ""
-    echo "COST SAVING:"
-    echo "  • Running: ~$17/month"
-    echo "  • Stopped: ~$0.30/month"
+    echo "COST SUMMARY:"
+    echo "  • Auto-schedule (9AM-9PM): ~$38/month"
+    echo "  • Manual control: ~$30-47/month"  
+    echo "  • Always stopped: ~$30/month"
     echo "  • Destroyed: $0/month"
 }
 

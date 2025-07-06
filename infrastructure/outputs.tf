@@ -58,4 +58,94 @@ output "github_secrets_info" {
     BACKEND_SERVICE = aws_ecs_service.backend.name
     FRONTEND_SERVICE = aws_ecs_service.frontend.name
   }
+}
+
+# Database Outputs
+output "database_endpoint" {
+  description = "Database endpoint"
+  value       = aws_db_instance.postgres.endpoint
+}
+
+output "database_name" {
+  description = "Database name"
+  value       = aws_db_instance.postgres.db_name
+}
+
+# Load Balancer Outputs
+output "load_balancer_dns_name" {
+  description = "Load balancer DNS name"
+  value       = aws_lb.main.dns_name
+}
+
+output "load_balancer_zone_id" {
+  description = "Load balancer zone ID"
+  value       = aws_lb.main.zone_id
+}
+
+# Cognito Outputs
+output "cognito_user_pool_id" {
+  description = "Cognito User Pool ID"
+  value       = aws_cognito_user_pool.main.id
+}
+
+output "cognito_user_pool_client_id" {
+  description = "Cognito User Pool Client ID"
+  value       = aws_cognito_user_pool_client.main.id
+}
+
+output "cognito_domain" {
+  description = "Cognito Domain"
+  value       = aws_cognito_user_pool_domain.main.domain
+}
+
+output "cognito_issuer_uri" {
+  description = "Cognito Issuer URI"
+  value       = "https://cognito-idp.${var.aws_region}.amazonaws.com/${aws_cognito_user_pool.main.id}"
+}
+
+output "cognito_jwks_uri" {
+  description = "Cognito JWKS URI"
+  value       = "https://cognito-idp.${var.aws_region}.amazonaws.com/${aws_cognito_user_pool.main.id}/.well-known/jwks.json"
+}
+
+# Domain Outputs
+output "domain_name" {
+  description = "Custom domain name (if configured)"
+  value       = var.domain_name != "" ? var.domain_name : null
+}
+
+output "route53_zone_id" {
+  description = "Route 53 Hosted Zone ID (if custom domain is used)"
+  value       = var.domain_name != "" ? aws_route53_zone.main[0].zone_id : null
+}
+
+output "route53_name_servers" {
+  description = "Route 53 Name Servers (point your domain to these)"
+  value       = var.domain_name != "" ? aws_route53_zone.main[0].name_servers : null
+}
+
+output "certificate_arn" {
+  description = "ACM Certificate ARN (if custom domain is used)"
+  value       = var.domain_name != "" ? aws_acm_certificate_validation.main[0].certificate_arn : null
+}
+
+# Application URLs (dynamic based on custom domain)
+output "application_url" {
+  description = "Application URL"
+  value       = local.frontend_url
+}
+
+output "api_url" {
+  description = "API URL"
+  value       = local.api_url
+}
+
+output "swagger_url" {
+  description = "Swagger UI URL"
+  value       = local.swagger_url
+}
+
+output "health_check_url" {
+  description = "Health Check URL"
+  value       = local.health_url
 } 

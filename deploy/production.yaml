@@ -6,16 +6,13 @@ metadata:
   updated: "2024-01-15T12:00:00Z"
   description: "Production deployment configuration for Bau platform"
 spec:
+  version: "1.0.0"
   backend:
-    image: "123456789.dkr.ecr.eu-central-1.amazonaws.com/bau-backend:1.0.0"
-    version: "1.0.0"
     replicas: 1
     resources:
       cpu: "256"
       memory: "512"
   frontend:
-    image: "123456789.dkr.ecr.eu-central-1.amazonaws.com/bau-frontend:1.0.0"
-    version: "1.0.0"
     replicas: 1
     resources:
       cpu: "256"

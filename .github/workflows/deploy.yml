@@ -43,16 +43,27 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
       - name: Read deployment config
         id: config
         run: |
+          # Auto-detect AWS Account ID
+          AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+          echo "Detected AWS Account ID: $AWS_ACCOUNT_ID"
+          
           if [[ "${{ github.event.inputs.version }}" != "" ]]; then
             # Manual deployment - use input version
             VERSION="${{ github.event.inputs.version }}"
             VERSION=${VERSION#v}  # Remove 'v' prefix if present
             
-            # Get ECR registry
-            ECR_REGISTRY="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com"
+            # Build image URIs with detected account ID
+            ECR_REGISTRY="$AWS_ACCOUNT_ID.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com"
             BACKEND_IMAGE="$ECR_REGISTRY/${{ env.ECR_REPOSITORY_BACKEND }}:$VERSION"
             FRONTEND_IMAGE="$ECR_REGISTRY/${{ env.ECR_REPOSITORY_FRONTEND }}:$VERSION"
             
@@ -64,10 +75,13 @@ jobs:
               exit 1
             fi
             
-            # Parse YAML config (improved parsing for the actual structure)
+            # Parse YAML config and replace account ID placeholder
             VERSION=$(sed -n '/metadata:/,/spec:/p' deploy/production.yaml | grep "version:" | cut -d '"' -f 2 | head -1)
-            BACKEND_IMAGE=$(sed -n '/backend:/,/frontend:/p' deploy/production.yaml | grep "image:" | cut -d '"' -f 2 | head -1)
-            FRONTEND_IMAGE=$(sed -n '/frontend:/,/environment:/p' deploy/production.yaml | grep "image:" | cut -d '"' -f 2 | head -1)
+            
+            # Build image URIs with detected account ID and version from config
+            ECR_REGISTRY="$AWS_ACCOUNT_ID.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com"
+            BACKEND_IMAGE="$ECR_REGISTRY/${{ env.ECR_REPOSITORY_BACKEND }}:$VERSION"
+            FRONTEND_IMAGE="$ECR_REGISTRY/${{ env.ECR_REPOSITORY_FRONTEND }}:$VERSION"
             
             echo "Automatic deployment of version $VERSION"
           fi
@@ -127,12 +141,29 @@ jobs:
         working-directory: infrastructure
         env:
           ALERT_EMAIL: ${{ secrets.BILLING_ALERT_EMAIL }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         run: |
           echo "Deploying infrastructure..."
           tofu init
           tofu validate
-          tofu plan -var-file=tofu.tfvars -var="alert_email=$ALERT_EMAIL"
-          tofu apply -var-file=tofu.tfvars -var="alert_email=$ALERT_EMAIL" -auto-approve
+          
+          # Build deployment arguments
+          DEPLOY_ARGS="-var-file=tofu.tfvars -var=alert_email=$ALERT_EMAIL -var=db_password=$DB_PASSWORD"
+          
+          # Add domain configuration if provided
+          if [ -n "${{ secrets.DOMAIN_NAME }}" ]; then
+            DEPLOY_ARGS="$DEPLOY_ARGS -var=domain_name=${{ secrets.DOMAIN_NAME }}"
+            echo "🌐 Using custom domain: ${{ secrets.DOMAIN_NAME }}"
+          fi
+          
+          if [ -n "${{ secrets.CREATE_API_SUBDOMAIN }}" ]; then
+            DEPLOY_ARGS="$DEPLOY_ARGS -var=create_api_subdomain=${{ secrets.CREATE_API_SUBDOMAIN }}"
+            echo "📡 API subdomain: ${{ secrets.CREATE_API_SUBDOMAIN }}"
+          fi
+          
+          # Deploy infrastructure
+          tofu plan $DEPLOY_ARGS
+          tofu apply $DEPLOY_ARGS -auto-approve
           echo "Infrastructure deployed successfully"
 
   deploy-applications:
@@ -158,8 +189,11 @@ jobs:
         run: |
           echo "Verifying images exist..."
           
+          # Auto-detect AWS Account ID
+          AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+          
           # Login to ECR
-          aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com
+          aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
           
           # Check if backend image exists
           if docker manifest inspect $BACKEND_IMAGE >/dev/null 2>&1; then

@@ -65,6 +65,40 @@ deploy_infrastructure() {
             ALERT_EMAIL=""
         fi
     fi
+
+    # Get database password
+    if [[ -z "$DB_PASSWORD" ]]; then
+        echo
+        echo "💡 Tip: You can set DB_PASSWORD as a GitHub secret to avoid this prompt"
+        echo "Requirements: 8+ chars, uppercase, lowercase, numbers, special chars"
+        echo "Generate one: openssl rand -base64 12"
+        echo
+        read -s -p "Enter database password: " DB_PASSWORD
+        echo
+        if [[ -z "$DB_PASSWORD" ]]; then
+            print_error "Database password is required!"
+            exit 1
+        fi
+    fi
+
+    # Get custom domain (optional)
+    if [[ -z "$DOMAIN_NAME" ]]; then
+        echo
+        echo "💡 Tip: You can set DOMAIN_NAME as a GitHub variable to avoid this prompt"
+        read -p "Enter your custom domain (e.g., example.com) or press Enter to use ALB DNS: " DOMAIN_NAME
+        if [[ -n "$DOMAIN_NAME" ]]; then
+            echo
+            read -p "Create api.${DOMAIN_NAME} subdomain for API? (y/N): " -n 1 -r
+            echo
+            if [[ $REPLY =~ ^[Yy]$ ]]; then
+                CREATE_API_SUBDOMAIN="true"
+            else
+                CREATE_API_SUBDOMAIN="false"
+            fi
+        else
+            CREATE_API_SUBDOMAIN="false"
+        fi
+    fi
     
     cd infrastructure
     
@@ -78,7 +112,19 @@ deploy_infrastructure() {
     
     # Plan deployment
     print_step "Planning deployment..."
-    tofu plan -var-file=tofu.tfvars -var="alert_email=$ALERT_EMAIL"
+    PLAN_ARGS="-var-file=tofu.tfvars -var=alert_email=$ALERT_EMAIL -var=db_password=$DB_PASSWORD"
+    
+    if [[ -n "$DOMAIN_NAME" ]]; then
+        PLAN_ARGS="$PLAN_ARGS -var=domain_name=$DOMAIN_NAME -var=create_api_subdomain=$CREATE_API_SUBDOMAIN"
+        print_step "Using custom domain: $DOMAIN_NAME"
+        if [[ "$CREATE_API_SUBDOMAIN" == "true" ]]; then
+            print_step "API subdomain: api.$DOMAIN_NAME"
+        fi
+    else
+        print_step "Using ALB DNS name (no custom domain)"
+    fi
+    
+    tofu plan $PLAN_ARGS
     
     # Ask for confirmation
     echo
@@ -91,7 +137,7 @@ deploy_infrastructure() {
     
     # Apply changes
     print_step "Applying changes..."
-    tofu apply -var-file=tofu.tfvars -var="alert_email=$ALERT_EMAIL" -auto-approve
+    tofu apply $PLAN_ARGS -auto-approve
     
     # Show outputs
     print_step "Deployment completed! Here are the outputs:"
@@ -159,22 +205,59 @@ update_ecs_services() {
 show_completion_info() {
     print_success "🎉 AWS infrastructure deployment completed!"
     echo
-    echo "Next steps:"
-    echo "1. Add GitHub secrets:"
-    echo "   - AWS_ACCESS_KEY_ID"
-    echo "   - AWS_SECRET_ACCESS_KEY" 
-    echo "   - BILLING_ALERT_EMAIL (your email for cost alerts)"
-    echo "2. Push to main branch to trigger automatic deployment"
-    echo "3. Monitor deployment in GitHub Actions"
+    
+    # Show outputs
+    print_step "Getting deployment information..."
+    tofu output
+    
     echo
-    echo "Alternative deployment methods:"
-    echo "- With email env var: ALERT_EMAIL=you@example.com ./deploy-aws.sh"
-    echo "- Manual: cd infrastructure && make deploy"
+    echo "📋 Next steps:"
+    echo "1. Configure GitHub repository (see GITHUB_SETUP.md)"
+    echo "   Required secrets: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, DB_PASSWORD"
+    echo "   Required variables: BILLING_ALERT_EMAIL"
+    
+    # Show domain-specific information
+    DOMAIN_OUTPUT=$(tofu output -raw domain_name 2>/dev/null || echo "")
+    if [[ -n "$DOMAIN_OUTPUT" && "$DOMAIN_OUTPUT" != "null" ]]; then
+        echo
+        print_step "🌐 Custom Domain Configuration:"
+        echo "Domain: $DOMAIN_OUTPUT"
+        echo "Certificate: Created and validated automatically"
+        echo
+        echo "📍 Point your domain to these name servers:"
+        tofu output -json route53_name_servers 2>/dev/null | jq -r '.[]' 2>/dev/null || echo "Check Route 53 console for name servers"
+        echo
+        print_warning "Important: Update your domain's name servers with your registrar!"
+    else
+        echo
+        print_step "🌐 Using ALB DNS name (no custom domain configured)"
+        ALB_DNS=$(tofu output -raw load_balancer_dns_name 2>/dev/null || echo "")
+        if [[ -n "$ALB_DNS" ]]; then
+            echo "Access your application at: http://$ALB_DNS"
+        fi
+    fi
+    
     echo
-    echo "Useful commands:"
-    echo "- Check ECS services: aws ecs list-services --cluster bau-cluster"
+    echo "2. Deploy applications:"
+    echo "   git push origin main  # Triggers automatic deployment"
+    echo
+    echo "3. Verify deployment:"
+    APP_URL=$(tofu output -raw application_url 2>/dev/null || echo "")
+    API_URL=$(tofu output -raw api_url 2>/dev/null || echo "")
+    if [[ -n "$APP_URL" ]]; then
+        echo "   Frontend: $APP_URL"
+    fi
+    if [[ -n "$API_URL" ]]; then
+        echo "   API: $API_URL"
+        echo "   Health: $API_URL/../actuator/health"
+    fi
+    
+    echo
+    echo "🛠️  Management commands:"
+    echo "- Check services: aws ecs list-services --cluster bau-cluster"
     echo "- View logs: aws logs tail /ecs/bau-backend --follow"
-    echo "- Destroy infrastructure: cd infrastructure && make destroy"
+    echo "- Update domain: Edit infrastructure/tofu.tfvars and run tofu apply"
+    echo "- Destroy: cd infrastructure && tofu destroy"
 }
 
 # Main execution

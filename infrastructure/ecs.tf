@@ -54,6 +54,34 @@ resource "aws_ecs_task_definition" "backend" {
         {
           name  = "AWS_REGION" 
           value = var.aws_region
+        },
+        {
+          name  = "DB_USERNAME"
+          value = var.db_username
+        },
+        {
+          name  = "DB_PASSWORD"
+          value = var.db_password
+        },
+        {
+          name  = "SPRING_DATASOURCE_URL"
+          value = "jdbc:postgresql://${aws_db_instance.postgres.endpoint}:5432/${var.db_name}"
+        },
+        {
+          name  = "AWS_COGNITO_USER_POOL_ID"
+          value = aws_cognito_user_pool.main.id
+        },
+        {
+          name  = "AWS_COGNITO_CLIENT_ID"
+          value = aws_cognito_user_pool_client.main.id
+        },
+        {
+          name  = "AWS_COGNITO_ISSUER_URI"
+          value = "https://cognito-idp.${var.aws_region}.amazonaws.com/${aws_cognito_user_pool.main.id}"
+        },
+        {
+          name  = "AWS_COGNITO_JWK_SET_URI"
+          value = "https://cognito-idp.${var.aws_region}.amazonaws.com/${aws_cognito_user_pool.main.id}/.well-known/jwks.json"
         }
       ]
 
@@ -144,6 +172,12 @@ resource "aws_ecs_service" "backend" {
     assign_public_ip = true
   }
 
+  load_balancer {
+    target_group_arn = aws_lb_target_group.backend.arn
+    container_name   = "${var.project_name}-backend"
+    container_port   = 8080
+  }
+
   tags = {
     Name = "${var.project_name}-backend-service"
   }
@@ -166,6 +200,12 @@ resource "aws_ecs_service" "frontend" {
     subnets          = aws_subnet.public[*].id
     security_groups  = [aws_security_group.frontend.id]
     assign_public_ip = true
+  }
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.frontend.arn
+    container_name   = "${var.project_name}-frontend"
+    container_port   = 8080
   }
 
   tags = {
