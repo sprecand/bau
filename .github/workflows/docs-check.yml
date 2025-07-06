@@ -30,10 +30,6 @@ jobs:
       with:
         node-version: '18'
     
-    - name: Install German Dictionary
-      run: |
-        npm install -g @cspell/dict-de-de
-        
     - name: Markdown Lint
       uses: DavidAnson/markdownlint-cli2-action@v20
       continue-on-error: true

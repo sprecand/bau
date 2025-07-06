@@ -1,25 +1,35 @@
 {
   "version": "0.2",
-  "language": "en,de-de",
-  "import": ["@cspell/dict-de-de/cspell-ext.json"],
+  "language": "en,de",
+  "dictionaries": ["en", "de"],
   "words": [
     "AWS", "PostgreSQL", "JWT", "TypeScript", "JavaScript", "OpenAPI", "Cognito",
     "DTO", "JSON", "HTTP", "HTTPS", "API", "REST", "CRUD", "SQL", "JPA", "JDK",
     "OpenTofu", "Terraform", "Docker", "Kubernetes", "GitHub", "CI", "CD", "DevOps",
     "SonarQube", "ESLint", "Spring", "SpringBoot", "Angular", "RxJS", "NgRx",
     "Tailwind", "CSS", "HTML", "SCSS", "YAML", "YML", "Markdown",
-    "Betrieb", "Bauarbeiter", "Baustelle", "Handwerker", "adresse", "anzahl",
-    "bedarfe", "bedarfs", "usecase", "postgres", "postgresql", "nginx", "awslogs",
-    "jdbc", "amazoncognito", "csrf", "tfvars", "DATASOURCE", "WORKDIR", "BIGSERIAL",
-    "VARCHAR", "INACTIV", "oklch", "Segoe", "Noto", "Menlo", "Consolas", "bezier",
-    "sonarqube", "jacoco", "insertable"
+    "usecase", "postgres", "postgresql", "nginx", "awslogs",
+    "jdbc", "amazoncognito", "csrf", "tfvars", "DATASOURCE", "WORKDIR",
+    "dbname", "tablespace", "varchar", "nullable", "springdoc", "javaTimeModule",
+    "objectMapper", "serializers", "deserializers", "lombok", "slf4j", "logback",
+    "WebFlux", "ReactiveMongoRepository", "MongoTemplate", "JUnit", "Mockito",
+    "ArgumentMatchers", "TestContainer", "assertThat", "Jacoco", "SonarCloud",
+    "artifactory", "nexus", "maven", "gradle", "dockerfile", "buildx",
+    "kubernetes", "kubectl", "kustomize", "skaffold", "terraform", "opentofu",
+    "cloudformation", "pulumi", "ansible", "serverless", "amplify",
+    "Betrieb", "Bauarbeiter", "Baustelle", "Handwerker", "Arbeitsplatz", "Vertrag",
+    "Lohn", "Stundenansatz", "Qualifikation", "Erfahrung", "Verfügbarkeit",
+    "Arbeitsbeginn", "Projektdauer", "Anfahrtsweg", "Überstunden", "Sozialleistungen"
   ],
-  "ignoreRegExpList": [
-    "/```[\\s\\S]*?```/g",
-    "/`[^`]*`/g",
-    "/https?:\\/\\/[^\\s)]+/g",
-    "/[a-zA-Z0-9_\\-\\/\\.]+\\.(java|ts|js|html|css|yaml|yml|md|json|txt|sh|py)/g",
-    "/\\d+\\.\\d+\\.\\d+/g",
-    "/#[0-9a-fA-F]{3,6}/g"
+  "ignorePaths": [
+    "node_modules/**",
+    "dist/**",
+    "build/**",
+    "coverage/**",
+    "*.min.js",
+    "*.bundle.js",
+    "package-lock.json",
+    "yarn.lock",
+    "*.log"
   ]
 } 
