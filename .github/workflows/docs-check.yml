@@ -37,11 +37,11 @@ jobs:
     
     - name: Install German Dictionary
       run: |
-        npm install -g @cspell/dict-de-de
+        npm install -g cspell @cspell/dict-de-de
         cspell link add @cspell/dict-de-de
         
     - name: Spell Check
-      uses: streetsidesoftware/cspell-action@v6
+      uses: streetsidesoftware/cspell-action@v7
       with:
         files: |
           doc/**/*.md
