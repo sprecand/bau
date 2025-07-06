@@ -26,7 +26,7 @@ BetriebResponse:
       example: "+41 81 123 45 67"
     status:
       type: string
-      enum: [AKTIV, INACTIV]
+      enum: [AKTIV, INAKTIV]
       description: Current status
       example: "AKTIV"
     createdAt:
@@ -103,9 +103,9 @@ UpdateBetriebStatusRequest:
   properties:
     status:
       type: string
-      enum: [AKTIV, INACTIV]
+      enum: [AKTIV, INAKTIV]
       description: New status
-      example: "INACTIV"
+      example: "INAKTIV"
 
 BetriebListResponse:
   type: object

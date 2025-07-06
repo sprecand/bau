@@ -424,14 +424,14 @@ class BetriebApiControllerTest {
             // Given
             UUID testId = testBetrieb.getId();
             UpdateBetriebStatusRequest statusRequest = new UpdateBetriebStatusRequest()
-                    .status(UpdateBetriebStatusRequest.StatusEnum.INACTIV);
+                    .status(UpdateBetriebStatusRequest.StatusEnum.INAKTIV);
             Betrieb updatedBetrieb = testBetrieb.toBuilder()
                     .status(BetriebStatus.INAKTIV)
                     .build();
             BetriebResponse updatedResponse = new BetriebResponse()
                     .id(testId)
                     .name("Test Company")
-                    .status(BetriebResponse.StatusEnum.INACTIV);
+                    .status(BetriebResponse.StatusEnum.INAKTIV);
 
             when(betriebUseCase.updateBetriebStatus(testId, BetriebStatus.INAKTIV)).thenReturn(Optional.of(updatedBetrieb));
             when(mapper.toResponse(updatedBetrieb)).thenReturn(updatedResponse);
@@ -442,7 +442,7 @@ class BetriebApiControllerTest {
                             .content(objectMapper.writeValueAsString(statusRequest)))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(jsonPath("$.status").value("INACTIV"));
+                    .andExpect(jsonPath("$.status").value("INAKTIV"));
 
             verify(betriebUseCase).updateBetriebStatus(testId, BetriebStatus.INAKTIV);
             verify(mapper).toResponse(updatedBetrieb);
@@ -455,7 +455,7 @@ class BetriebApiControllerTest {
             // Given
             UUID nonExistentId = UUID.randomUUID();
             UpdateBetriebStatusRequest statusRequest = new UpdateBetriebStatusRequest()
-                    .status(UpdateBetriebStatusRequest.StatusEnum.INACTIV);
+                    .status(UpdateBetriebStatusRequest.StatusEnum.INAKTIV);
 
             when(betriebUseCase.updateBetriebStatus(nonExistentId, BetriebStatus.INAKTIV)).thenReturn(Optional.empty());
 
@@ -475,7 +475,7 @@ class BetriebApiControllerTest {
         void shouldReturnForbiddenForNonAdminUser() throws Exception {
             // Given
             UpdateBetriebStatusRequest statusRequest = new UpdateBetriebStatusRequest()
-                    .status(UpdateBetriebStatusRequest.StatusEnum.INACTIV);
+                    .status(UpdateBetriebStatusRequest.StatusEnum.INAKTIV);
 
             // When & Then
             mockMvc.perform(patch("/api/v1/betriebe/{id}/status", testBetrieb.getId())

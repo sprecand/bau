@@ -340,7 +340,7 @@ components:
           example: "+41 81 123 45 67"
         status:
           type: string
-          enum: [AKTIV, INACTIV]
+          enum: [AKTIV, INAKTIV]
           description: Current status
           example: "AKTIV"
         createdAt:
@@ -414,9 +414,9 @@ components:
       properties:
         status:
           type: string
-          enum: [AKTIV, INACTIV]
+          enum: [AKTIV, INAKTIV]
           description: New status
-          example: "INACTIV"
+          example: "INAKTIV"
     BetriebListResponse:
       type: object
       properties:
@@ -571,7 +571,7 @@ components:
           example: "BETRIEB"
         status:
           type: string
-          enum: [AKTIV, INACTIV]
+          enum: [AKTIV, INAKTIV]
           description: User status
           example: "AKTIV"
         emailVerified:
@@ -657,7 +657,7 @@ components:
           example: "BETRIEB"
         status:
           type: string
-          enum: [AKTIV, INACTIV]
+          enum: [AKTIV, INAKTIV]
           description: User status
           example: "AKTIV"
     UpdateUserProfileRequest:

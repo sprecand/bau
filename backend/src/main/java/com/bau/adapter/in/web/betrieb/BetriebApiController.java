@@ -43,7 +43,9 @@ public class BetriebApiController implements BetriebApi {
     @Override
     public ResponseEntity<BetriebListResponse> listBetriebe(@Valid Integer page, @Valid Integer size) {
         log.info("Retrieving betriebs - page: {}, size: {}", page, size);
-        BetriebUseCase.BetriebPageResult result = betriebUseCase.getBetriebs(page, size, null);
+        // Convert from 1-based API page to 0-based internal page
+        int internalPage = page - 1;
+        BetriebUseCase.BetriebPageResult result = betriebUseCase.getBetriebs(internalPage, size, null);
         List<BetriebResponse> content = result.getContent().stream()
                 .map(mapper::toResponse)
                 .toList();
@@ -51,7 +53,7 @@ public class BetriebApiController implements BetriebApi {
                 .content((List<Object>) (List<?>) content)
                 .totalElements(result.getTotalElements())
                 .totalPages(result.getTotalPages())
-                .currentPage(result.getCurrentPage())
+                .currentPage(result.getCurrentPage() + 1) // Convert back to 1-based page
                 .pageSize(result.getPageSize())
                 .hasNext(result.isHasNext())
                 .hasPrevious(result.isHasPrevious());
