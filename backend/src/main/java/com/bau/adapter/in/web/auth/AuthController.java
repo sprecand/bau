@@ -92,14 +92,21 @@ public class AuthController implements AuthenticationApi {
             if (authentication != null && authentication.getCredentials() instanceof String) {
                 String accessToken = (String) authentication.getCredentials();
                 
-                // Perform global sign out via AWS Cognito
-                boolean signOutSuccess = cognitoUserService.globalSignOut(accessToken);
-                
-                if (signOutSuccess) {
-                    log.info("User signed out successfully from AWS Cognito");
+                // Only call globalSignOut if accessToken is not empty
+                if (accessToken != null && !accessToken.trim().isEmpty()) {
+                    // Perform global sign out via AWS Cognito
+                    boolean signOutSuccess = cognitoUserService.globalSignOut(accessToken);
+                    
+                    if (signOutSuccess) {
+                        log.info("User signed out successfully from AWS Cognito");
+                    } else {
+                        log.warn("Failed to sign out user from AWS Cognito");
+                    }
                 } else {
-                    log.warn("Failed to sign out user from AWS Cognito");
+                    log.debug("No valid access token found, skipping Cognito sign out");
                 }
+            } else {
+                log.debug("No valid authentication found, skipping Cognito sign out");
             }
             
             // Clear security context
