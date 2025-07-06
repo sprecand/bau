@@ -6,6 +6,7 @@ import com.bau.adapter.in.web.bedarf.mapper.BedarfWebMapper;
 import com.bau.application.domain.bedarf.Bedarf;
 import com.bau.application.domain.bedarf.BedarfStatus;
 import com.bau.application.port.in.BedarfUseCase;
+import com.bau.shared.service.AuthenticationContextService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -30,17 +31,24 @@ public class BedarfApiController implements BedarfApi {
     
     private final BedarfUseCase bedarfUseCase;
     private final BedarfWebMapper mapper;
+    private final AuthenticationContextService authContextService;
     
     @Override
     @PreAuthorize("hasRole('BETRIEB')")
     public ResponseEntity<BedarfResponse> createBedarf(@Valid @RequestBody CreateBedarfRequest createBedarfRequest) {
         log.info("Creating new bedarf");
-        Bedarf bedarf = mapper.toDomain(createBedarfRequest);
         
-        // TODO: Replace with real authentication context when AWS Cognito is integrated
-        // For now, use a mock betriebId for local development
-        UUID mockBetriebId = UUID.fromString("123e4567-e89b-12d3-a456-426614174001");
-        bedarf.setBetriebId(mockBetriebId);
+        // Get the current user's betrieb ID from authentication context
+        Optional<UUID> currentUserBetriebId = authContextService.getCurrentUserBetriebId();
+        if (currentUserBetriebId.isEmpty()) {
+            log.warn("User has no betrieb ID - cannot create bedarf");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        
+        Bedarf bedarf = mapper.toDomain(createBedarfRequest);
+        bedarf.setBetriebId(currentUserBetriebId.get());
+        
+        log.debug("Creating bedarf for betrieb: {}", currentUserBetriebId.get());
         
         Bedarf createdBedarf = bedarfUseCase.createBedarf(bedarf);
         BedarfResponse response = mapper.toResponse(createdBedarf);

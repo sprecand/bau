@@ -4,16 +4,17 @@ import com.bau.application.domain.bedarf.Bedarf;
 import com.bau.application.domain.bedarf.BedarfStatus;
 import com.bau.application.port.in.BedarfUseCase;
 import com.bau.adapter.in.web.bedarf.mapper.BedarfWebMapper;
+import com.bau.shared.service.AuthenticationContextService;
 import com.bau.config.TestSecurityConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
@@ -38,11 +39,14 @@ class BedarfApiControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @MockBean
+    @MockitoBean
     private BedarfUseCase bedarfUseCase;
 
-    @MockBean
+    @MockitoBean
     private BedarfWebMapper mapper;
+
+    @MockitoBean
+    private AuthenticationContextService authenticationContextService;
 
     @Test
     @DisplayName("Should get bedarfs list successfully")

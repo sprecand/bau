@@ -1,6 +1,7 @@
 export interface BedarfDto {
   id?: string;
   betriebId: string;
+  betriebName?: string;  // Company name from API spec
   titel?: string;
   beschreibung?: string;
   datumVon: string;

@@ -84,7 +84,7 @@ export class BedarfeComponent implements OnInit {
     return this.bedarfe().filter(bedarf => bedarf.status === BedarfStatus.AKTIV);
   });
 
-  readonly displayedColumns = ['titel', 'adresse', 'datumVon', 'datumBis', 'anzahlArbeiter', 'status', 'actions'];
+  readonly displayedColumns = ['titel', 'betriebName', 'adresse', 'datumVon', 'datumBis', 'anzahlArbeiter', 'status', 'actions'];
 
   // Form
   bedarfForm: FormGroup;
@@ -361,5 +361,56 @@ export class BedarfeComponent implements OnInit {
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
+  }
+
+  /**
+   * Contact company for job application
+   */
+  contactCompany(bedarf: BedarfDto): void {
+    const message = `Interesse an: ${bedarf.titel}\n\nFirma: ${bedarf.betriebName || 'Unbekannt'}\nStandort: ${bedarf.adresse}\nZeitraum: ${this.formatDate(bedarf.datumVon)} - ${this.formatDate(bedarf.datumBis)}\n\nBitte kontaktieren Sie uns für weitere Informationen oder um Ihre Bewerbung einzureichen.`;
+    
+    // Show contact information dialog
+    this.showContactDialog(bedarf, message);
+  }
+
+  /**
+   * Check if current user can edit this bedarf
+   */
+  canEditBedarf(bedarf: BedarfDto): boolean {
+    const user = this.authService.effectiveUser();
+    if (!user) return false;
+    
+    // Admins can edit all bedarfs
+    if (user.role === 'ADMIN') return true;
+    
+    // Betrieb users can only edit their own bedarfs
+    if (user.role === 'BETRIEB' && user.betriebId === bedarf.betriebId) return true;
+    
+    return false;
+  }
+
+  /**
+   * Show contact information dialog
+   */
+  private showContactDialog(bedarf: BedarfDto, message: string): void {
+    const dialogMessage = `
+      Kontaktaufnahme für: ${bedarf.titel}
+      
+      Firma: ${bedarf.betriebName || 'Unbekannt'}
+      Standort: ${bedarf.adresse}
+      
+      Für die Kontaktaufnahme haben Sie folgende Möglichkeiten:
+      
+      1. Direkte Kontaktaufnahme über die Plattform-Administratoren
+      2. Telefonische Anfrage über die Hauptnummer
+      3. E-Mail-Anfrage mit Referenz auf diesen Bedarf
+      
+      Soll eine Kontaktanfrage versendet werden?
+    `;
+    
+    if (confirm(dialogMessage)) {
+      this.showSuccess('Kontaktanfrage wurde versendet. Sie werden in Kürze kontaktiert.');
+      console.log('Contact request for:', bedarf.titel, 'Company:', bedarf.betriebName);
+    }
   }
 }

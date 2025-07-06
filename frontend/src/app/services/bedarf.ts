@@ -90,4 +90,11 @@ export class BedarfService {
 
     return this.http.get<PageResponse<BedarfDto>>(`/api/v1/bedarfe/betrieb/${betriebId}`, { params: httpParams });
   }
+
+  /**
+   * Get company contact information for a job posting
+   */
+  getCompanyContactInfo(betriebId: string): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/api/v1/betriebe/${betriebId}/contact`);
+  }
 }
