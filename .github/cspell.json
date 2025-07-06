@@ -1,6 +1,7 @@
 {
   "version": "0.2",
   "language": "en,de-CH",
+  "import": ["@cspell/dict-de-de/cspell-ext.json"],
   "words": [
     "AWS", "PostgreSQL", "JWT", "TypeScript", "JavaScript", "OpenAPI", "Cognito",
     "DTO", "JSON", "HTTP", "HTTPS", "API", "REST", "CRUD", "SQL", "JPA", "JDK",
